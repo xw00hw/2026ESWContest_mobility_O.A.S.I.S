@@ -1,11 +1,38 @@
-# RTMPose Hailo 부분 가속 연구 레시피
+[← 실물 착석 시험 실행 패키지](../README.md) &nbsp;|&nbsp; ① 센싱 → ② 처리 → **③ RL 제어** → ④ 시트 구동
 
-2026-10-28 실기 파이프라인에 이어진 변환·검증 코드의 **소스 참조본**이다. 범용 설치기나 즉시 실행 가능한 배포 명령이 아니다. 각 스크립트의 기존 절대경로, 모델 경계, 해시 고정 조건을 보존했다. 실행 전에 별도 연구 작업공간에서 경로와 의존성을 검토해야 한다.
+# RTMPose Hailo 분할 추론 변환 레시피
 
-- `model_transform/split_before_final_conv.py`: 원본 RTMPose의 `Mul_204:624` 경계로 분리한다. Hailo 앞부분과 CPU 마지막 합성곱/SimCC head를 위한 연구 코드다.
-- `model_transform/validate_hybrid_hardware.py`: 기본값은 모델/배열/해시 검증만 수행한다. `--run-device`가 명시되면 Hailo 장치를 사용한다. 현재 카메라를 열거나 모터를 제어하지 않는다.
-- `dfc54/`: 당시 DFC 5.4 작업공간(`/root/...`)에서 사용했던 검증, 컴파일, mapping 추출, manifest 준비 코드다. 고정 경로와 외부 HAR/ONNX/보정·검증 corpus가 필요하다. import 또는 실행만으로 변환을 시작하는 파일이 있으므로 라이브러리처럼 import하지 않는다.
+> 운전자 자세 추정 모델(RTMPose)을 **Hailo-10H NPU + CPU**로 나눠 실행하기 위해 사용한 변환·검증 코드입니다.
 
-모델 원본/가중치, ONNX/HAR/HEF 바이너리, 보정 및 held-out 배열, DFC 설치 파일, HailoRT·드라이버 설치기는 포함하지 않는다. 이 폴더를 보존하며 컴파일이나 장치 추론을 다시 실행하지 않았다. 단위시험의 mock 결과와 실제 Hailo 품질 검증은 구별한다. 원본과 해시 일치는 상위 `source_provenance.json`에 기록한다.
+---
 
-현재 실사용 방식은 Hailo-10H 앞부분 + CPU 뒷부분의 혼합 추론이다. 전체 RTMPose를 Hailo에서 실행한다고 표현하지 않는다. 분리 부동소수점의 수치 일치나 합성 진단만으로 사람 자세 정확도 또는 착석 효과가 검증됐다고 주장하지 않는다.
+## 왜 나눴나
+
+RTMPose 전체를 Hailo 컴파일러(DFC 5.4)로 변환하면 두 군데에서 막혔습니다.
+
+1. 출력부(SimCC head)의 MatMul 변환이 지원되지 않았습니다.
+2. 마지막 7×7 합성곱(`Conv_205`)은 Hailo 자원 배치에 실패했습니다.
+
+그래서 그 직전인 `Mul_204` 지점에서 모델을 둘로 나눴습니다.
+
+```text
+카메라 프레임 ─► [Hailo-10H] RTMPose 앞부분 (~ Mul_204) ─► [CPU] 7×7 합성곱 + SimCC 출력부 ─► 관절 좌표
+```
+
+분할한 부동소수점 모델은 50개 입력에서 원본과 일치했고, Pi에서 CPU 뒷부분만 실행한 32개 입력 비교도 통과했습니다(최대 SimCC 차이 1.42e-6, 중앙값 4.42 ms).
+
+## 구성
+
+| 경로 | 내용 |
+|---|---|
+| `model_transform/split_before_final_conv.py` | 원본 RTMPose를 `Mul_204` 경계에서 앞·뒤 두 모델로 분리 |
+| `model_transform/validate_hybrid_hardware.py` | 모델·배열·해시 검증 (기본). `--run-device`를 주면 Hailo 장치에서 실제 추론 |
+| `dfc54/` | Hailo DFC 5.4 작업 환경에서 쓴 검증·컴파일·매핑 추출·manifest 준비 스크립트 |
+
+## 사용 시 주의
+
+- 이 폴더는 **변환 과정의 기록**이며 바로 실행되는 설치기가 아닙니다. 스크립트에는 당시 작업 환경의 경로와 모델 경계·해시 조건이 고정되어 있습니다.
+- `dfc54/`의 일부 파일은 import만 해도 변환을 시작하므로 라이브러리처럼 import하지 않습니다.
+- 모델 가중치, ONNX/HAR/HEF 파일, 보정 데이터, Hailo 설치 파일은 포함하지 않습니다.
+- 수치 일치는 원본 모델과의 비교이며, 사람 자세 각도의 정확도를 검증한 것은 아닙니다.
+- 실제 사용하는 런타임 코드는 [`deploy/runtime/oasis_rt/rtmpose_hailo.py`](../../../runtime/oasis_rt/rtmpose_hailo.py)입니다.

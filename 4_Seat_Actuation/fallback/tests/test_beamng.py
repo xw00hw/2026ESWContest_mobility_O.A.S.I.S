@@ -23,7 +23,7 @@ from fallback.beamng import (VehicleValidator, VehicleFrame, BridgeReceiver, rea
 from fallback import beamng_bridge as bridge
 
 LOCAL_COLLECTOR = Path(os.environ.get("BEAMNG_COLLECTOR_ROOT",
-    r"C:\Users\SO\Desktop\BeamNG.simulation\BeamNG_Collector_v0_3\BeamNG_Collector_v0_3"))
+    "BeamNG_Collector_v0_3"))
 LOCAL_DRIVE = LOCAL_COLLECTOR/"data/sessions/2026-10-25/session_20261025_061416_car_A_free_cbfe254c/vehicle/vehicle.csv"
 LOCAL_STOP = LOCAL_COLLECTOR/"data/sessions/2026-10-25/session_20261025_060803_car_A_free_8623d582/vehicle/vehicle.csv"
 

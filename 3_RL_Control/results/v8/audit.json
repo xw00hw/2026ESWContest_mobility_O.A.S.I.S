@@ -125,14 +125,14 @@
  "_summary": {
   "failed": [],
   "overlays": [
-   "C:/Users/JUN/Documents/Active_bolster/sim/v3/overlays/pipeline_v5.yaml",
-   "C:/Users/JUN/Documents/Active_bolster/sim/v2/overlays/smooth.yaml",
-   "C:/Users/JUN/Documents/Active_bolster/sim/v3/overlays/v4_comfort.yaml",
-   "C:/Users/JUN/Documents/Active_bolster/sim/v3/overlays/no_pitch.yaml",
-   "C:/Users/JUN/Documents/Active_bolster/sim/v3/overlays/final_v7.yaml",
-   "C:/Users/JUN/Documents/Active_bolster/sim/v3/overlays/fb_a2.yaml",
-   "C:/Users/JUN/Documents/Active_bolster/sim/v3/overlays/beamng_drive_collector.yaml",
-   "C:/Users/JUN/Documents/Active_bolster/sim/v3/overlays/reward_score.yaml"
+   "sim/v3/overlays/pipeline_v5.yaml",
+   "sim/v2/overlays/smooth.yaml",
+   "sim/v3/overlays/v4_comfort.yaml",
+   "sim/v3/overlays/no_pitch.yaml",
+   "sim/v3/overlays/final_v7.yaml",
+   "sim/v3/overlays/fb_a2.yaml",
+   "sim/v3/overlays/beamng_drive_collector.yaml",
+   "sim/v3/overlays/reward_score.yaml"
   ]
  }
 }

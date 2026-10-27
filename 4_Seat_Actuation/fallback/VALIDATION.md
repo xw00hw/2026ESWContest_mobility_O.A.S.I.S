@@ -36,7 +36,7 @@ ELF 시험은 생성된 ARM 코드를 실행한다. 레지스터/통신 시험�
 - bench 프로파일 SHA256: `898bc5ecb825efc7f3a7b162d9812940d98e99d845805b3ca4d6f6b738fb915d`.
 - fallback ELF SHA256: `78f51982e8cbe31008c58c76a6260c3f52f6ae27f13b5b13bdb36e506bc6f212`.
 - fallback BIN SHA256: `2e4045b79edc5a302c0d7a76585e3e9c378ee72b65c5c6c31015029123b77cdc`.
-- 로컬 호스트 시험 로그: `C:\Users\SO\Documents\GitHub\SMART_SEAT\MOTER\build\fallback_review\host_tests_final.log`.
+- 로컬 호스트 시험 로그: 로컬 빌드 폴더의 `fallback_review/host_tests_final.log`.
 - 로컬 최종 차량 재생: 같은 폴더의 `vehicle_replay_final/report.json`, CSV, PNG. report에 전체 설정·입력·프로파일·소스 해시 포함.
 - 펌웨어 생성물/검증 영수증: `../stm32/build_fallback/`.
 

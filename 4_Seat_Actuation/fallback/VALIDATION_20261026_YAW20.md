@@ -13,7 +13,7 @@
 
 ## 기록과 범위
 
-로그·재생 보고서 위치: `C:\Users\SO\Documents\GitHub\SMART_SEAT\MOTER\build\fallback_yaw20_20261026\`.
+로그·재생 보고서 위치: 로컬 빌드 폴더의 `fallback_yaw20/`.
 
 `host_tests.log`, `vehicle_replay/report.json`, `implementation_receipt.json`에 검사 결과·전체 설정·입력/소스 해시를 기록한다. 과거 프로파일·원시 데이터·2026-10-25 검증 기록은 그대로 보존했다.
 

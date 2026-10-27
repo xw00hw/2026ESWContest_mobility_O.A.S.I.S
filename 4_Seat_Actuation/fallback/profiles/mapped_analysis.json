@@ -33,7 +33,7 @@
       "sha256": "898bc5ecb825efc7f3a7b162d9812940d98e99d845805b3ca4d6f6b738fb915d"
     },
     "pressure_only_point_table": {
-      "path": "C:\\Users\\SO\\Documents\\GitHub\\ESW_fallback_local_data\\bench_20261025_pose_v1\\pressure_command_points.csv",
+      "path": "ESW_fallback_local_data\\bench_20261025_pose_v1\\pressure_command_points.csv",
       "sha256": "2c2603fc173759ad7a0b1e8a98649c101dace5b398b0f29d4dee7d57bbc0347f",
       "kind": "locally derived pressure/motor-only table"
     },

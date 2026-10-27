@@ -5,7 +5,7 @@
 ## 준비된 프로젝트
 
 - CubeIDE: `C:\ST\STM32CubeIDE_2.2.0\STM32CubeIDE\stm32cubeide.exe`
-- 작업공간: `C:\Users\SO\STM32CubeIDE\workspace_ExperimentA_20261027`
+- 작업공간: 새 CubeIDE 작업공간 (임의 경로)
 - 프로젝트: `ExperimentA_CAD_180` (`stm32/cubeide`). 기존 작업공간 연결을 유지하기 위한 식별자이며, 현재 소스와 ELF의 실제 사양은 **270°**다.
 - ELF: `stm32/build_fallback/fallback_control_h723.elf`
 - 변수 목록: `cubeide/Live_Expressions.txt` (새 작업공간에 미리 등록)
