@@ -1,0 +1,145 @@
+# O.A.S.I.S Pi runtime configuration (paths relative to this file)
+# entry: python -m oasis_rt.app (OASIS_FALLBACK v2 board, BeamNG_Bolster_FB collector path) -- deploy/README.md
+fb_root: null                       # 4_Seat_Actuation (BeamNG_Bolster_FB host modules); null = $OASIS_FB_ROOT / parents
+model_dir: ../model_v8              # FINAL (v8: OASIS_FALLBACK v2 actuator + BeamNG.drive Collector inputs). v7: ../model_v7. deploy/export/export_actor.py output (manifest-checked)
+dt_s: 0.05                          # 20 Hz, = sim dt_control
+filter_tau_s: 0.3                   # output low-pass validated in sim/v2 (-71 % jitter, same CoM effect)
+theta_max_deg: 20                   # training normalization, MUST match the model; actual cap is the STM envelope, not occupied force-safety approval
+pitch_deg: {left: 0.0, right: 0.0}  # v2 models only (yaw policy): pitch preset. v3 models command pitch themselves
+rig: static_bench                   # static_bench (BeamNG demo on the L2 bench: no inertial load -> raw interlock force) | car
+
+control:                            # docs: deploy/CONTROL_SPEC.md
+  mode: rl                          # rl (residual SAC on the tuned rule) | rule (tuned rule only) | fb_v6 (BeamNG_Bolster_FB V6)
+  fallback: true                    # actor error / NaN / no valid backend -> tuned rule for the rest of the session (latched)
+  cold_fallback: fb_v6              # rl / rule model package unusable at start -> FB V6 vehicle-only controller (null: refuse)
+  actuator_mismatch: rule           # model trained for another actuator / STM tune slower than trained -> rule | run (rl anyway)
+  rule: {}                          # {} = the model's prior from the manifest (v7: gain 12, lead 0.7 s = results/v7/rule.json best)
+
+fb_v6: {settings: null}             # optional experiment_a settings JSON; its six tuning values always come from the STM
+
+beamng:                             # PC: Collector v0.3 -> fallback.beamng_bridge -> beamng/pi_relay.py -> this Pi (beamng/README.md)
+  listen: [0.0.0.0, 64257]
+  allow_from: []                    # PC address(es) running pi_relay.py; [] = any sender on the (wired, lab) LAN
+  fresh_ms: 200                     # BeamNG_Bolster_FB VehicleValidator: max row age / host gap (50..200)
+  max_pc_age_ms: 50                 # collector receipt -> relay send on the PC (relay header)
+  startup_s: 2.0                    # continuously valid rows + verified PWM OFF before the one FB_ARM
+  steer_sign: 1                     # +1: + steering_angle_deg = left turn (+a_y). Check: python -m oasis_rt.app --check-vehicle 30
+  allow_synthetic: false            # true only with beamng/fake_collector.py (source_kind synthetic_test)
+
+confirmations:                      # hardware session refuses to open any device until all are true (operator, not software)
+  hardware_mapping_checked: false   # servo wiring UR D3 / UL D4 / DR D5 / DL D6, +yaw closes toward the occupant on both sides
+  neutral_start_clear: false        # FB_ARM applies confirmed D3/D4/D5/D6 neutral 1800/1800/1200/1200 us (2026-10-28): mechanism may move
+  stm_tuning_reviewed: false        # g_experiment_a_tune (yaw_max, rates) reviewed for this session (stm32/EXPERIMENT_A_LIVE_TUNING.md)
+  steer_sign_checked: false         # --check-vehicle: steer_verdict ok with beamng.steer_sign
+  trial_settings_reviewed: false
+
+actor:
+  backends: [c, numpy]              # add hailo to try the HEF; the fastest backend passing the check wins
+  c_lib: ../build/liboasis_actor.so
+  hef: ../model_v8/actor_core.hef
+  check_set: ../model_v8/check_set.npy # realistic histories (deploy/export/make_calib_set.py)
+  tolerance: {numpy: 0.0, c: 1.0e-4, hailo: 0.1}   # hailo: a8w8 max 0.075, closed loop -0.03 pp (quant_check.json)
+
+link:
+  firmware: fallback_v2             # OASIS_FALLBACK v2 (oasis_rt.app, fb_link.py) | control_v6 (legacy oasis_rt.controller)
+  port: /dev/ttyACM0                # NUCLEO ST-LINK VCP on the Pi
+  baud: 460800
+  # --- legacy OASIS_CONTROL v6 (stm32_link.Stm32Link) only:
+  yaw_max_deg: 20
+  send_mode: event                  # event: FW v6 as is | track: proposed FW TRK mode
+  deadband_deg: 0.5
+  min_interval_s: 0.25              # FW v6 restarts its path on every SET -> do not send faster
+  keepalive_s: 0                    # 0 = none: PING (every 0.25 s) refreshes the FW heartbeat
+  mock_crank_rate_dps: 15.0         # --mock only (FW v6 MOTOR_RATE); proposal: 60
+
+pressure:
+  channels:                         # physical pad -> mat channel (A1 = side bank; map confirmed by the team 2026-10-26)
+    side_R: A1_C1                   # v2 models: one side pad per wing (calibration channels, loaded in the car)
+    side_L: A1_C3
+    side_hi_R: A1_C1                # v3 models: upper / lower pad per wing -- confirmed 2026-10-26:
+    side_hi_L: A1_C3                #   C0 right lower, C1 right upper, C2 left lower, C3 left upper
+    side_lo_R: A1_C0
+    side_lo_L: A1_C2
+    back_R: A2_C2
+    back_L: A2_C1
+    cush_R: [A0_C3]                 # v2/v3 models' grouping; a model's manifest overrides it (v4: R = [A0_C1, A0_C3],
+    cush_L: [A0_C1, A0_C2]          #   L = [A0_C0, A0_C2] from the A0 map C0 FL, C1 BR, C2 BL, C3 FR)
+  pad_calib: ../model/pad_calib.json  # tools/pad_calib.py output (counts/N per channel); without it the model's
+                                      # sim value from manifest.json (v2 32.6, v3 87 counts/N per pad) is used
+  fsr_curve: null                   # e.g. ../tools/fsr_curve_20261026.json: nonlinear FSR curve for the INTERLOCK
+                                      # force. OFF until the curve is remapped to the A1 bank's divider (the car read
+                                      # up to 2316 counts, above the Uno curve's ~1900 saturation; fsr_curve.py --rm_*)
+  zero_window_s: 2.0
+  zero_max_std_counts: 40
+  baseline_variability_mode: reject # reject by default; dated noisy-sensor trial explicitly uses warn (freshness/coverage still required)
+  stale_s: 0.3
+  no_pressure_yaw_cap_deg: 8        # interlock blind -> cap the squeeze
+
+safety: {mode: model, fsr_force_soft_N: 60, fsr_force_hard_N: 120, arm_deg: 2.0, hold_s: 0.3,   # = sim/v2 dr_v2.yaml
+         pad_saturation_counts: null}  # e.g. 2200: any pad of a CLOSED wing at/above it -> release that wing (unit-free guard)
+console_N_per_g: 221.9              # calib_v2 sim_console_N_per_g (inertial load subtracted by the interlock)
+
+vehicle:                            # legacy oasis_rt.controller only (oasis_rt.app reads `beamng`)
+  source: udp                       # udp (DAQ adapter / BeamNG bridge) | replay
+  udp_port: 47801                   # JSON: t, ay_mps2, ax_mps2, yaw_rate_radps, speed_mps, steer_rad (+y LEFT)
+                                    #   BeamNG bridge (beamng/bridge.py) adds steer_input_rad (raw wheel, before the car)
+  replay: ../../sim/v2/l1_refined_seq.csv
+  loop: false
+  stale_s: 0.3
+
+g_residual_control:
+  enabled: false                   # Enable only via the reviewed g_hybrid trial profile.
+  deadband_g: 0.01
+  measured_on_g: 0.02
+  measured_off_g: 0.01
+  knee_g: 0.0625                    # Baseline 10 degrees at this measured |G|.
+  knee_yaw_deg: 10.0
+  full_g: 1.0                      # 20-degree REQUEST before filter / downstream limits.
+  full_yaw_deg: 20.0
+  preview_on_g: 0.03
+  preview_off_g: 0.015
+  preview_full_g: 0.0625
+  preview_max_yaw_deg: 10.0
+  preview_confirm_s: 0.10
+  residual_max_deg: 1.5             # Effective actor-minus-training-prior angle; tapers to zero at 1G.
+  speed_min_mps: 1.0
+
+body_scale:                         # v9: G base/preview angle x s for a sitter other than the reference user
+  enabled: false                    # s = 1 when false (the reference user's reviewed 10/28 behaviour)
+  neutral: null                     # this sitter's operator-confirmed neutral JSON (same file as pose_camera --neutral)
+  reference: {}                     # override of oasis_rt/body_scale.py REFERENCE only for a re-measured reference user
+
+predictor:
+  kind: model                       # model (v6+: the manifest's; v7 = BeamNGPredictor) | hold (car, see predictor.py note)
+                                    # | wheel | sequence (replay) | kinematic
+  # wheel / kinematic: wheelbase_m, steer_ratio, understeer_K, tau_s, steer_tau_s (beamng/fit_wheel.py output)
+
+wheel:                              # Optional direct MOZA input; never replaces measured BeamNG acceleration.
+  source: none                      # none | udp. No socket or joystick opened by default.
+  priority_prediction: false         # Fresh calibrated MOZA -> wheel preview; otherwise original predictor.
+  listen: ["::", 64258]
+  allow_from: []                    # Set the PC's literal IP before enabling udp.
+  source_id: moza-r3
+  device_key: winmm:346e:0005:0:x
+  physical_span_deg: 450             # User-confirmed Pit House total range, +/-225 physical degrees.
+  fresh_ms: 100
+  max_pc_age_ms: 50
+  calibration:                      # Game mapping is distinct: built-in BeamNG map says 720 total degrees.
+    confirmed: false                # Requires paired raw-axis/game steering evidence; no guessed gain.
+    game_gain_deg: null              # Signed game handwheel degrees at normalized raw +1.
+    game_offset_deg: 0
+    beamng_vehicle_id: null           # Pin the measured vehicle; a different vehicle falls back to BeamNG prediction.
+
+pose:
+  source: none                      # none opens no camera/socket; udp is optional preprocessed oasis.pose.v1 on this Pi
+  source_id: null                   # required expected producer identity before selecting udp
+  udp_port: 47802                   # receiver binds only 127.0.0.1; does not start a camera or DAQ producer
+  min_confidence: 0.5               # require vision_valid=true and neutral_valid=true as well
+  lean_sign: 1.0                    # confirmed image-to-vehicle sign, applied to neutral-relative lean and shift
+  stale_s: 1.0                      # capture-clock age, not arrival age; packet must name monotonic or monotonic_raw
+
+profile: {mass_kg: 75, shoulder_width_m: 0.42, sitting_torso_m: 0.58,    # configured values; not inferred from image-normalized widths
+          from_camera: false}   # true is refused by the Pi app until a calibrated metric-body interface exists
+
+realtime: {cpu: 3, fifo_priority: 50, mlock: true, gc_freeze: true}
+log_dir: ~/oasis_logs

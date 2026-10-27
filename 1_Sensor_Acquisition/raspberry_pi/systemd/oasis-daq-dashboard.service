@@ -1,0 +1,21 @@
+[Unit]
+Description=OASIS DAQ dashboard (placeholder -- the dashboard runs inside oasis-daq.service)
+Documentation=file:///home/esw/ESW/1_Sensor_Acquisition/raspberry_pi/docs/OPERATIONS.md
+After=oasis-daq.service
+BindsTo=oasis-daq.service
+
+# The dashboard is served by the acquisition daemon itself, because it reads
+# live worker state from the same process.  Splitting it into its own unit
+# would require an IPC layer for no operational benefit, so this unit exists
+# only as an explicit marker; it is NOT installed by scripts/install.sh.
+#
+# To disable the dashboard, set dashboard.enabled: false in configs/daq.yaml
+# and restart oasis-daq.service.
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,36 @@
+# env v3 = dr_v2.yaml + this overlay (bolster pitch, two pad zones per side, body-shape coupling)
+seat_bolster:
+  actuator_mode: fw_event_hb          # FW v6 SET semantics + PING heartbeat, event sender (deploy send_mode: event)
+
+v3:
+  pitch_enabled: true                 # false = ablation: policy outputs yaw only, pitch held at 0
+  pitch_max_deg: 8                    # firmware JOINT_PITCH_LIMIT_MDEG; whole yaw 0-20 x pitch +-8 box is reachable (C4_R8)
+  crank_rate_choices: [30, 60]        # FW proposal A: 30 deg/s first bench step, 60 target (crank, not structure)
+  crank_rate_p: [0.3, 0.7]
+  # two pad zones per wing at h_bolster -/+ zone_dh (the plate's cranks sit +-48 mm; the pad is taller)
+  zone_dh_m: [0.04, 0.10]
+  # +pitch moves the LOWER zone inward and the upper outward (R = Rz(-yaw) Rx(pitch), crank 1 = upper).
+  # Channel map CONFIRMED by the team 2026-10-26 (A1 side bank): C0 right lower, C1 right upper, C2 left lower,
+  # C3 left upper. With it, bench 10/25 B2 (+pitch -> C0 +26 / C1 -10 right, C2 +6 / C3 -9 left counts/deg)
+  # says +pitch raises the LOWER pads -> pitch_sign +1 follows from the data (photos still welcome).
+  pitch_sign: 1
+  calib_zone: hi                      # zone of the calibrated side channels (car 7234 counts/g, bench 15.7 counts/deg)
+  channel_map: {side_hi_R: A1_C1, side_hi_L: A1_C3, side_lo_R: A1_C0, side_lo_L: A1_C2}
+  # pitch pad travel / yaw pad travel at the contact. Bench B2: left 0.6-0.8, right upper up to ~2 (noisy, r2 < 0.31)
+  pitch_arm_ratio: [0.3, 1.5]
+  # effective pad travel per rad of yaw (calib_v2: 1.48 cm nominal, x authority 0.5-2); the per-episode
+  # solve is limited to this range (beyond it the linear-ratio solve is degenerate)
+  arm_range_m: [0.003, 0.05]
+  # body shape -> contact: upper-zone share of the wing stiffness grows with shoulder width
+  zone_frac_hi: {base: 0.5, per_m_shoulder: 3.0, sd: 0.08, clip: [0.25, 0.75]}
+  # body shape -> preload: preload x exp(beta * (shoulder_w - 0.42) / 0.06); 2 subjects on 10/26 calibrate beta
+  width_preload_beta: [0.0, 0.7]
+  # what the policy sees of the body build: mass from scale / rest pressure (8 %), shoulder width and sitting
+  # torso from the calibrated frontal camera (3 %) -- the camera is the body-shape cue
+  profile_noise_frac: [0.08, 0.03, 0.03]
+  side_offset_counts: [0, 250]        # FSR rest offset; absolute rest counts = offset + G * zone preload (obs 50-53)
+  zone_share_nominal: 0.375           # calibrated zone's share of the wing's inertial side-diff (G anchoring); 0.5 gave
+                                      # a car console median 3888 counts/g vs v2 5172 (target 7234) -> 0.375 = 0.5 x 3888/5172
+
+reward:
+  w_pitch: 0.005                      # (pitch / pitch_max)^2, both sides

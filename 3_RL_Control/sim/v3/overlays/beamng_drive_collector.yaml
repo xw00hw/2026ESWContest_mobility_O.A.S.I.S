@@ -1,0 +1,12 @@
+# v8: BeamNG.drive through BeamNG Collector v0.3 (BeamNG_Bolster_FB path, beamng/README.md) -- what the Pi receives:
+# one row per BeamNG update (~30-35 Hz in FB's V5/V6 logs) with speed, handwheel, gravity-free acceleration,
+# NO road network and NO yaw-rate column (the Pi uses a_y / max(v, 5 m/s)).
+v3:
+  yaw_rate_source: from_ay
+  predictor:
+    npz: models/v8/predictor.npz        # retrained for these inputs (sim/v3/final/train_predictor.py)
+  road:
+    p_available: 0.0                    # Collector rows carry no road network -> road_valid 0
+sensors:
+  obd_rate_hz: [25, 60]                 # speed / handwheel: same Collector row
+  imu_rate_hz: [25, 60]                 # acceleration: same row

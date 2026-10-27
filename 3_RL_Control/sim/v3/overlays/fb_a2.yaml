@@ -1,0 +1,12 @@
+# Actuator of the bench since 2026-10-27: NUCLEO-H723ZG running OASIS_FALLBACK v2 (BeamNG_Bolster_FB stm32,
+# fallback_control.c). The Pi sends the latest target (FB_SET, <= 25 Hz); the firmware moves on 20 ms frames,
+# per axis at the STM tune rate, every servo pulse <= 2 us per frame (13.5 deg/s crank, ~5 deg/s structure yaw),
+# within yaw <= STM yaw_max and the CAD pitch cap. No path restart (unlike OASIS_CONTROL v6).
+seat_bolster:
+  actuator_mode: fb_a2
+v3:
+  fb_a2:
+    rate_dps_choices: [10, 20]        # g_experiment_a_tune.values.yaw_rate_mdeg_s / 1000 (runtime requires >= 10 for rl)
+    rate_p: [0.2, 0.8]
+    yaw_cap_choices: [15, 20]         # g_experiment_a_tune.values.yaw_max_mdeg / 1000 (FB default 15; 20 = policy range)
+    yaw_cap_p: [0.3, 0.7]

@@ -1,0 +1,221 @@
+{
+ "assumption": "tightening increases same-side pressure; bench right-yaw sign flipped, magnitude kept",
+ "arm_eff_m": 0.020993559408370124,
+ "target_ratio_g_per_deg": 0.003068840384118221,
+ "contact_k_N_per_m": 3000.0,
+ "contact_k_identifiable": false,
+ "pad_calib": null,
+ "preload_N": 20.0,
+ "arm_m": 0.020993559408370124,
+ "theta_max_deg": 20.0,
+ "door_k_N_per_m": 19831.314089496853,
+ "G_side_counts_per_N": 32.60563970796281,
+ "sim_console_N_per_g": 221.86354529845696,
+ "sim_tight_N_per_deg": 0.6806335669142582,
+ "authority_g_equiv_at_theta_max": 0.06135605252306332,
+ "targets": {
+  "car_console": 7234.002822332773,
+  "car_door": 3467.777138477445,
+  "bench_tight": 22.2
+ },
+ "validation": {
+  "side_diff_r2_all": 0.6437401100451469,
+  "side_diff_r2_h1": 0.621858095962168,
+  "side_diff_r2_h2": 0.6729523282349286,
+  "note": "no parameter was fitted to this trace: k and G come from two scalar gains, door k from the gain ratio"
+ },
+ "readout": {
+  "a1_c1": {
+   "features": [
+    "FR"
+   ],
+   "weights": [
+    46.251909013579265
+   ],
+   "base_counts": 1451.3,
+   "r2_test": {
+    "h1->h2": 0.7040092909352517,
+    "h2->h1": 0.44542750643661144
+   }
+  },
+  "a1_c3": {
+   "features": [
+    "FL"
+   ],
+   "weights": [
+    40.81391537094192
+   ],
+   "base_counts": 581.2,
+   "r2_test": {
+    "h1->h2": 0.46051220304879104,
+    "h2->h1": 0.5205303313664568
+   }
+  },
+  "a0_c0": {
+   "features": [
+    "yp",
+    "phi"
+   ],
+   "weights": [
+    -321.7300985589109,
+    41.28434492003993
+   ],
+   "base_counts": 1296.8,
+   "r2_test": {
+    "h1->h2": -0.0014235951390439983,
+    "h2->h1": -0.011044255349830667
+   }
+  },
+  "a0_c1": {
+   "features": [
+    "yp",
+    "phi"
+   ],
+   "weights": [
+    1068.7896744159837,
+    -81.87290814631041
+   ],
+   "base_counts": 2018.6,
+   "r2_test": {
+    "h1->h2": 0.07062654261723256,
+    "h2->h1": 0.1177454619404944
+   }
+  },
+  "a0_c2": {
+   "features": [
+    "yp",
+    "phi"
+   ],
+   "weights": [
+    1660.8073453370607,
+    -158.21247467254656
+   ],
+   "base_counts": 1112.2,
+   "r2_test": {
+    "h1->h2": 0.005078671861757034,
+    "h2->h1": 0.06519459924450122
+   }
+  },
+  "a0_c3": {
+   "features": [
+    "yp",
+    "phi"
+   ],
+   "weights": [
+    483.1818353162064,
+    -110.37844298977011
+   ],
+   "base_counts": 2201.5,
+   "r2_test": {
+    "h1->h2": 0.24462185143684323,
+    "h2->h1": 0.11916505754987017
+   }
+  },
+  "a2_c1": {
+   "features": [
+    "yp",
+    "phi"
+   ],
+   "weights": [
+    90.1639039674875,
+    25.67564674670976
+   ],
+   "base_counts": 1831.2,
+   "r2_test": {
+    "h1->h2": -0.008064538840467872,
+    "h2->h1": 0.0030217132570307115
+   }
+  },
+  "a2_c2": {
+   "features": [
+    "yp",
+    "phi"
+   ],
+   "weights": [
+    -790.0606797873189,
+    -55.110082670061395
+   ],
+   "base_counts": 1409.3,
+   "r2_test": {
+    "h1->h2": 0.15553146695418674,
+    "h2->h1": 0.16772089343514973
+   }
+  }
+ },
+ "bench_other_channels": {
+  "pred": {
+   "a1_c1": 40.647717779088296,
+   "a1_c3": 8.089307088040439,
+   "a0_c0": 0.12287963320499654,
+   "a0_c1": 0.40096788952754603,
+   "a0_c2": 0.16941084359031358,
+   "a0_c3": -0.8927459251043788,
+   "a2_c1": 0.5108125483178145,
+   "a2_c2": -1.98916788188086
+  },
+  "meas_flipped": {
+   "a1_c1": 22.2,
+   "a1_c3": -0.0,
+   "a0_c0": 1.250698326813588,
+   "a0_c1": 0.43444543652424006,
+   "a0_c2": -0.08994408153538959,
+   "a0_c3": 0.5618720962903729,
+   "a2_c1": -0.7979402478548508,
+   "a2_c2": 2.6435908318327277
+  }
+ },
+ "servo": {
+  "rate_dps": 15.0,
+  "cmd_to_arrival_s_median": 0.51,
+  "report_hz": 5,
+  "range_validated_deg": [
+   0,
+   20
+  ]
+ },
+ "sensors": {
+  "noise_counts_car": [
+   1,
+   7
+  ],
+  "noise_counts_bench": [
+   22,
+   58
+  ],
+  "hysteresis_counts": 15.279609247742206,
+  "pose_torso_lean_noise_deg": 0.3
+ },
+ "console_N_per_g_vs_k_nominal": [
+  [
+   800.0,
+   86.04493343538255
+  ],
+  [
+   1256.3342419800163,
+   125.52171056467309
+  ],
+  [
+   1972.969659464377,
+   177.3214165322026
+  ],
+  [
+   3098.3866769659353,
+   224.93709669413096
+  ],
+  [
+   4865.761596458723,
+   273.36145744870845
+  ],
+  [
+   7641.278633678052,
+   330.16057815414854
+  ],
+  [
+   12000.0,
+   390.82738981696946
+  ]
+ ],
+ "door_k_over_contact_k": 2.0,
+ "door_k_over_contact_k_static": 6.6104380298322845,
+ "door_note": "static 0.2 g calibration gave 6.6; drive-replay ratio 0.48 needs ~0.8-2 (asymmetry in the replay is mostly from the drive itself); 2.0 used"
+}

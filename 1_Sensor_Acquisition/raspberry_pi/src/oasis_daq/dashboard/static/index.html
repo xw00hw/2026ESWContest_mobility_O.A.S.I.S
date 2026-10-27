@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OASIS DAQ</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  :root{--bg:#0e1014;--panel:#171a21;--line:#262b36;--fg:#e6e9ef;--muted:#8b93a7;
+        --ok:#39d353;--warn:#e3b341;--err:#f85149;--acc:#4da3ff;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);
+       font:14px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+  header{display:flex;align-items:center;gap:16px;padding:10px 18px;
+         background:var(--panel);border-bottom:1px solid var(--line);
+         position:sticky;top:0;z-index:500}
+  h1{font-size:15px;margin:0;letter-spacing:.02em}
+  .pill{padding:3px 12px;border-radius:999px;font-weight:600;font-size:12px;
+        border:1px solid var(--line)}
+  .INIT{background:#2b2f3a;color:var(--muted)}
+  .READY{background:#173a22;color:var(--ok)}
+  .RECORDING{background:#3a1717;color:var(--err);animation:pulse 2s infinite}
+  .SAVING{background:#3a3117;color:var(--warn)}
+  .ERROR{background:#3a1717;color:var(--err)}
+  @keyframes pulse{50%{opacity:.55}}
+  .grow{flex:1}
+  button{font:inherit;font-weight:600;padding:7px 18px;border-radius:7px;
+         border:1px solid var(--line);background:#222735;color:var(--fg);cursor:pointer}
+  button:hover:not(:disabled){border-color:var(--acc)}
+  button:disabled{opacity:.35;cursor:not-allowed}
+  #start{background:#1d3a25;border-color:#2c6b3c}
+  #stop{background:#3a1d1d;border-color:#6b2c2c}
+  main{display:grid;gap:12px;padding:12px;
+       grid-template-columns:repeat(auto-fit,minmax(330px,1fr))}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+        padding:12px 14px;min-width:0}
+  .card h2{font-size:11px;text-transform:uppercase;letter-spacing:.08em;
+           color:var(--muted);margin:0 0 10px}
+  .wide{grid-column:1/-1}
+  table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+  td{padding:3px 0;border-bottom:1px solid #1e222b}
+  td:first-child{color:var(--muted);white-space:nowrap;padding-right:10px}
+  td:last-child{text-align:right;font-weight:600}
+  .stack{position:relative;background:#000;border-radius:8px;overflow:hidden;
+         aspect-ratio:16/10}
+  .stack img,.stack canvas{position:absolute;inset:0;width:100%;height:100%}
+  .stack img{object-fit:contain}
+  #map{height:300px;border-radius:8px;background:#11141a}
+  #mapfallback{display:none;height:300px;width:100%;background:#11141a;border-radius:8px}
+  .ok{color:var(--ok)}.warn{color:var(--warn)}.err{color:var(--err)}.muted{color:var(--muted)}
+  .evt{font-size:12px;max-height:190px;overflow:auto;font-family:ui-monospace,monospace}
+  .evt div{padding:2px 0;border-bottom:1px solid #1e222b}
+  .bignum{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+  .row{display:flex;gap:14px;flex-wrap:wrap}
+  .row>div{flex:1;min-width:96px}
+  .lbl{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+  #banner{display:none;padding:8px 18px;background:#3a1717;color:#ffb4b4;font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <h1>OASIS DAQ</h1>
+  <span id="state" class="pill INIT">INIT</span>
+  <span id="sid" class="muted"></span>
+  <span id="elapsed" class="muted"></span>
+  <span class="grow"></span>
+  <button id="start">START</button>
+  <button id="stop" disabled>STOP</button>
+</header>
+<div id="banner"></div>
+
+<main>
+  <section class="card">
+    <h2>Camera &amp; pose</h2>
+    <div class="stack">
+      <img id="preview" alt="camera preview">
+      <canvas id="skeleton"></canvas>
+    </div>
+    <table>
+      <tr><td>capture fps</td><td id="c_fps">-</td></tr>
+      <tr><td>resolution</td><td id="c_res">-</td></tr>
+      <tr><td>frames recorded</td><td id="c_rec">-</td></tr>
+      <tr><td>estimated drops</td><td id="c_drop">-</td></tr>
+      <tr><td>recorded size</td><td id="c_mb">-</td></tr>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>MediaPipe pose</h2>
+    <div class="row" style="margin-bottom:10px">
+      <div><div class="lbl">fps</div><div class="bignum" id="p_fps">-</div></div>
+      <div><div class="lbl">p95 latency</div><div class="bignum" id="p_lat">-</div></div>
+      <div><div class="lbl">valid</div><div class="bignum" id="p_valid">-</div></div>
+    </div>
+    <table>
+      <tr><td>confidence</td><td id="p_conf">-</td></tr>
+      <tr><td>torso angle</td><td id="p_torso">-</td></tr>
+      <tr><td>lean score</td><td id="p_lean">-</td></tr>
+      <tr><td>lean velocity</td><td id="p_leanv">-</td></tr>
+      <tr><td>neutral posture</td><td id="p_neutral">-</td></tr>
+      <tr><td>frames processed</td><td id="p_proc">-</td></tr>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>GPS</h2>
+    <div class="row" style="margin-bottom:10px">
+      <div><div class="lbl">fix</div><div class="bignum" id="g_fix">-</div></div>
+      <div><div class="lbl">speed</div><div class="bignum" id="g_spd">-</div></div>
+      <div><div class="lbl">sats</div><div class="bignum" id="g_sats">-</div></div>
+    </div>
+    <table>
+      <tr><td>latitude</td><td id="g_lat">-</td></tr>
+      <tr><td>longitude</td><td id="g_lon">-</td></tr>
+      <tr><td>altitude</td><td id="g_alt">-</td></tr>
+      <tr><td>course</td><td id="g_crs">-</td></tr>
+      <tr><td>HDOP</td><td id="g_hdop">-</td></tr>
+      <tr><td>rate / age</td><td id="g_rate">-</td></tr>
+      <tr><td>UTC</td><td id="g_utc">-</td></tr>
+      <tr><td>checksum errors</td><td id="g_ck">-</td></tr>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>IMU</h2>
+    <div class="row" style="margin-bottom:10px">
+      <div><div class="lbl">g-force</div><div class="bignum" id="i_g">-</div></div>
+      <div><div class="lbl">rate</div><div class="bignum" id="i_rate">-</div></div>
+      <div><div class="lbl">temp</div><div class="bignum" id="i_temp">-</div></div>
+    </div>
+    <table>
+      <tr><td>accel x/y/z (m/s²)</td><td id="i_acc">-</td></tr>
+      <tr><td>gyro x/y/z (rad/s)</td><td id="i_gyr">-</td></tr>
+      <tr><td>roll / pitch / yaw</td><td id="i_rpy">-</td></tr>
+      <tr><td>frames ok</td><td id="i_frames">-</td></tr>
+      <tr><td>checksum errors</td><td id="i_ck">-</td></tr>
+      <tr><td>age</td><td id="i_age">-</td></tr>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>Storage &amp; system</h2>
+    <div class="row" style="margin-bottom:10px">
+      <div><div class="lbl">SSD free</div><div class="bignum" id="s_free">-</div></div>
+      <div><div class="lbl">rec. time left</div><div class="bignum" id="s_time">-</div></div>
+    </div>
+    <table>
+      <tr><td>storage root</td><td id="s_root" style="font-size:11px">-</td></tr>
+      <tr><td>CPU / temp</td><td id="s_cpu">-</td></tr>
+      <tr><td>memory used</td><td id="s_mem">-</td></tr>
+      <tr><td>disk write latency</td><td id="s_lat">-</td></tr>
+      <tr><td>warnings / errors</td><td id="s_evt">-</td></tr>
+      <tr><td>clock source</td><td id="s_clk">-</td></tr>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>Route</h2>
+    <div id="map"></div>
+    <svg id="mapfallback" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="muted" id="m_note" style="font-size:11px;margin-top:6px"></div>
+  </section>
+
+  <section class="card wide">
+    <h2>Events</h2>
+    <div class="evt" id="events"></div>
+  </section>
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const f = (v, d = 2, suf = '') =>
+  (v === null || v === undefined || Number.isNaN(v)) ? '-' : (+v).toFixed(d) + suf;
+
+// MediaPipe indices the DAQ tracks, and the bones drawn between them.
+const BONES = [[11,12],[11,13],[13,15],[12,14],[14,16],
+               [11,23],[12,24],[23,24],[0,11],[0,12]];
+
+let map = null, track = null, tilesFailed = 0, mapReady = false;
+function initMap() {
+  try {
+    if (typeof L === 'undefined') throw new Error('leaflet unavailable');
+    map = L.map('map', {attributionControl:false}).setView([0,0], 2);
+    const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                              {maxZoom:19});
+    tiles.on('tileerror', () => { if (++tilesFailed > 6) useFallbackMap(); });
+    tiles.addTo(map);
+    track = L.polyline([], {color:'#4da3ff', weight:4}).addTo(map);
+    mapReady = true;
+    $('m_note').textContent = 'OSM tiles require internet on this laptop; ' +
+      'the Pi does not proxy them.';
+  } catch (e) { useFallbackMap(); }
+}
+function useFallbackMap() {
+  if (!$('map')) return;
+  $('map').style.display = 'none';
+  $('mapfallback').style.display = 'block';
+  mapReady = false;
+  $('m_note').textContent = 'No map tiles reachable - drawing the GPS track only.';
+}
+function drawFallbackTrack(pts) {
+  const svg = $('mapfallback');
+  if (svg.style.display === 'none') return;
+  if (!pts.length) {
+    svg.innerHTML = '<text x="300" y="150" fill="#8b93a7" text-anchor="middle" ' +
+                    'font-size="13">no GPS fix yet</text>';
+    return;
+  }
+  const lats = pts.map(p=>p[0]), lons = pts.map(p=>p[1]);
+  const a=Math.min(...lats), b=Math.max(...lats), c=Math.min(...lons), d=Math.max(...lons);
+  const sx=(d-c)||1e-6, sy=(b-a)||1e-6;
+  const poly = pts.map(p => (30+((p[1]-c)/sx)*540).toFixed(1)+','+
+                            (270-((p[0]-a)/sy)*240).toFixed(1)).join(' ');
+  let grid='';
+  for (let i=0;i<=6;i++){
+    grid += `<line x1="${30+i*90}" y1="30" x2="${30+i*90}" y2="270" stroke="#1e222b"/>`;
+    grid += `<line x1="30" y1="${30+i*40}" x2="570" y2="${30+i*40}" stroke="#1e222b"/>`;
+  }
+  svg.innerHTML = grid +
+    `<polyline points="${poly}" fill="none" stroke="#4da3ff" stroke-width="2"/>`;
+}
+
+function drawSkeleton(landmarks) {
+  const cv = $('skeleton'), img = $('preview');
+  const w = img.clientWidth, h = img.clientHeight;
+  if (!w || !h) return;
+  if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
+  const ctx = cv.getContext('2d');
+  ctx.clearRect(0,0,w,h);
+  if (!landmarks || !landmarks.length) return;
+  const by = {}; landmarks.forEach(p => by[p.i] = p);
+  ctx.lineWidth = 2.5; ctx.strokeStyle = '#39d353';
+  BONES.forEach(([a,b]) => {
+    const p = by[a], q = by[b];
+    if (!p || !q || p.v < 0.5 || q.v < 0.5) return;
+    ctx.beginPath(); ctx.moveTo(p.x*w, p.y*h); ctx.lineTo(q.x*w, q.y*h); ctx.stroke();
+  });
+  landmarks.forEach(p => {
+    if (p.v < 0.5) return;
+    ctx.fillStyle = '#4da3ff';
+    ctx.beginPath(); ctx.arc(p.x*w, p.y*h, 3.5, 0, 6.283); ctx.fill();
+  });
+}
+
+async function poll() {
+  let s;
+  try {
+    s = await (await fetch('/api/status', {cache:'no-store'})).json();
+    $('banner').style.display = 'none';
+  } catch (e) {
+    $('banner').style.display = 'block';
+    $('banner').textContent =
+      'Dashboard cannot reach the Pi. Recording on the Pi is NOT affected by this.';
+    return;
+  }
+  $('state').textContent = s.state;
+  $('state').className = 'pill ' + s.state;
+  $('sid').textContent = s.session_id || '';
+  $('elapsed').textContent = s.recording ? s.elapsed_hms : '';
+  $('start').disabled = s.state !== 'READY' && s.state !== 'ERROR';
+  $('stop').disabled  = s.state !== 'RECORDING';
+
+  const c = s.camera || {};
+  $('c_fps').textContent = f(c.measured_fps,1,' fps');
+  $('c_res').textContent = c.width ? `${c.width}x${c.height}` : '-';
+  $('c_rec').textContent = c.frames_recorded ?? '-';
+  $('c_drop').textContent = c.estimated_drops ?? '-';
+  $('c_mb').textContent = f(c.mb_recorded,1,' MB');
+
+  const p = s.pose || {};
+  $('p_fps').textContent = f(p.fps,1);
+  $('p_lat').textContent = f(p.latency_p95_ms,0,'ms');
+  $('p_valid').textContent = p.valid_ratio!=null ? (p.valid_ratio*100).toFixed(0)+'%' : '-';
+  $('p_conf').textContent = f(p.pose_confidence,3);
+  $('p_torso').textContent = f(p.torso_angle_deg,2,'°');
+  $('p_lean').textContent = f(p.lean_score,3);
+  $('p_leanv').textContent = f(p.lean_velocity,3,'/s');
+  $('p_neutral').innerHTML = p.neutral_valid
+      ? '<span class="ok">calibrated</span>'
+      : `<span class="warn">${p.neutral_reason||'-'}</span>`;
+  $('p_proc').textContent = p.frames_processed ?? '-';
+  drawSkeleton(p.landmarks);
+
+  const g = s.gps || {};
+  $('g_fix').innerHTML = g.fix_valid ? '<span class="ok">FIX</span>'
+                                     : '<span class="warn">NO FIX</span>';
+  $('g_spd').textContent = f(g.ground_speed_mps,1,' m/s');
+  $('g_sats').textContent = (g.satellite_count ?? '-') + '/' + (g.satellites_in_view ?? '-');
+  $('g_lat').textContent = g.latitude_deg!=null ? g.latitude_deg.toFixed(7) : '-';
+  $('g_lon').textContent = g.longitude_deg!=null ? g.longitude_deg.toFixed(7) : '-';
+  $('g_alt').textContent = f(g.altitude_m,1,' m');
+  $('g_crs').textContent = f(g.course_deg,1,'°');
+  $('g_hdop').textContent = f(g.hdop,2);
+  $('g_rate').textContent = f(g.rate_hz,2,' Hz') + ' / ' + f(g.age_s,1,'s');
+  $('g_utc').textContent = g.gps_utc || '-';
+  $('g_ck').textContent = g.checksum_failures ?? '-';
+
+  const i = s.imu || {};
+  $('i_g').textContent = f(i.g_force,3,' g');
+  $('i_rate').textContent = f(i.rate_hz,1,' Hz');
+  $('i_temp').textContent = f(i.temperature_c,1,'°C');
+  $('i_acc').textContent = i.acc_mps2 ? i.acc_mps2.map(v=>f(v,2)).join(' / ') : '-';
+  $('i_gyr').textContent = i.gyro_radps ? i.gyro_radps.map(v=>f(v,3)).join(' / ') : '-';
+  $('i_rpy').textContent = i.orientation_rad
+      ? i.orientation_rad.map(v=>f(v*57.29578,1)).join(' / ') : '-';
+  $('i_frames').textContent = i.frames_ok ?? '-';
+  $('i_ck').innerHTML = i.checksum_errors
+      ? `<span class="err">${i.checksum_errors}</span>` : '0';
+  $('i_age').textContent = f(i.age_s,2,'s');
+
+  const st = s.storage || {};
+  $('s_free').textContent = f(st.free_gb,1,' GB');
+  $('s_time').textContent = s.estimated_recording_hours_left!=null
+      ? f(s.estimated_recording_hours_left,1,' h') : '-';
+  $('s_root').textContent = st.path || '-';
+  $('s_evt').innerHTML = `<span class="warn">${s.events?.warning||0}</span> / ` +
+                         `<span class="err">${s.events?.error||0}</span>`;
+  $('s_clk').textContent = s.clock_source || '-';
+
+  $('events').innerHTML = (s.recent_events||[]).slice().reverse().map(e => {
+    const cls = e.level==='error'?'err':e.level==='warning'?'warn':'muted';
+    return `<div><span class="${cls}">[${e.level}]</span> ${e.source}: ${e.kind}</div>`;
+  }).join('') || '<div class="muted">no events</div>';
+
+  if (g.latitude_deg != null && g.longitude_deg != null && g.fix_valid) {
+    try {
+      const geo = await (await fetch('/api/route.geojson',{cache:'no-store'})).json();
+      const coords = geo.features?.[0]?.geometry?.coordinates || [];
+      const pts = coords.map(c => [c[1], c[0]]);
+      if (mapReady && track) {
+        track.setLatLngs(pts);
+        map.setView([g.latitude_deg, g.longitude_deg], Math.max(map.getZoom(), 15));
+      } else { drawFallbackTrack(pts); }
+    } catch (e) { /* map is optional; never break the rest of the page */ }
+  }
+}
+
+async function health() {
+  try {
+    const h = await (await fetch('/api/health',{cache:'no-store'})).json();
+    $('s_cpu').textContent = f(h.cpu_percent,0,'%') + ' / ' + f(h.cpu_temp_c,1,'°C');
+    $('s_mem').textContent = f(h.mem_used_percent,0,'%');
+    $('s_lat').textContent = f(h.disk_write_latency_ms,1,' ms');
+  } catch (e) {}
+}
+
+$('start').onclick = async () => {
+  $('start').disabled = true;
+  const r = await (await fetch('/api/session/start', {method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({notes:'started from dashboard'})})).json();
+  if (!r.ok) alert('start failed: ' + (r.error||'unknown'));
+  poll();
+};
+$('stop').onclick = async () => {
+  if (!confirm('Stop the recording session?')) return;
+  $('stop').disabled = true;
+  const r = await (await fetch('/api/session/stop', {method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({reason:'dashboard'})})).json();
+  if (!r.ok) alert('stop failed: ' + (r.error||'unknown'));
+  poll();
+};
+
+$('preview').src = '/api/stream.mjpg';
+$('preview').onerror = () => {
+  // Fall back to still polling if the multipart stream is blocked.
+  setTimeout(() => { $('preview').src = '/api/preview.jpg?t=' + Date.now(); }, 1000);
+};
+initMap();
+poll(); health();
+setInterval(poll, 500);
+setInterval(health, 2000);
+</script>
+</body>
+</html>

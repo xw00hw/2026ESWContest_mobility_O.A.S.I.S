@@ -1,0 +1,5 @@
+# Keep copied commissioning sources byte-identical to the verified LF originals.
+*.py text eol=lf
+*.json text eol=lf
+*.yaml text eol=lf
+*.md text eol=lf

@@ -1,0 +1,14 @@
+g_experiment_a_tune.values.yaw_max_mdeg
+g_experiment_a_tune.values.pitch_max_mdeg
+g_experiment_a_tune.values.yaw_rate_mdeg_s
+g_experiment_a_tune.values.pitch_rate_mdeg_s
+g_experiment_a_tune.values.full_scale_ay_mmps2
+g_experiment_a_tune.values.pitch_scale_permille
+g_experiment_a_tune.request_seq
+g_fallback_debug.tuning_revision
+g_fallback_debug.tuning_result_code
+g_fallback_debug.armed
+g_fallback_debug.commanded_pose_mdeg
+g_fallback_debug.target_pose_mdeg
+g_fallback_debug.commanded_pulse_us
+g_fallback_debug.fault

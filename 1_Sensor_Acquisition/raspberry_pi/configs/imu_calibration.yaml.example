@@ -1,0 +1,29 @@
+# IMU calibration -- copy to imu_calibration.yaml and fill in from real data.
+#
+# This file is NEVER written automatically.  The DAQ only reads it; a missing
+# file simply means no bias correction is applied, and the raw sensor-frame
+# values are recorded either way, so nothing is lost by leaving it absent.
+
+# Gyro bias, rad/s, measured with the unit completely stationary.
+# Take the mean of gyro_{x,y,z}_radps over >=60 s of imu.csv with no motion.
+gyro_bias_radps: [0.0, 0.0, 0.0]
+
+# Accelerometer offset, m/s^2, measured stationary and level.
+# The measured gravity vector minus the expected one.
+acc_bias_mps2: [0.0, 0.0, 0.0]
+
+# Magnetometer state.  The WIT unit reports raw counts with no scale factor, so
+# v0.1 records them uncalibrated; this block is provenance only.
+magnetometer:
+  calibrated: false
+  method: ""
+  notes: "raw counts, uncalibrated"
+
+# Provenance -- fill these in, they end up in every session's metadata.
+calibration_date: ""        # YYYY-MM-DD
+calibration_version: "0"
+performed_by: ""
+notes: ""
+
+# The mounting rotation lives in daq.yaml (imu.mounting.rotation_matrix), not
+# here, because it describes the installation rather than the sensor.

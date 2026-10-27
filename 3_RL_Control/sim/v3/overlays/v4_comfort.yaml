@@ -1,0 +1,9 @@
+# model v4 (2026-10-26 bench data): seat-pad grouping by the confirmed mat map + 'pressed too hard' penalty
+v3:
+  cush_groups: {R: [a0_c1, a0_c3], L: [a0_c0, a0_c2]}   # A0: C0 front-left, C1 rear-right, C2 rear-left, C3 front-right
+  # NOTE: the bench pads read LESS when the right bolster closes (AUTO784 -26.5 upper / -5.5 lower counts/deg)
+  # although it does close onto the body. Team decision (2026-10-26): keep the intended model -- tightening RAISES
+  # the same-side pad pressure (magnitude from the bench). The coverage-loss option (v3.sensor_coverage) stays off.
+reward:
+  over_F_N: 20.0       # added squeeze (vs the same occupant with the bolsters open) above which it counts as too hard
+  w_over: 1.0          # x ((added - over_F_N) / over_F_N)^2 per control step; tuned rule: p95 9 N, full squeeze up to 63 N

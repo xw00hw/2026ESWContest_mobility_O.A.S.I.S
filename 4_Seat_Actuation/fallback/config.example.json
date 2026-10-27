@@ -1,0 +1,26 @@
+{
+  "left_channels": ["A1_C2", "A1_C3"],
+  "right_channels": ["A1_C0", "A1_C1"],
+  "guard_channels": ["A1_C0", "A1_C1", "A1_C2", "A1_C3"],
+  "pressure_fraction": 0.2,
+  "max_yaw_deg": 20.0,
+  "max_rate_deg_s": 2.0,
+  "full_scale_ay_mps2": 2.941995,
+  "on_ay_mps2": 0.2941995,
+  "off_ay_mps2": 0.196133,
+  "filter_tau_s": 0.2,
+  "baseline_seconds": 2.0,
+  "fresh_ms": 200.0,
+  "pressure_trip_seconds": 0.1,
+  "max_baseline_std_v": 0.1,
+  "max_baseline_drift_v": 0.4,
+  "neutral_tolerance_mdeg": 100,
+  "confirmations": {
+    "hardware_matches_bench": true,
+    "sensor_mapping_confirmed": true,
+    "positive_yaw_supports_occupant": true,
+    "neutral_start_clear": false,
+    "same_recorded_participant": false,
+    "initial_range_checked": true
+  }
+}

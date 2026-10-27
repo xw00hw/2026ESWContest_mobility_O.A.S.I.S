@@ -1,0 +1,140 @@
+{
+ "id": "fsr_curve_20261026_uno",
+ "source": "team scale press test 2026-10-26 (rough): single FSR, round contact d = 3.15 cm, Arduino Uno A0",
+ "conditions": {
+  "uno_supply_and_ref_V": 5.0,
+  "uno_adc_bits": 10,
+  "contact_diameter_cm": 3.15,
+  "note": "pressure = applied force / contact area (estimated). Uno readings are exact 10-bit codes 250, 300, ..., 470 (V = code * 5 / 1023)."
+ },
+ "points": [
+  {
+   "kPa": 5.54,
+   "uno_V": 1.222
+  },
+  {
+   "kPa": 9.59,
+   "uno_V": 1.466
+  },
+  {
+   "kPa": 12.04,
+   "uno_V": 1.564
+  },
+  {
+   "kPa": 22.48,
+   "uno_V": 1.808
+  },
+  {
+   "kPa": 34.96,
+   "uno_V": 1.955
+  },
+  {
+   "kPa": 49.36,
+   "uno_V": 2.053,
+   "note": "saturation starts"
+  },
+  {
+   "kPa": 87.28,
+   "uno_V": 2.151
+  },
+  {
+   "kPa": 130.4,
+   "uno_V": 2.199
+  },
+  {
+   "kPa": 231.86,
+   "uno_V": 2.248
+  },
+  {
+   "kPa": 678.69,
+   "uno_V": 2.297
+  }
+ ],
+ "transfer_to_stm32": {
+  "board": "NUCLEO-H723ZG, ADC1 12-bit (0..4095), offset+linearity calibration, no VREFBUF, VREFINT not read",
+  "rule": "ratiometric: the FSR divider and VREF+ are fed from the same 3V3 rail, so counts = 4095 * Vout / VREF+ = 4095 * divider ratio, independent of the exact rail voltage; ratio = uno_V / 5.0",
+  "requires": "the same divider (resistor value and topology) as on the STM32 bank; otherwise remap through the FSR resistance (fsr_curve.py --rm_uno / --rm_stm)",
+  "volts_display": "V = counts * VREF+ / 4095 with VREF+ = 3.3 V nominal (not measured)"
+ },
+ "fit": {
+  "cmax_counts": 1918.599191134028,
+  "F50_N": 3.9936651464642994,
+  "n": 0.8395955692125779,
+  "max_abs_resid_counts": 12.052663172303482,
+  "model": "counts = cmax F^n / (F^n + F50^n), F on the calibration contact",
+  "divider_remap": null
+ },
+ "stm_table": [
+  {
+   "kPa": 5.54,
+   "F_N": 4.32,
+   "stm_counts": 1001,
+   "stm_V_at_3V3": 0.807,
+   "gain_counts_per_N": 90.78
+  },
+  {
+   "kPa": 9.59,
+   "F_N": 7.47,
+   "stm_counts": 1201,
+   "stm_V_at_3V3": 0.968,
+   "gain_counts_per_N": 51.2
+  },
+  {
+   "kPa": 12.04,
+   "F_N": 9.38,
+   "stm_counts": 1281,
+   "stm_V_at_3V3": 1.032,
+   "gain_counts_per_N": 39.0
+  },
+  {
+   "kPa": 22.48,
+   "F_N": 17.52,
+   "stm_counts": 1481,
+   "stm_V_at_3V3": 1.193,
+   "gain_counts_per_N": 16.64
+  },
+  {
+   "kPa": 34.96,
+   "F_N": 27.24,
+   "stm_counts": 1601,
+   "stm_V_at_3V3": 1.29,
+   "gain_counts_per_N": 8.11
+  },
+  {
+   "kPa": 49.36,
+   "F_N": 38.47,
+   "stm_counts": 1681,
+   "stm_V_at_3V3": 1.355,
+   "gain_counts_per_N": 4.24
+  },
+  {
+   "kPa": 87.28,
+   "F_N": 68.02,
+   "stm_counts": 1762,
+   "stm_V_at_3V3": 1.42,
+   "gain_counts_per_N": 1.7
+  },
+  {
+   "kPa": 130.4,
+   "F_N": 101.62,
+   "stm_counts": 1801,
+   "stm_V_at_3V3": 1.451,
+   "gain_counts_per_N": 0.9
+  },
+  {
+   "kPa": 231.86,
+   "F_N": 180.69,
+   "stm_counts": 1841,
+   "stm_V_at_3V3": 1.484,
+   "gain_counts_per_N": 0.36
+  },
+  {
+   "kPa": 678.69,
+   "F_N": 528.91,
+   "stm_counts": 1881,
+   "stm_V_at_3V3": 1.516,
+   "gain_counts_per_N": 0.07
+  }
+ ],
+ "saturation_counts_measured": 1881.2430000000002
+}

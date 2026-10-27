@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "oasis-daq"
+version = "0.1.0"
+description = "OASIS driver-monitoring data acquisition for Raspberry Pi 5 (GPS + IMU + A-pillar camera + MediaPipe pose)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Proprietary" }
+dependencies = [
+    "pyserial>=3.5",
+    "PyYAML>=6.0",
+    "numpy>=1.24",
+    "opencv-python>=4.8",
+    "mediapipe>=0.10",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4"]
+
+[project.scripts]
+oasis-daqctl = "oasis_daq.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"oasis_daq.dashboard" = ["static/*.html"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

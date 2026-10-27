@@ -1,0 +1,141 @@
+{
+ "mean": {
+  "passive": {
+   "com": 0.0,
+   "du": -0.3,
+   "theta": 0.0,
+   "pitch": 0.0,
+   "force": 0.0,
+   "trip": 0.0,
+   "over": 0.0,
+   "ret": -0.3,
+   "red": 0.0,
+   "over_time": 0.0,
+   "over_press": 0.0,
+   "score": 0.0
+  },
+  "rule_tuned": {
+   "com": 15.373,
+   "du": -8.365,
+   "theta": -0.506,
+   "pitch": 0.0,
+   "force": -8.329,
+   "trip": 0.0,
+   "over": -19.993,
+   "ret": -21.821,
+   "red": 10.282,
+   "over_time": 6.195,
+   "over_press": 0.025,
+   "score": 4.686
+  },
+  "sac_v8a_s0": {
+   "com": 14.582,
+   "du": -6.716,
+   "theta": -0.581,
+   "pitch": 0.0,
+   "force": -8.314,
+   "trip": 0.0,
+   "over": -11.181,
+   "ret": -12.21,
+   "red": 2.401,
+   "over_time": 6.862,
+   "over_press": 0.014,
+   "score": -2.428
+  },
+  "sac_v8a_s1": {
+   "com": 13.733,
+   "du": -6.386,
+   "theta": -0.452,
+   "pitch": 0.0,
+   "force": -7.321,
+   "trip": 0.0,
+   "over": -16.886,
+   "ret": -17.313,
+   "red": 3.886,
+   "over_time": 5.164,
+   "over_press": 0.021,
+   "score": -0.807
+  }
+ },
+ "median": {
+  "passive": {
+   "com": 0.0,
+   "du": -0.3,
+   "theta": 0.0,
+   "pitch": 0.0,
+   "force": 0.0,
+   "trip": 0.0,
+   "over": 0.0,
+   "ret": -0.3,
+   "red": 0.0,
+   "over_time": 0.0,
+   "over_press": 0.0,
+   "score": 0.0
+  },
+  "rule_tuned": {
+   "com": 4.028,
+   "du": -5.583,
+   "theta": -0.525,
+   "pitch": 0.0,
+   "force": -0.71,
+   "trip": 0.0,
+   "over": 0.0,
+   "ret": -3.704,
+   "red": 2.989,
+   "over_time": 0.0,
+   "over_press": 0.0,
+   "score": 2.5
+  },
+  "sac_v8a_s0": {
+   "com": 3.832,
+   "du": -5.099,
+   "theta": -0.596,
+   "pitch": 0.0,
+   "force": -0.923,
+   "trip": 0.0,
+   "over": 0.0,
+   "ret": -3.151,
+   "red": 2.619,
+   "over_time": 0.0,
+   "over_press": 0.0,
+   "score": 2.233
+  },
+  "sac_v8a_s1": {
+   "com": 3.841,
+   "du": -4.637,
+   "theta": -0.466,
+   "pitch": 0.0,
+   "force": -0.621,
+   "trip": 0.0,
+   "over": 0.0,
+   "ret": -2.601,
+   "red": 2.587,
+   "over_time": 0.0,
+   "over_press": 0.0,
+   "score": 2.24
+  }
+ },
+ "agreement": {
+  "rule_tuned vs passive": {
+   "ret_diff_mean": -21.52,
+   "score_diff_mean": 4.69,
+   "sign_agreement": 0.35
+  },
+  "sac_v8a_s0 vs rule_tuned": {
+   "ret_diff_mean": 9.61,
+   "score_diff_mean": -7.11,
+   "sign_agreement": 0.75
+  },
+  "sac_v8a_s1 vs rule_tuned": {
+   "ret_diff_mean": 4.51,
+   "score_diff_mean": -5.49,
+   "sign_agreement": 0.46
+  }
+ },
+ "passive_com_rms_cm": {
+  "median": 0.585,
+  "p10": 0.093,
+  "p90": 1.465
+ },
+ "note": "reward terms summed per 40 s episode (negative = cost); eval bank seeds 1000+, levels 0 / 2"
+}

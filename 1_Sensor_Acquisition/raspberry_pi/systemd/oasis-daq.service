@@ -1,0 +1,59 @@
+[Unit]
+Description=OASIS DAQ acquisition daemon (GPS + IMU + camera + MediaPipe pose)
+Documentation=file:///home/esw/ESW/1_Sensor_Acquisition/raspberry_pi/docs/OPERATIONS.md
+After=network.target local-fs.target
+# Do not fight a boot-time problem forever (these belong in [Unit], not
+# [Service] -- systemd ignores them with a warning if placed in [Service]).
+StartLimitIntervalSec=300
+StartLimitBurst=5
+# The external SSD is mounted by udisks2 after login, so it may not be present
+# at boot.  The daemon therefore does NOT require the mount: it comes up in
+# READY (or ERROR) and reports the storage state instead of failing to start.
+# Uncomment to make the unit wait for the SSD once it is in /etc/fstab:
+# RequiresMountsFor=/media/esw/T7
+
+[Service]
+Type=simple
+User=esw
+Group=esw
+# dialout: serial ports. video: the V4L2 camera node.
+SupplementaryGroups=dialout video
+
+# WorkingDirectory= takes the rest of the line verbatim and must NOT be
+# quoted -- systemd would treat the quote as part of the path.
+WorkingDirectory=/home/esw/ESW/1_Sensor_Acquisition/raspberry_pi
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=-/etc/default/oasis-daq
+
+# The config path is quoted so a clone path with spaces still works.
+ExecStart=/home/esw/sensor-env/bin/oasis-daqctl --config "/home/esw/ESW/1_Sensor_Acquisition/raspberry_pi/configs/daq.yaml" daemon
+
+# Graceful stop: SIGTERM makes the daemon close the session, flush and fsync
+# every writer, finalise the video segments and remove the INCOMPLETE marker.
+KillSignal=SIGTERM
+KillMode=mixed
+# Generous: closing a session finalises ffmpeg segments and hashes the manifest.
+TimeoutStopSec=180
+
+Restart=on-failure
+RestartSec=10
+
+# A crashed daemon must never resume into the previous session directory; a new
+# session directory is always allocated, and the old one keeps its INCOMPLETE
+# marker for recovery.
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=oasis-daq
+
+# Modest hardening that does not interfere with device access.
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=no
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+
+[Install]
+WantedBy=multi-user.target

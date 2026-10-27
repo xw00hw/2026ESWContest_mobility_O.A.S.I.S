@@ -1,0 +1,5 @@
+/build_pressure_only/
+/build_integrated_check/
+/build_fallback/
+/build_invalid_modes/
+__pycache__/

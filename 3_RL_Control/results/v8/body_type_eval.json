@@ -1,0 +1,135 @@
+{
+ "summary": [
+  {
+   "body": "A-like",
+   "ctrl": "ff_tuned",
+   "J": 4.93,
+   "red": 12.05,
+   "over": 7.81,
+   "squeeze_deg": 5.19,
+   "sq_max": 44.9
+  },
+  {
+   "body": "A-like",
+   "ctrl": "sac_v8_s1",
+   "J": 4.04,
+   "red": 10.55,
+   "over": 7.48,
+   "squeeze_deg": 5.18,
+   "sq_max": 40.45
+  },
+  {
+   "body": "A-like",
+   "ctrl": "sac_v8_s1_masked",
+   "J": 2.89,
+   "red": 8.71,
+   "over": 7.77,
+   "squeeze_deg": 5.3,
+   "sq_max": 38.84
+  },
+  {
+   "body": "B-like",
+   "ctrl": "ff_tuned",
+   "J": 2.73,
+   "red": 7.48,
+   "over": 4.92,
+   "squeeze_deg": 5.19,
+   "sq_max": 39.17
+  },
+  {
+   "body": "B-like",
+   "ctrl": "sac_v8_s1",
+   "J": 2.77,
+   "red": 6.97,
+   "over": 5.05,
+   "squeeze_deg": 5.54,
+   "sq_max": 39.46
+  },
+  {
+   "body": "B-like",
+   "ctrl": "sac_v8_s1_masked",
+   "J": 2.58,
+   "red": 6.98,
+   "over": 5.01,
+   "squeeze_deg": 5.23,
+   "sq_max": 39.17
+  },
+  {
+   "body": "broad",
+   "ctrl": "ff_tuned",
+   "J": 5.54,
+   "red": 12.1,
+   "over": 6.75,
+   "squeeze_deg": 5.19,
+   "sq_max": 45.91
+  },
+  {
+   "body": "broad",
+   "ctrl": "sac_v8_s1",
+   "J": 3.19,
+   "red": 7.61,
+   "over": 7.36,
+   "squeeze_deg": 5.74,
+   "sq_max": 44.22
+  },
+  {
+   "body": "broad",
+   "ctrl": "sac_v8_s1_masked",
+   "J": 3.56,
+   "red": 8.78,
+   "over": 7.09,
+   "squeeze_deg": 5.3,
+   "sq_max": 40.66
+  }
+ ],
+ "paired": {
+  "B-like: sac_v8_s1 - ff_tuned": {
+   "mean": -0.59,
+   "ci95": [
+    -1.75,
+    0.15
+   ],
+   "better": "14/24"
+  },
+  "B-like: sac_v8_s1 - sac_v8_s1_masked": {
+   "mean": -0.39,
+   "ci95": [
+    -1.16,
+    0.23
+   ],
+   "better": "15/24"
+  },
+  "A-like: sac_v8_s1 - ff_tuned": {
+   "mean": -0.63,
+   "ci95": [
+    -3.01,
+    1.45
+   ],
+   "better": "14/24"
+  },
+  "A-like: sac_v8_s1 - sac_v8_s1_masked": {
+   "mean": 1.52,
+   "ci95": [
+    -0.47,
+    4.1
+   ],
+   "better": "9/24"
+  },
+  "broad: sac_v8_s1 - ff_tuned": {
+   "mean": -4.74,
+   "ci95": [
+    -13.04,
+    0.33
+   ],
+   "better": "14/24"
+  },
+  "broad: sac_v8_s1 - sac_v8_s1_masked": {
+   "mean": -2.17,
+   "ci95": [
+    -7.55,
+    2.41
+   ],
+   "better": "12/24"
+  }
+ }
+}

@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-28",
+  "scope": "seated commissioning source, no run authorization",
+  "unchanged_from_physically_used_core": [
+    "occupied_trial.py",
+    "raw_count_guard.py",
+    "startup_alignment.py",
+    "native/rtmpose_viewer.py",
+    "camera/collect_pose_reference.py",
+    "pc/start_pc_displays.py"
+  ],
+  "template_changes": [
+    "candidate.yaml: local identifiers/paths removed; all readiness remains false; wheel calibration confirmation false",
+    "prepare_candidate.py: preserve explicitly supplied log_dir instead of historical machine path",
+    "Git receipt hashes use LF-normalized text; deployed core files remain byte-identical",
+    "submission repo: ESW folder names renamed (4_Seat_Actuation, 3_RL_Control); teammate absolute path replaced by OASIS_GUI_ROOT"
+  ],
+  "sha256": {
+    "camera/collect_pose_reference.py": "87de76fd2496e6a88dc23442f65d56b04f2fcdd31461e18a95dc807f0611c2c8",
+    "camera/test_pose_reference.py": "0c1213061a06af3be03104871424baf60fc47ea9eecef9838d4857b08ff10434",
+    "model_recipe/dfc54/compile_research.py": "b262130e0bab7f81d46a655155e9c405e5475e2835fb04b072995b685c67698a",
+    "model_recipe/dfc54/export_compiler_mapping.py": "a5e5392a3d249b8485970541b3279c11691378f2cd6dbe31d339cb631d750830",
+    "model_recipe/dfc54/prepare_research_manifest.py": "7b52b3ce878deb55f54144b8a694d78aaa0884b6fecde82809132211a67ce4c6",
+    "model_recipe/dfc54/validate_research.py": "48193de94bb86338a844688c655d2b5c7d1c1692ef612c358697fbbe954dc866",
+    "model_recipe/model_transform/split_before_final_conv.py": "4bf95407c2d13005123252e3cd6fcbd4e0e894e760ee1c5e5bd15fb8a0e9aa10",
+    "model_recipe/model_transform/test_validate_hybrid_hardware.py": "91b4105349decbbef6745b997c578fbe30be1e119b2904bdb9bae1472638810d",
+    "model_recipe/model_transform/validate_hybrid_hardware.py": "dbc0bbd924c51fa86175811399bd2c33e937caf70df513f10bab67d466469c9f",
+    "native/rtmpose_viewer.py": "c003bc3e0101d5c849d989d25399ed43b53f10c480c8bcfbb20b7bc0f0e263f6",
+    "native/test_rtmpose_viewer.py": "b19716ba8bb63caf05bc3b9c575d0e9d0379b47d2827f1b77558e853668a3d23",
+    "occupied_trial.py": "e478167987c40c368b995f0754739c815b9ec9fe464cd3262ab2e3ed65498b34",
+    "pc/start_pc_displays.py": "45f54b40c12920436ba51a7ed4d7bcc2947fc9bc1774a828d6d3b4c59d8c8349",
+    "pc/test_pc_displays.py": "25ad837793ae73bd216aecbeb611395528a88c83c56c44e89f9898c848d82e9d",
+    "prepare_candidate.py": "abe587987ce25bc8edb2bc8382e0e479d239a65ed9f7ee120f4b9e32a10dba15",
+    "raw_count_guard.py": "6a65e2193b9fb8b70e089c44d23d5b7fd0d4a0abbbda2ccfec90582746667ac3",
+    "startup_alignment.py": "cb9b39d4ff91a81e6663c35a95a1e5390393d790b048a4a8f412179497bb0142",
+    "test_baseline_warn_trial.py": "d9c79421cc4b66bd628e55726630b040ad53c1f125cfb708abf70826baa9e470",
+    "test_hybrid_trial.py": "c9d8083a29fa533b4157fed7fc8627c85e5ca77b059c2835733f3791a22d486b",
+    "test_monitor_link.py": "a6dcfb9c1d69a56ffaef83835f516629f7e31bff8f1b276c0fa9454cf5b396ee",
+    "test_neutral_settle.py": "8709502f7f3cf0bf8588c3b00b7d4b8736c582c4dcbcedc6377544e98b3b41c2",
+    "test_occupied_trial.py": "69b322b61f70c88a19fdba4a6ba48ba899930202a123c913e451d76e5e829e05",
+    "test_optional_pose_trial.py": "79775cd65f36a25cfbaea75fa01cefc9e073fa6c0cf2c0510d152e346cc23f8c",
+    "test_raw_count_guard.py": "aa87bcb2b7f3a82141e00103060bdd647398ce8097e6c642a953f7453ce9c277",
+    "test_startup_alignment.py": "b8c9834aaf1a4c90c465f574a96abfa85813119684ad466c7176c27cea18aa08"
+  }
+}

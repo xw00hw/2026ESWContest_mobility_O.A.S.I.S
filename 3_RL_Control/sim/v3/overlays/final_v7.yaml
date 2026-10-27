@@ -1,0 +1,48 @@
+# FINAL (v7, 2026-10-27): BeamNG on the static L2 bench. Replaces beamng_v6.yaml.
+# Parameter sources: sim/v3/final/PARAMS_FINAL.md (hypothesis-consistent data only, sim/v3/final/curate.py).
+v3:
+  predictor:
+    kind: beamng                        # oasis_rt.predictor.BeamNGPredictor: wheel prior + road ahead + state -> MLP
+    npz: models/v7/predictor.npz        # sim/v3/final/train_predictor.py (missing -> the wheel prior alone)
+    params: {wheelbase_m: 2.7, steer_ratio: 15.0, understeer_K: 0.0012, tau_s: 0.12, steer_tau_s: 0.3}   # nominal BeamNG car
+    l1_sw_advance_s: [0.5, 0.7]         # car log OBD steering -> raw wheel timing (OBD ~0.55 s behind a_y)
+  road:                                 # BeamNGpy road network ahead (bridge `road_ay_g`), see env_v3._road_setup
+    p_available: 0.75                   # BeamNG.tech + BeamNGpy; BeamNG.drive protocols carry no road -> road_valid 0
+    p_route_known: 0.6                  # navigation route set; else the junction branch is known once the car turns
+    follow_kinds: [urban_turn, steady_circle, l1_replay, beamng]
+    gain: [0.85, 1.25]                  # road vs driven curvature (corner cutting)
+    shift_m: [-4.0, 4.0]                # turn-in earlier / later than the road
+    smooth_m: [4.0, 15.0]
+    noise_kappa: [0.0005, 0.002]        # 1/m, 10 m correlated
+    commit_kappa: 0.015                 # 1/m: 'the car is turning' (R < 67 m)
+    s_err_m: [0.0, 1.5]                 # position along the road
+  zone_frac_hi: {base: 0.5, per_m_shoulder: 3.0, per_m_torso: 3.0, sd: 0.08, clip: [0.25, 0.75]}   # A/B rest pressures (H4)
+  pitch_arm_ratio: [0.235, 0.588]       # geometry: zone 0.04-0.10 m about the pitch axis / 0.17 m from the yaw hinge
+vehicle:                                # BeamNG-class car, scenario.dynamic_bicycle
+  model: dynamic
+  wheelbase_m:         {dist: uniform, range: [2.4, 3.0], nominal: 2.7, level: 0, src: "BeamNG compact .. full-size"}
+  steer_ratio:         {dist: normal, mean: 15.0, sd: 1.2, clip: [12.5, 18.0], level: 0, src: "BeamNG lock 450-540 deg / 33-38 deg"}
+  weight_front_frac:   {dist: uniform, range: [0.48, 0.62], nominal: 0.55, level: 0, src: LIT}
+  c_front_per_rad:     {dist: uniform, range: [8.0, 14.0], nominal: 11.0, level: 1, src: "LIT: cornering stiffness / axle load"}
+  c_rear_per_rad:      {dist: uniform, range: [11.0, 18.0], nominal: 14.5, level: 1, src: LIT}
+  k_yaw:               {dist: uniform, range: [0.9, 1.15], nominal: 1.0, level: 1, src: "LIT: Iz / (m a b)"}
+  delta_max_rad:       {dist: uniform, range: [0.5, 0.65], nominal: 0.58, level: 0, src: ASM}
+  rack_tau_s:          {dist: uniform, range: [0.02, 0.07], nominal: 0.04, level: 1, src: "ASM: BeamNG input filter + rack"}
+  rack_rate_radps:     {dist: uniform, range: [1.0, 3.0], nominal: 2.0, level: 1, src: ASM}
+  roll_grad_deg_per_g: {dist: uniform, range: [2.5, 6.0], nominal: 4.0, level: 1, src: LIT}
+  roll_fn_hz:          {dist: uniform, range: [1.2, 2.2], nominal: 1.6, level: 1, src: LIT}
+  roll_zeta:           {dist: uniform, range: [0.3, 0.6], nominal: 0.45, level: 1, src: LIT}
+seat_bolster:
+  authority_scale: {dist: lognormal, median: 1.0, logsd: 0.234, clip: [0.63, 1.58], level: 0,
+                    src: "curation: H3-consistent pitch responses -> 14-35 counts/deg around 22.2 (models/v7/calib_v2.json)"}
+sensors:
+  obd_rate_hz: [20, 100]                # bridge rate
+  obd_latency_s: [0.01, 0.06]
+  speed_quant_kph: 0.1
+  imu_rate_hz: [50, 100]                # BeamNG vehicle acceleration (gravity excluded)
+  imu_latency_s: [0.01, 0.05]
+  imu_misalign_deg: 0.5
+  imu_bias_mps2: 0.02
+  noise_counts: [20.0, 60.0]            # bench target: 10/25 22-58, 10/26 26-44 counts within a dwell
+  pose_rate_hz: [9.5, 11.0]             # bench 10.3 Hz
+  pose_lean_noise_deg: [0.4, 1.0]       # bench A 0.40-0.48, B 0.75-0.97 deg

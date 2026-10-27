@@ -1,0 +1,218 @@
+fb_root: /REPLACE_WITH_ESW_REPOSITORY/4_Seat_Actuation
+model_dir: /REPLACE_WITH_MODEL_V8_DIRECTORY
+dt_s: 0.05
+filter_tau_s: 0.3
+theta_max_deg: 20
+pitch_deg:
+  left: 0.0
+  right: 0.0
+rig: static_bench
+control:
+  mode: rl
+  fallback: true
+  cold_fallback: null
+  actuator_mismatch: rule
+  rule: {}
+fb_v6:
+  settings: null
+beamng:
+  listen:
+  - '::'
+  - 64257
+  allow_from:
+  - REPLACE_WITH_VERIFIED_PC_IP
+  fresh_ms: 200
+  max_pc_age_ms: 50
+  startup_s: 2.0
+  steer_sign: 1
+  allow_synthetic: false
+confirmations:
+  hardware_mapping_checked: false
+  neutral_start_clear: false
+  stm_tuning_reviewed: false
+  steer_sign_checked: false
+  trial_settings_reviewed: false
+actor:
+  backends:
+  - c
+  - numpy
+  c_lib: /REPLACE_WITH_BUILT_LIBOASIS_ACTOR_SO
+  hef: null
+  check_set: /REPLACE_WITH_MODEL_V8_DIRECTORY/check_set.npy
+  tolerance:
+    numpy: 0.0
+    c: 0.0001
+    hailo: 0.1
+link:
+  firmware: fallback_v2
+  port: /dev/serial/by-id/REPLACE_WITH_VERIFIED_STM32
+  baud: 460800
+  yaw_max_deg: 20
+  send_mode: event
+  deadband_deg: 0.5
+  min_interval_s: 0.25
+  keepalive_s: 0
+  mock_crank_rate_dps: 15.0
+pressure:
+  channels:
+    side_R: A1_C1
+    side_L: A1_C3
+    side_hi_R: A1_C1
+    side_hi_L: A1_C3
+    side_lo_R: A1_C0
+    side_lo_L: A1_C2
+    back_R: A2_C2
+    back_L: A2_C1
+    cush_R:
+    - A0_C1
+    - A0_C3
+    cush_L:
+    - A0_C0
+    - A0_C2
+  pad_calib: /REPLACE_WITH_EXISTING_PAD_CALIBRATION_JSON
+  fsr_curve: null
+  zero_window_s: 2.0
+  zero_max_std_counts: 40
+  baseline_variability_mode: warn
+  stale_s: 0.3
+  no_pressure_yaw_cap_deg: 20.0
+  counts_per_N:
+    A1_C2: 86.94837255456748
+    A2_C2: 86.94837255456748
+    A1_C0: 86.94837255456748
+    A1_C3: 86.94837255456748
+    A2_C1: 86.94837255456748
+    A1_C1: 86.94837255456748
+safety:
+  mode: raw
+  fsr_force_soft_N: 60
+  fsr_force_hard_N: 120
+  arm_deg: 0
+  hold_s: 0.3
+  pad_saturation_counts: 2500
+console_N_per_g: 221.9
+vehicle:
+  source: udp
+  udp_port: 47801
+  replay: null
+  loop: false
+  stale_s: 0.3
+predictor:
+  kind: model
+wheel:
+  source: udp
+  priority_prediction: true
+  listen:
+  - '::'
+  - 64258
+  allow_from:
+  - REPLACE_WITH_VERIFIED_PC_IP
+  source_id: moza-r3
+  device_key: REPLACE_WITH_VERIFIED_MOZA_DEVICE
+  physical_span_deg: 450
+  fresh_ms: 100
+  max_pc_age_ms: 50
+  calibration:
+    confirmed: false
+    game_gain_deg: -560.0
+    game_offset_deg: 0.0
+    beamng_vehicle_id: REPLACE_WITH_CALIBRATED_VEHICLE_ID
+pose:
+  source: udp
+  source_id: front_seat_pose
+  udp_port: 47802
+  min_confidence: 0.5
+  lean_sign: 1.0
+  stale_s: 1.0
+profile:
+  mass_kg: 75
+  shoulder_width_m: 0.42
+  sitting_torso_m: 0.58
+  from_camera: false
+realtime:
+  cpu: 3
+  fifo_priority: 0
+  mlock: false
+  gc_freeze: true
+log_dir: /REPLACE_WITH_NEW_TRIAL_LOG_DIRECTORY
+deployment:
+  release: reconnect_20261028_optionalpose_candidate
+  commissioning: Template only; paths and local calibration require review; readiness
+    is not inherited
+  physical_pressure_calibrated: false
+  requested_yaw_cap_deg: 20
+  real_board_yaw_cap_changed: false
+  hardware_arm_performed: false
+  pressure_masking_enabled: false
+  moza_coordinate_checked: false
+  moza_driving_accuracy_validated: false
+  moza_physical_motion_validated: false
+  camera_pose_neutral_available: false
+  seated_shadow_only: true
+  physical_motion_authorized: false
+  camera_excluded_by_operator: false
+  approved_trial: null
+  occupied_trial_accepted: false
+  operator_stop_ready: false
+  pressure_masking: false
+  physical_trial_yaw_cap_deg: 20
+  raw_release_counts: 2500
+  raw_release_latched: true
+  expected_tuning_revision: 2
+  requested_trial: 'UNAPPROVED G-hybrid: measured1G prefilter20deg, preview10, residual1.5;
+    raw2500latched release, pitch0,300s including2s settle+2s baseline; variability40count
+    warning only'
+  operator_reported_raw_release_threshold_counts: 2500
+  operator_reported_yaw_range_checked_deg: 20
+  force_units_calibrated: false
+  approval_recorded_wall_time_ns: null
+  neutral_calibration_validated: false
+  rl_after_new_neutral_authorized: false
+  neutral_calibration_id: D3_1800_D4_1800_D5_1200_D6_1200_20261028
+  neutral_pulses_us:
+  - 1800
+  - 1800
+  - 1200
+  - 1200
+  neutral_channel_order:
+  - UR_D3
+  - UL_D4
+  - DR_D5
+  - DL_D6
+  prior_neutral_pulses_us:
+  - 1800
+  - 1200
+  - 1200
+  - 1800
+  inherited_rl_wrapper_use: Only this isolated G-hybrid wrapper and a newly reviewed
+    runtime release; old approval tags are invalid
+  source_config: candidate.yaml (repository template)
+  source_config_sha256: null
+  host_source_policy: Resolve from new --runtime-root release; never reuse old calibrated
+    host contract
+  neutral_settle_s: 2.0
+  neutral_calibration_status: Operator confirmed D3=1800,D4=1800,D5=1200,D6=1200;
+    mounting readiness remains separate
+  baseline_window_s: 2.0
+  baseline_max_std_counts: 40
+  baseline_variability_mode: warn
+  arm_time_budget_s: 300
+  policy: g_residual_rl
+  camera_input_optional: true
+  camera_pose_physical_alignment_verified: false
+g_residual_control:
+  enabled: true
+  deadband_g: 0.01
+  measured_on_g: 0.02
+  measured_off_g: 0.01
+  knee_g: 0.0625
+  knee_yaw_deg: 10.0
+  full_g: 1.0
+  full_yaw_deg: 20.0
+  preview_on_g: 0.03
+  preview_off_g: 0.015
+  preview_full_g: 0.0625
+  preview_max_yaw_deg: 10.0
+  preview_confirm_s: 0.1
+  residual_max_deg: 1.5
+  speed_min_mps: 1.0

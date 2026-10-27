@@ -1,0 +1,202 @@
+# OASIS DAQ configuration -- v0.1
+#
+# Every value below was verified against the actual bench hardware on the
+# Raspberry Pi 5 / Ubuntu 24.04 target.  See 1_Sensor_Acquisition/raspberry_pi/docs/HARDWARE_BRINGUP.md for
+# the measurements these defaults come from.
+
+storage:
+  # Preferred storage roots, tried in order.  The first one that exists and is
+  # writable wins.  The external Samsung T7 is already mounted by udisks2 at
+  # /media/esw/T7, so that mountpoint is used as-is -- the SSD is never
+  # formatted, repartitioned or cleaned by this software.
+  roots:
+    - /media/esw/T7/OASIS_DAQ
+    - /mnt/T/OASIS_DAQ
+  # A configured root must live on a real mountpoint, so that an unmounted SSD
+  # cannot be mistaken for a mounted one via a leftover directory. Set false
+  # only for a deliberately non-removable root.
+  require_mountpoint: true
+  # Used only when no root above is available.  Recording still works so that
+  # bench development is never blocked, but the session is flagged degraded.
+  fallback_root: ~/oasis-daq-fallback
+  # Refuse to start a new session below this much free space.
+  min_free_gb_start: 20.0
+  # Close the running session cleanly and go to ERROR below this.
+  min_free_gb_stop: 5.0
+  # Allow production recording onto the fallback path (bench use only).
+  allow_fallback_recording: true
+  # Seconds between flushes of the buffered CSV/JSONL writers.
+  flush_interval_s: 5.0
+  # Seconds between fsync calls.  flush() only reaches the kernel page cache;
+  # a bench test that lost the USB SSD mid-session lost ~10 minutes of data
+  # because nothing had been forced to the device.  This bounds worst-case loss
+  # on an abrupt power cut or disconnect.  Measured fsync cost on this exFAT
+  # volume: ~27 ms for 64 KiB, so 15 s costs well under 1% of a core.
+  fsync_interval_s: 15.0
+
+session:
+  # Automatically begin recording as soon as the daemon reaches READY.
+  # Deliberately false: a boot must not silently start writing to the SSD.
+  autostart_recording: false
+  operator: ""
+  vehicle: ""
+  notes: ""
+
+clock:
+  # Informational only -- clock.py selects CLOCK_MONOTONIC_RAW when available
+  # and records the actual source in metadata.json.
+  prefer_monotonic_raw: true
+
+gps:
+  enabled: true
+  # u-blox 7 (UBX-G70xx, PROTVER 14.00) enumerating as a native USB CDC-ACM
+  # device.  Baud is therefore irrelevant on the host side, but it is still
+  # applied harmlessly for USB-UART bridge variants of the same receiver.
+  match:
+    vid_pid: "1546:01a7"
+    by_id_contains: "u-blox"
+    device: ""            # set to force a specific node, e.g. /dev/ttyACM0
+  baud: 9600
+  read_timeout_s: 1.0
+  # Confirm the port really emits NMEA before a session can rely on it.
+  # Read-only: no configuration is written to the receiver.
+  validate_protocol: true
+  validate_seconds: 2.5
+  # Age after which the GPS stream is reported stale by the health monitor.
+  stale_after_s: 3.0
+  # v0.1 records the receiver exactly as found.  Changing the update rate needs
+  # a UBX-CFG-RATE write plus ACK verification, which stays off by default.
+  configure_rate: false
+  target_rate_hz: 1
+
+imu:
+  enabled: true
+  # WitMotion WIT-standard IMU behind a CH340 USB-UART bridge.  Measured on the
+  # bench: 9600 baud, 0x55 frames of type 0x51/0x52/0x53/0x54 at 10 Hz each,
+  # 0 checksum failures over 418 frames.
+  match:
+    vid_pid: "1a86:7523"
+    by_id_contains: "1a86_USB_Serial"
+    device: ""
+  baud: 9600
+  # Probed in order by `oasis-daqctl check --probe-imu` when baud is unknown.
+  baud_candidates: [9600, 115200, 57600, 38400, 19200]
+  read_timeout_s: 1.0
+  # Confirm the port really speaks WIT at this baud before a session relies on
+  # it.  1a86:7523 is a generic CH340 id shared by many boards, so matching the
+  # USB identity is not proof that this is the IMU.  Read-only.
+  validate_protocol: true
+  validate_seconds: 2.0
+  stale_after_s: 2.0
+  # Full-scale ranges of the WIT standard protocol; used to scale raw counts.
+  acc_range_g: 16.0
+  gyro_range_dps: 2000.0
+  angle_range_deg: 180.0
+  # Raw serial bytes are always archived alongside the parsed CSV.
+  save_raw_stream: true
+  raw_chunk_bytes: 1048576
+  # Rotation from the sensor's own frame into the vehicle frame
+  # (+x forward, +y left, +z up).  Identity until the mount is measured;
+  # both raw-frame and vehicle-frame values are stored regardless.
+  mounting:
+    # 3x3 row-major matrix applied as v_vehicle = R @ v_sensor
+    rotation_matrix:
+      - [1.0, 0.0, 0.0]
+      - [0.0, 1.0, 0.0]
+      - [0.0, 0.0, 1.0]
+    description: "identity -- sensor axes not yet measured against vehicle axes"
+  calibration_file: "configs/imu_calibration.yaml"
+
+camera:
+  enabled: true
+  # Arducam OV9281 USB (global shutter, monochrome sensor exposed as MJPG).
+  # Measured sustained rate at 1280x800 MJPG: 100.2 fps via ffmpeg passthrough,
+  # 92.4 fps through the OpenCV raw path.  YUYV is capped at 10 fps and is
+  # therefore unusable for recording.
+  match:
+    vid_pid: "0c45:6366"
+    card_contains: "Arducam OV9281"
+    device: ""
+  width: 1280
+  height: 800
+  fourcc: "MJPG"
+  # The device only advertises 100 and 120 fps discrete intervals at this
+  # resolution; 100 is the stable choice.
+  capture_fps: 100
+  # Write every Nth captured frame to disk.  4 -> ~25 fps recorded, ~4 GB/h.
+  # Set to 1 to archive every captured frame (~16 GB/h).
+  record_decimation: 4
+  # Seconds of video per segment file.  A finished segment is fsynced to the
+  # device; the in-progress one is still lost on an abrupt power cut, so this
+  # value is the worst-case video loss window.
+  segment_seconds: 60
+  # Matroska tolerates truncation far better than plain MP4.
+  container: "mkv"
+  # Physical installation, recorded in metadata.json.
+  mount_position: "driver_side_a_pillar_upper"
+  stale_after_s: 2.0
+
+pose:
+  enabled: true
+  # MediaPipe Pose Landmarker runs on the newest available frame and is allowed
+  # to fall behind the recorder; it never throttles capture or recording.
+  # Measured on this Pi 5: pose_landmarker_lite sustains ~13.3 fps with p50
+  # inference 66 ms / p95 94 ms.  10 fps leaves headroom for the recorder.
+  target_fps: 10
+  # MediaPipe 1.x uses a .task bundle (the legacy `model_complexity` knob is
+  # gone).  Empty means <model_dir>/pose_landmarker_lite.task.
+  model_path: ""
+  min_detection_confidence: 0.5
+  min_tracking_confidence: 0.5
+  # The OV9281 is a monochrome sensor; frames are replicated to 3 channels.
+  grayscale_to_rgb: true
+  # Downscale before inference to keep CPU headroom on the Pi 5.
+  input_width: 640
+  input_height: 400
+  # Neutral posture is learned from a stable window early in the session.
+  neutral_calibration:
+    enabled: true
+    start_after_s: 5.0
+    window_s: 10.0
+    min_valid_frames: 30
+    max_landmark_stddev_px: 12.0
+
+dashboard:
+  enabled: true
+  host: "0.0.0.0"
+  port: 8080
+  preview_fps: 8
+  preview_width: 640
+  preview_jpeg_quality: 60
+  telemetry_hz: 5
+  # Serving OSM tiles requires the *laptop* to have internet; the Pi does not
+  # proxy them.  When tiles fail the map falls back to a plain grid + track.
+  map_tiles: "osm"
+
+health:
+  sample_interval_s: 1.0
+  # Warn when the SoC gets hot; the Pi 5 throttles around 80 C.
+  cpu_temp_warn_c: 75.0
+  cpu_temp_error_c: 85.0
+  queue_warn_ratio: 0.8
+
+queues:
+  # The camera is the only path with a producer/consumer queue: capture enqueues
+  # and a writer thread drains it, so capture never blocks on the filesystem.
+  # GPS and IMU write their CSV synchronously in their own thread -- at 2 and 10
+  # rows/s that is far cheaper than a queue.  Preview and pose use newest-wins
+  # slots, never queues, because a stale frame is worthless.
+  camera_write_maxsize: 240
+  pose_maxsize: 2
+  preview_maxsize: 2
+
+gpio_button:
+  # Optional physical START/STOP button.  Disabled until the pin is confirmed
+  # on real wiring -- never enable this against an unverified pin.
+  enabled: false
+  pin: null
+  active_low: true
+  hold_seconds: 0.05
+
+logging:
+  level: "INFO"

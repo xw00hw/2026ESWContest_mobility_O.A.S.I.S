@@ -1,0 +1,57 @@
+{
+ "eval_bank": {
+  "0.0": {
+   "fb_v6": {
+    "J": 1.41,
+    "red_mean": 3.46,
+    "red_p10": 0.0,
+    "over_time_pct": 2.17,
+    "squeeze_max_N": 29.5,
+    "trips": 0.0
+   },
+   "fb_v6_default": {
+    "J": 1.16,
+    "red_mean": 2.29,
+    "red_p10": -0.01,
+    "over_time_pct": 0.0,
+    "squeeze_max_N": 19.8,
+    "trips": 0.0
+   },
+   "rule_tuned": {
+    "J": 4.1,
+    "red_mean": 9.76,
+    "red_p10": 0.67,
+    "over_time_pct": 4.85,
+    "squeeze_max_N": 40.7,
+    "trips": 0.0
+   }
+  },
+  "2.0": {
+   "fb_v6": {
+    "J": 2.37,
+    "red_mean": 4.35,
+    "red_p10": -0.02,
+    "over_time_pct": 2.89,
+    "squeeze_max_N": 42.1,
+    "trips": 0.0
+   },
+   "fb_v6_default": {
+    "J": 1.69,
+    "red_mean": 2.55,
+    "red_p10": -0.01,
+    "over_time_pct": 0.16,
+    "squeeze_max_N": 22.2,
+    "trips": 0.0
+   },
+   "rule_tuned": {
+    "J": 4.28,
+    "red_mean": 10.8,
+    "red_p10": 0.43,
+    "over_time_pct": 7.54,
+    "squeeze_max_N": 42.0,
+    "trips": 0.0
+   }
+  }
+ },
+ "paired": {}
+}

@@ -1,0 +1,13 @@
+{
+  "pi_host": "REPLACE_WITH_PI_HOST",
+  "pi_user": "REPLACE_WITH_PI_USER",
+  "ipv6": false,
+  "host_key_alias": "REPLACE_WITH_VERIFIED_HOST_KEY_ALIAS",
+  "identity_file": "C:/REPLACE_WITH_EXISTING_SSH_IDENTITY",
+  "known_hosts_file": "C:/REPLACE_WITH_VERIFIED_KNOWN_HOSTS",
+  "remote_control_log": "/REPLACE_WITH_SESSION_DIRECTORY/control.jsonl",
+  "camera_remote_port": 8081,
+  "camera_local_port": 8081,
+  "monitor_local_port": 8766,
+  "monitor_source": "C:/REPLACE_WITH_ESW_REPOSITORY/3_RL_Control/beamng/rl_monitor.py"
+}

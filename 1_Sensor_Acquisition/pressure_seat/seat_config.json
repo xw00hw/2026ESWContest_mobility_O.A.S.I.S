@@ -1,0 +1,151 @@
+{
+  "schema": "seat-daq-config-v1",
+  "confirmed_utc": "2026-10-06T14:04:10.372098+00:00",
+  "assignment_source": "Imported from the latest working SMART_SEAT configuration: C0/C1/C2/C3 on all three MUX banks; user UI labels A0 seat, A1 Side, A2 Back. Precise sensor positions are not calibrated.",
+  "vref": 3.3,
+  "vref_measured": false,
+  "bank_labels": {
+    "0": "A0 · 좌판",
+    "1": "A1 · Side",
+    "2": "A2 · Back"
+  },
+  "bank_conditions": {
+    "0": {
+      "rm_ohm": 620,
+      "rlim_ohm": 100,
+      "source": "Previously user-confirmed D circuit; not remeasured during this firmware update"
+    },
+    "1": {
+      "rm_ohm": null,
+      "rlim_ohm": null,
+      "source": "Resistance settings not confirmed; user UI label Side preserved"
+    },
+    "2": {
+      "rm_ohm": null,
+      "rlim_ohm": null,
+      "source": "Resistance settings not confirmed; user UI label Back preserved"
+    }
+  },
+  "adc_inputs": {
+    "0": "A0/PA3/CN9-1/ADC1_INP15",
+    "1": "A1/PC0/CN9-3/ADC1_INP10",
+    "2": "A2/PC3/CN9-5/ADC1_INP13"
+  },
+  "mux_wiring": {
+    "S0": "D6/PE9/CN10-4",
+    "S1": "D5/PE11/CN10-6",
+    "S2": "D4/PE14/CN10-8",
+    "S3": "D3/PE13/CN10-10",
+    "EN": "D7/PG12/CN10-2"
+  },
+  "mapping": [
+    {
+      "id": "A0_C0",
+      "label": "A0 / C0",
+      "region": "좌판",
+      "side": "unknown",
+      "bank": 0,
+      "channel": 0,
+      "enabled": true
+    },
+    {
+      "id": "A0_C1",
+      "label": "A0 / C1",
+      "region": "좌판",
+      "side": "unknown",
+      "bank": 0,
+      "channel": 1,
+      "enabled": true
+    },
+    {
+      "id": "A0_C2",
+      "label": "A0 / C2",
+      "region": "좌판",
+      "side": "unknown",
+      "bank": 0,
+      "channel": 2,
+      "enabled": true
+    },
+    {
+      "id": "A0_C3",
+      "label": "A0 / C3",
+      "region": "좌판",
+      "side": "unknown",
+      "bank": 0,
+      "channel": 3,
+      "enabled": true
+    },
+    {
+      "id": "A1_C0",
+      "label": "A1 / C0",
+      "region": "Side",
+      "side": "unknown",
+      "bank": 1,
+      "channel": 0,
+      "enabled": true
+    },
+    {
+      "id": "A1_C1",
+      "label": "A1 / C1",
+      "region": "Side",
+      "side": "unknown",
+      "bank": 1,
+      "channel": 1,
+      "enabled": true
+    },
+    {
+      "id": "A1_C2",
+      "label": "A1 / C2",
+      "region": "Side",
+      "side": "unknown",
+      "bank": 1,
+      "channel": 2,
+      "enabled": true
+    },
+    {
+      "id": "A1_C3",
+      "label": "A1 / C3",
+      "region": "Side",
+      "side": "unknown",
+      "bank": 1,
+      "channel": 3,
+      "enabled": true
+    },
+    {
+      "id": "A2_C0",
+      "label": "A2 / C0",
+      "region": "Back",
+      "side": "unknown",
+      "bank": 2,
+      "channel": 0,
+      "enabled": true
+    },
+    {
+      "id": "A2_C1",
+      "label": "A2 / C1",
+      "region": "Back",
+      "side": "unknown",
+      "bank": 2,
+      "channel": 1,
+      "enabled": true
+    },
+    {
+      "id": "A2_C2",
+      "label": "A2 / C2",
+      "region": "Back",
+      "side": "unknown",
+      "bank": 2,
+      "channel": 2,
+      "enabled": true
+    },
+    {
+      "id": "A2_C3",
+      "label": "A2 / C3",
+      "region": "Back",
+      "side": "unknown",
+      "bank": 2,
+      "channel": 3,
+      "enabled": true
+    }
+  ]
+}

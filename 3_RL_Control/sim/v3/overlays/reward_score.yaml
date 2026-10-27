@@ -1,0 +1,11 @@
+# v8: train the RL policy on the evaluation score itself (sim/v3/tune_rule.py, the criterion the rule is tuned and the
+# checkpoints are selected with). Per control step (env_v3.step, reward.mode score):
+#   50 (y_twin^2 - y^2) / sum_episode(y_twin^2)                  -> sums to ~ the episode's CoM RMS reduction [%]
+#   - (50 [added squeeze > over_F_N] + 100 over_press^2) / steps  -> - 0.5 x time too hard [%] - 100 x mean over-press^2
+#   - w_du sum(da^2) - w_trip trip                                -> small smoothness term (the rule's chatter ~0.3 points)
+# The v7 reward (absolute CoM^2 in 2 cm units, w_du 0.3, squeeze^2, over-press^2) ranked the tuned rule BELOW the passive
+# seat (mean -21.8 vs -0.3 per episode, 35 % sign agreement with the score): models/v8/reward_diag.json.
+reward:
+  mode: score
+  w_du: 0.01
+  com_floor_m: 0.001                  # twin CoM RMS floor (1 mm) for nearly straight episodes

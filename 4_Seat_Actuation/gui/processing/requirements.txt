@@ -1,0 +1,10 @@
+# Windows Python 3.13; CPU inference. Install in an isolated environment.
+rtmlib==0.0.16
+onnxruntime==1.31.0
+openvino==2026.4.1
+opencv-python==5.0.0.93
+numpy>=2.2,<3
+pandas>=2.2,<3
+pyarrow==26.0.0
+imageio-ffmpeg==0.6.0
+matplotlib>=3.9,<4

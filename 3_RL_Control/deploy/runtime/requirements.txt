@@ -1,0 +1,5 @@
+# Raspberry Pi 5 runtime (Raspberry Pi OS Bookworm, Python 3.11): python -m venv ~/.venv/oasis && pip install -r requirements.txt
+numpy>=1.24
+pyyaml>=6.0
+pyserial>=3.5
+# optional: pandas (legacy oasis_rt.controller replay source only), hailo_platform (HailoRT, Hailo backend only)

@@ -1,0 +1,3 @@
+# smoother commands for the demo: the 2026-10-25 v2_resid policy chattered 0<->10 deg (servo is 15 deg/s)
+reward:
+  w_du: 0.3

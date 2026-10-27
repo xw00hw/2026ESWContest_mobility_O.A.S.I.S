@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<launchConfiguration type="com.st.stm32cube.ide.mcu.debug.launch.launchConfigurationType">
+  <stringAttribute key="com.st.stm32cube.ide.mcu.debug.launch.formatVersion" value="2" />
+  <stringAttribute key="com.st.stm32cube.ide.mcu.debug.launch.targetDevice" value="STM32H723ZGTx" />
+  <stringAttribute key="com.st.stm32cube.ide.mcu.debug.launch.server" value="com.st.stm32cube.ide.mcu.debug.stlink" />
+  <stringAttribute key="com.st.stm32cube.ide.mcu.debug.stlink.reset_strategy" value="no_reset" />
+  <stringAttribute key="com.st.stm32cube.ide.mcu.debug.stlink.frequency" value="1000" />
+  <stringAttribute key="com.st.stm32cube.ide.mcu.debug.stlink.watchdog_config" value="none" />
+  <stringAttribute key="com.st.stm32cube.ide.mcu.debug.stlink.low_power_debug" value="none" />
+  <booleanAttribute key="com.st.stm32cube.ide.mcu.debug.launch.startServer" value="true" />
+  <booleanAttribute key="com.st.stm32cube.ide.mcu.debug.launch.swd_mode" value="true" />
+  <booleanAttribute key="com.st.stm32cube.ide.mcu.debug.launch.enable_live_expr" value="true" />
+  <booleanAttribute key="com.st.stm32cube.ide.mcu.debug.launch.verify_flash_download" value="true" />
+  <booleanAttribute key="com.st.stm32cube.ide.mcu.debug.launch.enable_swv" value="false" />
+  <booleanAttribute key="com.st.stm32cube.ide.mcu.debug.stlink.enable_shared_stlink" value="false" />
+  <stringAttribute key="com.st.stm32cube.ide.mcu.debug.launch.loadList" value="{&quot;fItems&quot;: [{&quot;fIsFromMainTab&quot;: true, &quot;fPath&quot;: &quot;${workspace_loc:/ExperimentA_CAD_180}/../build_fallback/fallback_control_h723.elf&quot;, &quot;fProjectName&quot;: &quot;ExperimentA_CAD_180&quot;, &quot;fBuildConfigId&quot;: &quot;&quot;, &quot;fUseActiveBuildConfig&quot;: false, &quot;fPerformBuild&quot;: false, &quot;fDownload&quot;: false, &quot;fLoadSymbols&quot;: true, &quot;fSymbolAddress&quot;: &quot;&quot;, &quot;fDownloadOffsetAddress&quot;: &quot;&quot;, &quot;fStartDownloadAddress&quot;: &quot;&quot;}]}" />
+  <stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="ExperimentA_CAD_180" />
+  <stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="${workspace_loc:/ExperimentA_CAD_180}/../build_fallback/fallback_control_h723.elf" />
+  <stringAttribute key="org.eclipse.cdt.dsf.gdb.DEBUG_NAME" value="C:/ST/STM32CubeIDE_2.2.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740/tools/bin/arm-none-eabi-gdb.exe" />
+  <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.jtagDevice" value="ST-LINK (ST-LINK GDB server)" />
+  <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.doReset" value="false" />
+  <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.doHalt" value="false" />
+  <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.loadImage" value="false" />
+  <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.loadSymbols" value="true" />
+  <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.setBreakpoint" value="false" />
+  <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.setResume" value="false" />
+  <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.imageFileName" value="${workspace_loc:/ExperimentA_CAD_180}/../build_fallback/fallback_control_h723.elf" />
+  <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.symbolsFileName" value="${workspace_loc:/ExperimentA_CAD_180}/../build_fallback/fallback_control_h723.elf" />
+  <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+    <listEntry value="/ExperimentA_CAD_180" />
+  </listAttribute>
+  <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+    <listEntry value="4" />
+  </listAttribute>
+  <intAttribute key="org.eclipse.cdt.launch.BUILD_BEFORE_LAUNCH_ATTR" value="0" />
+  <intAttribute key="org.eclipse.cdt.debug.gdbjtag.core.portNumber" value="61234" />
+  <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.ipAddress" value="localhost" />
+  <booleanAttribute key="com.st.stm32cube.ide.mcu.debug.launch.useRemoteTarget" value="true" />
+  <intAttribute key="com.st.stm32cube.ide.mcu.debug.launch.mode" value="0" />
+  <stringAttribute key="com.st.stm32cube.ide.mcu.debug.launch.port" value="" />
+  <booleanAttribute key="com.st.stm32cube.ide.mcu.debug.stlink.stlink_check_serial_number" value="true" />
+  <stringAttribute key="com.st.stm32cube.ide.mcu.debug.stlink.stlink_txt_serial_number" value="003B001F3434511734313937" />
+</launchConfiguration>

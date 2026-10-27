@@ -1,0 +1,11 @@
+# DR overlays of the final model (v8 = v7 + OASIS_FALLBACK v2 actuator + BeamNG.drive Collector inputs + the
+# evaluation score as the RL reward), in order,
+# relative to the project root (3_RL_Control)
+sim/v3/overlays/pipeline_v5.yaml
+sim/v2/overlays/smooth.yaml
+sim/v3/overlays/v4_comfort.yaml
+sim/v3/overlays/no_pitch.yaml
+sim/v3/overlays/final_v7.yaml
+sim/v3/overlays/fb_a2.yaml
+sim/v3/overlays/beamng_drive_collector.yaml
+sim/v3/overlays/reward_score.yaml

@@ -1,0 +1,73 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Build / generated
+build/
+dist/
+*.egg-info/
+coverage.xml
+htmlcov/
+
+# Logs
+*.log
+logs/
+
+# Secrets / local config
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Data: raw and large generated datasets are not committed
+/data/raw/*
+/data/interim/*
+/data/processed/*
+!/data/raw/.gitkeep
+!/data/interim/.gitkeep
+!/data/processed/.gitkeep
+
+# Models / checkpoints
+*.pt
+*.pth
+*.ckpt
+*.onnx
+checkpoints/
+models/checkpoints/
+
+# Video / bag / large experiment artifacts
+*.mp4
+*.avi
+*.mkv
+*.bag
+*.mcap
+*.db3
+
+# Firmware / embedded local output
+*.elf
+*.hex
+*.bin
+*.map
+
+# Temporary
+*.tmp
+*.bak
+*~

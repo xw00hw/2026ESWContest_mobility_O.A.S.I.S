@@ -1,0 +1,25 @@
+# /etc/systemd/system/oasis-rt.service  (Raspberry Pi 5) -- deploy/README.md "Pi setup"
+# ~/rl is a symlink to "<ESW clone>/3_RL_Control" (no spaces in unit paths); the BeamNG_Bolster_FB modules are found
+# through it (<ESW clone>/4_Seat_Actuation). Optional: isolate core 3 -> "isolcpus=3 nohz_full=3" in
+# /boot/firmware/cmdline.txt.
+[Unit]
+Description=O.A.S.I.S bolster control (BeamNG -> RL / fallback -> OASIS_FALLBACK v2)
+After=network-online.target dev-ttyACM0.device
+Wants=network-online.target
+
+[Service]
+User=oasis
+WorkingDirectory=/home/oasis/rl/deploy/runtime
+ExecStart=/home/oasis/.venv/oasis/bin/python -m oasis_rt.app --config config.yaml
+AmbientCapabilities=CAP_SYS_NICE CAP_IPC_LOCK
+LimitRTPRIO=60
+LimitMEMLOCK=infinity
+CPUAffinity=3
+KillSignal=SIGINT
+TimeoutStopSec=5
+Restart=no
+# Restart=no on purpose: one session per start, no automatic re-ARM after a fault (BeamNG_Bolster_FB / AGENTS.md);
+# SIGINT = operator stop -> FB_OFF + OFF verification; the firmware's 500 ms lease turns PWM off on its own if the Pi dies.
+
+[Install]
+WantedBy=multi-user.target

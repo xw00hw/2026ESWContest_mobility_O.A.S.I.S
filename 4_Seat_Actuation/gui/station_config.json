@@ -1,0 +1,86 @@
+{
+  "schema": "oasis-control-station-v1",
+  "vref_v": 3.3,
+  "vref_measured": false,
+  "camera": {
+    "width": 1280,
+    "height": 800,
+    "fps": 30
+  },
+  "mapping": {
+    "D3": {
+      "model": "DS5180SSG_270deg",
+      "center_us": 1800,
+      "crank": 1,
+      "direction": -1
+    },
+    "D4": {
+      "model": "DS5180SSG_270deg",
+      "center_us": 1200,
+      "crank": 1,
+      "direction": 1
+    },
+    "D5": {
+      "model": "DS5180SSG_270deg",
+      "center_us": 1200,
+      "crank": 2,
+      "direction": 1
+    },
+    "D6": {
+      "model": "DS5180SSG_270deg",
+      "center_us": 1800,
+      "crank": 2,
+      "direction": -1
+    }
+  },
+  "mux_wiring": {
+    "S0": "D8/PF3",
+    "S1": "D9/PD15",
+    "S2": "D10/PD14",
+    "S3": "D11/PB5",
+    "EN": "D12/PA6"
+  },
+  "adc_inputs": [
+    "A0/PA3/IN15",
+    "A1/PC0/IN10",
+    "A2/PC3_C/IN13"
+  ],
+  "notes": [
+    "Left: D4=theta1,D6=-theta2; right: D3=-theta1,D5=theta2. Independent structure yaw/pitch.",
+    "All DS. Boot/zero D3,D4,D5,D6 = 1800,1200,1200,1800us; crank zero 1200us before mirroring. No boot sweep.",
+    "Exact C4_R8 inverse kinematics, not a linear yaw/pitch-to-servo mixer.",
+    "No measured shaft/plate feedback or force calibration."
+  ],
+  "kinematics": {
+    "revision": "C4_R8",
+    "yaw_range_deg": [
+      0,
+      20
+    ],
+    "pitch_range_deg": [
+      -8,
+      8
+    ],
+    "reference_sha256": "b0d69561adfdb4a2afcb194e61848896994b50f18defe8d91f5b6d61c952c843",
+    "source": "Universal_Joint_Control_R8/01_Viewer_Source/kinematics.js",
+    "range_basis": "Extended analytically from C4_R8 geometry; physical clearance and loaded endpoints unmeasured.",
+    "yaw_auto_range_deg": [
+      0,
+      27
+    ]
+  },
+  "auto_scan": {
+    "settle_s": 0.5,
+    "dwell_s": 2
+  },
+  "joints": {
+    "left": [
+      "D4",
+      "D6"
+    ],
+    "right": [
+      "D3",
+      "D5"
+    ]
+  }
+}

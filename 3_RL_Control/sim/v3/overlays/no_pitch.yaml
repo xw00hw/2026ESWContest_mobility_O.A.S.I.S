@@ -1,0 +1,2 @@
+v3:
+  pitch_enabled: false          # ablation: same env/obs, policy outputs yaw only (pitch held at 0)

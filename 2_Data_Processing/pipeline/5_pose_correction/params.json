@@ -1,0 +1,249 @@
+{
+ "t_conf": 0.5,
+ "t_overlap": 30,
+ "min_track_frames": 5,
+ "t_tta": 40,
+ "t_roi": 40,
+ "t_model": 50,
+ "t_mp_self": 40,
+ "t_mp_vis": 0.9,
+ "t_mp": 80,
+ "jump_win_s": 0.13,
+ "t_jump": 45,
+ "jump_min_neighbors": 2,
+ "bone_q_lo": 0.001,
+ "bone_q_hi": 0.999,
+ "bone_margin_lo": 0.8,
+ "bone_margin_hi": 1.2,
+ "angle_margin_deg": 15,
+ "t_swap_margin": 30,
+ "region_bin": 16,
+ "region_min_count": 3,
+ "region_dilate": 2,
+ "t_agree": 40,
+ "min_agree": 3,
+ "interp_max_gap_s": 0.25,
+ "smooth_half_win_s": 0.13,
+ "smooth_min_pts": 5,
+ "b_jump_win_s": 0.35,
+ "t_b_jump": 60,
+ "t_mis": 50,
+ "b_min_vis": 0.5,
+ "feature_min_vis": 0.5,
+ "feature_unreliable_max_vis": 0.49,
+ "neutral_window_s": 10,
+ "neutral_step_s": 1,
+ "neutral_valid_fraction": 0.9,
+ "neutral_min_frames": 225,
+ "neutral_max_scatter_px": 12,
+ "neutral_min_gps_epochs": 8,
+ "neutral_min_speed_kmh": 20,
+ "neutral_max_speed_range_kmh": 5,
+ "gps_match_max_s": 1.5,
+ "person_driver_iou": 0.5,
+ "person_min_height_px": 150,
+ "person_fill_gap_s": 0.25,
+ "person_edge_px": 10,
+ "qa_overrides": [
+  {
+   "segment": 0,
+   "frames": [
+    1426,
+    1430
+   ],
+   "landmark": "right_wrist",
+   "source": "seg_000_r3",
+   "why": "passenger head in the foreground hides the driver's right arm; dot sits on the passenger"
+  },
+  {
+   "segment": 0,
+   "frames": [
+    1454,
+    1463
+   ],
+   "landmark": "right_elbow",
+   "source": "seg_000_r3",
+   "why": "passenger head in the foreground hides the driver's right arm; dot sits on the passenger"
+  },
+  {
+   "segment": 0,
+   "frames": [
+    1460,
+    1463
+   ],
+   "landmark": "right_wrist",
+   "source": "seg_000_r3",
+   "why": "passenger head in the foreground hides the driver's right arm; dot sits on the passenger"
+  },
+  {
+   "segment": 0,
+   "frames": [
+    1476,
+    1480
+   ],
+   "landmark": "right_wrist",
+   "source": "seg_000_r3",
+   "why": "passenger head in the foreground hides the driver's right arm; dot sits on the passenger"
+  },
+  {
+   "segment": 0,
+   "frames": [
+    1160,
+    1218
+   ],
+   "landmark": "left_elbow",
+   "source": "seg_000_r3",
+   "why": "far elbow collapsed next to the wrists (15-60 px) while both hands hold a bottle; real elbow hidden"
+  },
+  {
+   "segment": 1,
+   "frames": [
+    0,
+    4
+   ],
+   "landmark": "right_elbow",
+   "source": "seg_001_r3",
+   "why": "passenger head in the foreground hides the driver's right arm; dot sits on the passenger"
+  },
+  {
+   "segment": 1,
+   "frames": [
+    11,
+    11
+   ],
+   "landmark": "right_wrist",
+   "source": "seg_001_r3",
+   "why": "passenger head in the foreground hides the driver's right arm; dot sits on the passenger"
+  },
+  {
+   "segment": 17,
+   "frames": [
+    1464,
+    1471
+   ],
+   "landmark": "right_wrist",
+   "source": "seg_017_r3",
+   "why": "fast raised arm with motion blur; wrist drawn mid-forearm ~140 px short"
+  },
+  {
+   "segment": 0,
+   "frames": [
+    1420,
+    1446
+   ],
+   "landmark": "right_elbow",
+   "source": "seg_000_r4",
+   "why": "passenger in front of the camera hides the driver's right arm; not caught by the person-box rule (YOLOX misses the close-up head)"
+  },
+  {
+   "segment": 0,
+   "frames": [
+    1464,
+    1475
+   ],
+   "landmark": "right_wrist",
+   "source": "seg_000_r4",
+   "why": "passenger in front of the camera hides the driver's right arm; not caught by the person-box rule (YOLOX misses the close-up head)"
+  },
+  {
+   "segment": 0,
+   "frames": [
+    1464,
+    1465
+   ],
+   "landmark": "right_elbow",
+   "source": "seg_000_r4",
+   "why": "passenger in front of the camera hides the driver's right arm; not caught by the person-box rule (YOLOX misses the close-up head)"
+  },
+  {
+   "segment": 1,
+   "frames": [
+    14,
+    21
+   ],
+   "landmark": "right_elbow",
+   "source": "seg_001_r4",
+   "why": "passenger in front of the camera hides the driver's right arm; not caught by the person-box rule (YOLOX misses the close-up head)"
+  },
+  {
+   "segment": 1,
+   "frames": [
+    704,
+    721
+   ],
+   "landmark": "right_shoulder",
+   "source": "seg_001_r4",
+   "why": "passenger in front of the camera hides the driver's right arm; not caught by the person-box rule (YOLOX misses the close-up head); widened from f708-718 to the head presence f704-721 given by the overall lead"
+  },
+  {
+   "segment": 1,
+   "frames": [
+    704,
+    721
+   ],
+   "landmark": "right_elbow",
+   "source": "seg_001_r4",
+   "why": "passenger in front of the camera hides the driver's right arm; not caught by the person-box rule (YOLOX misses the close-up head); widened from f708-719 to the head presence f704-721 given by the overall lead"
+  },
+  {
+   "segment": 0,
+   "frames": [
+    916,
+    926
+   ],
+   "landmark": "all",
+   "source": "seg_000_r5",
+   "why": "frame mask (all joints), QA r5 occlusion episode +-3 frames: passenger / object covers the driver (before the OBD window)"
+  },
+  {
+   "segment": 0,
+   "frames": [
+    1188,
+    1195
+   ],
+   "landmark": "all",
+   "source": "seg_000_r5",
+   "why": "frame mask (all joints), QA r5 occlusion episode +-3 frames: passenger / object covers the driver (before the OBD window)"
+  },
+  {
+   "segment": 1,
+   "frames": [
+    237,
+    427
+   ],
+   "landmark": "all",
+   "source": "seg_001_r5",
+   "why": "frame mask (all joints), QA r5 occlusion episode +-3 frames: passenger / object covers the driver (before the OBD window)"
+  },
+  {
+   "segment": 1,
+   "frames": [
+    479,
+    503
+   ],
+   "landmark": "all",
+   "source": "seg_001_r5",
+   "why": "frame mask (all joints), QA r5 occlusion episode +-3 frames: passenger / object covers the driver (before the OBD window)"
+  },
+  {
+   "segment": 1,
+   "frames": [
+    701,
+    724
+   ],
+   "landmark": "all",
+   "source": "seg_001_r5",
+   "why": "frame mask (all joints), QA r5 occlusion episode +-3 frames: passenger / object covers the driver (before the OBD window)"
+  },
+  {
+   "segment": 1,
+   "frames": [
+    773,
+    803
+   ],
+   "landmark": "all",
+   "source": "seg_001_r5",
+   "why": "frame mask (all joints), QA r5 occlusion episode +-3 frames: passenger / object covers the driver (before the OBD window)"
+  }
+ ]
+}

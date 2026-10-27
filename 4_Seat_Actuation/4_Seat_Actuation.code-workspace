@@ -1,0 +1,14 @@
+{
+  "folders": [{"path": "."}],
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {"label": "Seat: Setup GUI", "type": "process", "command": "cmd.exe", "args": ["/d", "/c", "${workspaceFolder}/gui/Setup_Control_Station.cmd"], "problemMatcher": []},
+      {"label": "Seat: Open GUI", "type": "process", "command": "cmd.exe", "args": ["/d", "/c", "${workspaceFolder}/gui/Open_Control_Station.cmd"], "problemMatcher": []},
+      {"label": "STM32: Build", "type": "process", "command": "powershell.exe", "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}/stm32/scripts/stm32.ps1", "-Action", "Build"], "group": {"kind": "build", "isDefault": true}, "problemMatcher": ["$gcc"]},
+      {"label": "STM32: List", "type": "process", "command": "powershell.exe", "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}/stm32/scripts/stm32.ps1", "-Action", "List"], "problemMatcher": []},
+      {"label": "STM32: Upload", "type": "process", "command": "powershell.exe", "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}/stm32/scripts/stm32.ps1", "-Action", "Upload", "-StLinkSerial", "${input:stlinkSerial}"], "problemMatcher": ["$gcc"]}
+    ],
+    "inputs": [{"id": "stlinkSerial", "type": "promptString", "description": "대상 ST-LINK serial (STM32: List에서 확인)"}]
+  }
+}

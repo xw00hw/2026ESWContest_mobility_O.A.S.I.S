@@ -1,0 +1,142 @@
+# O.A.S.I.S L3 domain-randomisation spec  (v0.1, 2026-10-12)
+#
+# Every parameter is drawn once per episode (per_step: true = resampled each step).
+# src tags  : L1   = fitted from the real-vehicle log (analysis/*.json)
+#             LIT  = literature value          ASM = engineering assumption
+#             L2   = placeholder until the bolster bench experiment (not done yet)
+# level     : ADR curriculum level at which the range opens fully (0 = from start).
+#             Ranges are linearly widened from `nominal` to the full range as the
+#             level rises (OpenAI 2019 ADR style), gated on the eval return.
+# Ranges marked L2 are deliberately wide; they MUST be narrowed (or replaced by a
+# posterior, DROPO/BayesSim style) once the bench data exists.
+
+sim:
+  dt_physics: 0.005          # 200 Hz
+  dt_control: 0.05           # 20 Hz policy
+  episode_s: 40.0
+  horizon_pred_s: 1.0        # predictor horizon, 10 x 0.1 s
+
+scenario:                    # -------- vehicle excitation --------
+  mix:                       # episode source probabilities
+    l1_replay: 0.3           # real a_y/a_x/v segments from L1 (time & amplitude scaled)
+    urban_turn: 0.25
+    lane_change: 0.15
+    slalom: 0.15
+    steady_circle: 0.05
+    random_steer: 0.10
+    beamng: 0.0              # BeamNG sequence library (data_beamng/*.csv); raise to ~0.4 once recorded
+  l1_amp_scale:      {dist: uniform, range: [0.8, 1.6], nominal: 1.0, level: 1, src: ASM}
+  l1_time_scale:     {dist: uniform, range: [0.7, 1.3], nominal: 1.0, level: 1, src: ASM}
+  ay_peak_g:         {dist: uniform, range: [0.05, 0.60], nominal: [0.05, 0.25], level: 2,
+                      src: "L1 (|ay| p95 0.10 g, max 0.37 g) -> 0.6 g is extrapolation (review doc 0.3-0.6 g target)"}
+  jerk_peak_gps:     {dist: loguniform, range: [0.1, 1.5], nominal: [0.1, 0.4], level: 2, src: "L1 p99 0.38 g/s"}
+  speed_kph:         {dist: uniform, range: [10, 80], nominal: [10, 60], level: 1, src: "L1 p50 35, max 59 km/h"}
+  turn_radius_m:     {dist: uniform, range: [6, 40], nominal: [8, 25], level: 0, src: ASM}
+  lane_change_period_s: {dist: uniform, range: [2.0, 6.0], nominal: [3.0, 5.0], level: 1, src: "LIT ISO 3888-1"}
+  slalom_freq_hz:    {dist: uniform, range: [0.15, 0.7], nominal: [0.2, 0.4], level: 1, src: ASM}
+  straight_gap_s:    {dist: uniform, range: [1.0, 8.0], nominal: [3.0, 8.0], level: 0, src: ASM}
+
+vehicle:                     # bicycle-model params (used for synthetic manoeuvres)
+  wheelbase_m:       {dist: uniform, range: [2.6, 2.9], nominal: 2.7, level: 0, src: ASM}
+  steer_ratio:       {dist: normal, mean: 13.5, sd: 1.0, clip: [11, 16], level: 0, src: "L1 fit 13.54 (OBD steer vs IMU yaw)"}
+  understeer_K:      {dist: uniform, range: [0.002, 0.012], nominal: 0.006, level: 0, src: "L1 effective fit 0.010 s2/m2 (low-speed biased)"}
+  yaw_lag_tau_s:     {dist: uniform, range: [0.08, 0.30], nominal: 0.15, level: 1, src: ASM}
+  mu_road:           {dist: uniform, range: [0.4, 1.0], nominal: 0.9, level: 2, src: ASM}
+  road_bank_deg:     {dist: uniform, range: [-3, 3], nominal: 0, level: 1, src: "L1: OBD ay bias +0.025 g"}
+  ax_coupling_g:     {dist: uniform, range: [0.0, 0.25], nominal: 0.1, level: 1, src: "L1 |ax| p95 0.14 g"}
+
+human:                       # -------- occupant --------
+  archetype:         {dist: choice, values: [driver, passenger], p: [0.5, 0.5], level: 0,
+                      src: "L1 subject = driver (A-pillar cam); review doc L1 plan = passenger"}
+  mass_kg:           {dist: uniform, range: [48, 105], nominal: 72, level: 0, src: "LIT 5th-95th pct adult"}
+  torso_frac:        {dist: uniform, range: [0.50, 0.60], nominal: 0.55, level: 0, src: LIT}
+  h_com_m:           {dist: uniform, range: [0.25, 0.40], nominal: 0.32, level: 0, src: LIT}
+  fn_torso_hz:       {dist: lognormal, median: 1.6, logsd: 0.45, clip: [0.7, 4.0], level: 0,
+                      src: "L1 events fn 5-95%: 0.8-5.0 Hz; LIT Fairley&Griffin 1990 lateral w/ backrest ~1.5 Hz"}
+  zeta_torso:        {dist: uniform, range: [0.8, 3.0], nominal: 1.5, level: 0, src: "L1 events: overdamped (median >=1, global fit 1.75); v0.1 range [0.5,2.5] under-damped vs L1 -> raised"}
+  passive_frac:      {dist: uniform, range: [0.3, 0.8], nominal: 0.5, level: 1, src: ASM}
+  reflex_delay_s:    {dist: uniform, range: [0.04, 0.15], nominal: 0.08, level: 0, src: "L1 tau 0-0.19 s; LIT trunk reflex 50-100 ms"}
+  fn_pelvis_hz:      {dist: uniform, range: [2.5, 6.0], nominal: 4.0, level: 0, src: ASM}
+  zeta_pelvis:       {dist: uniform, range: [0.8, 2.5], nominal: 1.5, level: 0, src: "ASM (foam shear heavily damped; tuned so sim matches L1 overdamping)"}
+  mu_cushion:        {dist: uniform, range: [0.3, 0.7], nominal: 0.5, level: 1, src: "ASM (review doc 1-B)"}
+  asym_ratio:        {dist: lognormal, median: 1.0, logsd: 0.35, clip: [0.5, 2.0], level: 0,
+                      src: "L1: right-turn/left-turn side-FSR gain = 2.04"}
+  lean_bias_deg:     {dist: normal, mean: 0, sd: 2.0, level: 0, src: ASM}
+  relax_gain:        {dist: uniform, range: [0.0, 2.0], nominal: 0.0, level: 1,
+                      src: "UNOBSERVABLE from pairwise data (drive x bolster interaction): muscles relax under support (LIT Okiyama 2001 EMG, Sandoz 2023 bracing). Bench P3 at several preloads bounds it; tilt test checks it"}
+  driver:
+    brace_k_Nm_rad:  {dist: uniform, range: [0, 150], nominal: 60, level: 0, src: ASM}
+    ff_gain:         {dist: uniform, range: [0.0, 0.5], nominal: 0.2, level: 0, src: "LIT Wada 2012: drivers tilt head centripetally"}
+    ff_lead_s:       {dist: uniform, range: [0.0, 0.5], nominal: 0.2, level: 0, src: ASM}
+  passenger:
+    brace_k_Nm_rad:  {dist: uniform, range: [0, 20], nominal: 0, level: 0, src: ASM}
+    ff_gain:         {dist: uniform, range: [-0.15, 0.25], nominal: 0.0, level: 0, src: "LIT Wada 2012 / Zikovitz&Harris 1999: passenger lean sign varies"}
+    ff_lead_s:       {dist: uniform, range: [-0.2, 0.2], nominal: 0.0, level: 0, src: ASM}
+
+seat_bolster:                # -------- L2 placeholders (bench not built yet) --------
+  theta_max_deg: 25          # firmware soft limit (mechanical stopper above this)
+  arm_len_m:         {dist: uniform, range: [0.12, 0.22], nominal: 0.17, level: 0, src: L2}
+  side_preload_N:    {dist: uniform, range: [0.0, 60.0], nominal: 20.0, level: 0, src: "L1: both live side FSRs loaded at rest -> preloaded contact; gap0 = -(F/k)^(1/n); L2 to measure"}
+  k_contact:         {dist: loguniform, range: [1500, 12000], nominal: 5000, level: 0, src: "L2 (foam + flank soft tissue; v0.1 upper 30 kN/m tripped the safety layer at 2-3 deg)"}
+  n_contact:         {dist: uniform, range: [1.0, 2.0], nominal: 1.5, level: 0, src: L2}
+  c_contact:         {dist: uniform, range: [100, 600], nominal: 250, level: 0, src: "L2 (raised after L1 validation)"}
+  h_bolster_m:       {dist: uniform, range: [0.12, 0.28], nominal: 0.20, level: 0, src: L2}
+  act_delay_s:       [0.01, 0.06]       # L2
+  act_tau_s:         [0.05, 0.30]       # L2
+  act_rate_dps:      [40, 150]          # L2
+  act_backlash_deg:  [0.0, 1.5]         # L2
+
+sensors:                     # -------- observation models --------
+  fsr_gain_logsd: 0.20                   # LIT unit-to-unit +-15-25 %
+  fsr_beta: [0.7, 1.1]                   # LIT Interlink power-law slope
+  fsr_R1_ohm: 30000                      # R at 1 N (ASM)
+  fsr_Rm_ohm: 3300                       # L2: per-channel Rm still to be chosen (review doc 5.3)
+  fsr_noise_counts: 4.0                  # L1: 2.0-6.6 counts sd (x U[0.5,2] below)
+  fsr_noise_scale: [0.5, 2.0]
+  fsr_creep_frac_per_decade: [0.0, 0.06] # L1: up to 3 %/min drift on A1_C3
+  fsr_hyst_frac: [0.0, 0.12]             # L1: load-unload residual ~8 %
+  fsr_p_dead: 0.10                       # L1: 4/12 channels dead or unloaded (33 %) -> 0.1 per channel + masking
+  fsr_pad_tau_s: [0.08, 0.35]            # L1: real side signal is ~1st-order (zeta fits hit bound); foam + pad (review doc 5-C)
+  fsr_rate_hz: 100                       # L1 100.4 Hz, p95 jitter 10 ms
+  pose_rate_hz: [8, 12]                  # L1 9.9 Hz (target_fps 10)
+  pose_latency_s: [0.045, 0.12]          # L1 capture->output p50 58 ms; review doc 50-90 ms
+  pose_proj_gain_per_m: [0.15, 0.8]      # ASM; L1 could not resolve lateral shift (R2 0.04)
+  pose_random_sign: false
+  pose_jitter_norm: [0.004, 0.012]       # L1: 0.010 at standstill (same order as signal)
+  pose_dropout: [0.0, 0.02]              # L1 valid 99.87 %
+  imu_rate_hz: [10, 100]                 # L1 10 Hz (WIT @9600 bd); planned 100-200 Hz
+  imu_latency_s: [0.002, 0.03]
+  imu_ay_noise_mps2: [0.02, 0.10]        # L1 0.02 (ay) / 0.09 (ax)
+  imu_bias_mps2: 0.05
+  imu_misalign_deg: 3.0                  # residual after the gravity/forward fit
+  obd_rate_hz: [0.8, 1.2]                # L1 Infocar screen updates ~1 Hz
+  obd_latency_s: [0.1, 1.0]              # L1 offset +0.3 s at 1 Hz resolution
+  speed_quant_kph: 1.0
+  stream_clock_offset_s: [-0.05, 0.05]   # residual after GPS/NTP alignment
+  motor_torque_gain_logsd: 0.15         # L2: current->torque calibration error
+  motor_friction_Nm: [0.2, 1.5]          # L2
+  motor_torque_noise_Nm: [0.1, 0.6]      # L2
+  pred_sigma0_g: [0.005, 0.02]           # L1 predictor not trained yet -> ASM
+  pred_sigma_per_s_g: [0.01, 0.06]
+  pred_gain: [0.8, 1.1]
+  pred_lag_s: [0.0, 0.15]
+
+reward:                      # review doc 6.3 -- pressure is NEVER in the reward (5-D)
+  w_com: 1.0
+  com_scale_m: 0.03
+  w_du: 0.05
+  w_theta: 0.02
+  w_slip: 0.1
+  w_trip: 1.0                # safety-layer trip penalty
+  w_force: 0.05              # sim-only comfort cost on true squeeze force above rest, (per 100 N)^2
+
+safety:                      # firmware path, applied outside the policy
+  side_fsr_trip_frac: 0.7    # side-FSR rise over the session baseline, fraction of ADC headroom (~ +120 N nominal)
+  motor_torque_trip_Nm: 20   # backup interlock from motor current (still works when a side FSR is dead)
+  mode: v1                   # v1: FSR-headroom / torque trip (RL runs of 2026-10-21); v2: force-based graded interlock
+  v2_force_hard_N: 120       # v2: motor-side force rise over rest -> release that side
+  v2_force_soft_N: 80        # v2: -> hold (no further closing)
+  v2_fsr_rise_cps: 6000      # v2: FSR rise > 300 counts / 50 ms while closing -> hold
+  v2_hold_s: 0.3
+  fsr_trip_arm_deg: 2.0      # FSR path armed only while that bolster is closed (v0.2: passive seat tripped 10-35x/episode without it)
+  rate_limit_dps: 60

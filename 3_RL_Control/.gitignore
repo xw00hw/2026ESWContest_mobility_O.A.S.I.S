@@ -1,0 +1,22 @@
+# data, models and generated artifacts stay out of git (CONTRIBUTING.md "Data policy")
+__pycache__/
+*.py[cod]
+/models/
+/dist/
+/deploy/model*/
+/deploy/runtime/build/
+/sim/rl/runs/
+/sim/rl/eval_bank*.csv
+*.npz
+*.npy
+*.pt
+*.onnx
+*.hef
+*.tar.gz
+/data_raw/
+/refined_drive/
+/bench_*/
+/data_beamng/
+sim/v2/l1_refined_seq.csv
+sim/v2/*_trace.csv
+sim/v2/policy_rollout_*.csv

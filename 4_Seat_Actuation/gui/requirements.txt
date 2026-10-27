@@ -1,0 +1,5 @@
+pyserial>=3.5,<4
+numpy>=1.26,<3
+opencv-python>=4.10,<5
+Pillow>=10,<13
+cv2-enumerate-cameras>=1.4,<2

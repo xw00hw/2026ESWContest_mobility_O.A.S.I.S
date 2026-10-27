@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8'?>
+<projectDescription>
+  <name>ExperimentA_CAD_180</name>
+  <comment>Experiment A prebuilt ELF/source viewer. No automatic build or upload.</comment>
+  <projects>
+	</projects>
+  <buildSpec />
+  <natures>
+    <nature>com.st.stm32cube.ide.mcu.MCUProjectNature</nature>
+    <nature>org.eclipse.cdt.core.cnature</nature>
+    <nature>com.st.stm32cube.ide.mcu.MCUCubeIdeServicesRevAev2ProjectNature</nature>
+    <nature>com.st.stm32cube.ide.mcu.MCUAdvancedStructureProjectNature</nature>
+    <nature>com.st.stm32cube.ide.mcu.MCUSingleCpuProjectNature</nature>
+    <nature>com.st.stm32cube.ide.mcu.MCURootProjectNature</nature>
+    <nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
+    <nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
+  </natures>
+  <linkedResources>
+    <link>
+      <name>Core</name>
+      <type>2</type>
+      <locationURI>PARENT-1-PROJECT_LOC/Core</locationURI>
+    </link>
+    <link>
+      <name>build_fallback</name>
+      <type>2</type>
+      <locationURI>PARENT-1-PROJECT_LOC/build_fallback</locationURI>
+    </link>
+    <link>
+      <name>scripts</name>
+      <type>2</type>
+      <locationURI>PARENT-1-PROJECT_LOC/scripts</locationURI>
+    </link>
+    <link>
+      <name>config</name>
+      <type>2</type>
+      <locationURI>PARENT-1-PROJECT_LOC/config</locationURI>
+    </link>
+    <link>
+      <name>EXPERIMENT_A_LIVE_TUNING.md</name>
+      <type>1</type>
+      <locationURI>PARENT-1-PROJECT_LOC/EXPERIMENT_A_LIVE_TUNING.md</locationURI>
+    </link>
+  </linkedResources>
+</projectDescription>

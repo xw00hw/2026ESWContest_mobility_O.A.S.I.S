@@ -1,0 +1,42 @@
+# OASIS DAQ stable device names
+#
+# Probe order decides whether the GPS is ttyACM0 or ttyACM1, so the DAQ never
+# addresses devices by kernel name.  These rules publish stable symlinks that
+# oasis_daq.devices prefers when they exist.
+#
+# Install:  sudo cp udev/99-oasis-daq.rules /etc/udev/rules.d/
+#           sudo udevadm control --reload-rules && sudo udevadm trigger
+# Verify:   ls -l /dev/oasis_*
+#
+# Identities were read from the attached hardware with `udevadm info`:
+#   GPS    1546:01a7  u-blox 7 GNSS receiver          (native USB CDC-ACM)
+#   IMU    1a86:7523  QinHeng CH340 USB-UART bridge   (WITMOTION WIT protocol)
+#   CAMERA 0c45:6366  Arducam OV9281 USB camera       (UVC, global shutter)
+#
+# NOTE: neither serial adapter reports a USB serial number, so the rules match
+# on VID/PID.  1a86:7523 is a *generic* CH340 id -- if a second CH340 device is
+# ever plugged into this Pi, both would match.  In that case, pin the IMU to a
+# physical port by uncommenting the ENV{ID_PATH} clause below and setting it to
+# the port the IMU is actually in (see: udevadm info -q property -n /dev/ttyUSB0).
+
+# --- GPS: u-blox 7 -----------------------------------------------------------
+SUBSYSTEM=="tty", ATTRS{idVendor}=="1546", ATTRS{idProduct}=="01a7", \
+  SYMLINK+="oasis_gps", GROUP="dialout", MODE="0660", \
+  ENV{OASIS_ROLE}="gps"
+
+# --- IMU: WITMOTION behind a CH340 bridge ------------------------------------
+SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", \
+  SYMLINK+="oasis_imu", GROUP="dialout", MODE="0660", \
+  ENV{OASIS_ROLE}="imu"
+# Port-pinned variant -- use instead of the rule above when more than one CH340
+# is present.  Replace the ID_PATH value with the port the IMU is plugged into.
+# SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", \
+#   ENV{ID_PATH}=="platform-xhci-hcd.1-usb-0:2:1.0", \
+#   SYMLINK+="oasis_imu", GROUP="dialout", MODE="0660"
+
+# --- Camera: Arducam OV9281 --------------------------------------------------
+# A UVC camera exposes several /dev/video* nodes; only index 0 is the capture
+# node, so the symlink must not be attached to the metadata node.
+SUBSYSTEM=="video4linux", ATTRS{idVendor}=="0c45", ATTRS{idProduct}=="6366", \
+  ATTR{index}=="0", SYMLINK+="oasis_camera", GROUP="video", MODE="0660", \
+  ENV{OASIS_ROLE}="camera"

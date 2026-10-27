@@ -1,0 +1,138 @@
+{
+ "1a left turn loads the RIGHT side": {
+  "ok": true,
+  "com_shift_cm": -2.23,
+  "dF_L": -10.0,
+  "dF_R": 26.3
+ },
+ "1b right yaw closes the right wing and raises its pads": {
+  "ok": true,
+  "yaw_R_deg": 14.3,
+  "d_counts": {
+   "L_lo": 169.0,
+   "L_hi": 66.1,
+   "R_lo": 1002.8,
+   "R_hi": 723.5
+  }
+ },
+ "1c +pitch moves the lower zone in, the upper out": {
+  "ok": true,
+  "d_gap_lo_mm": -0.97,
+  "d_gap_hi_mm": 0.97
+ },
+ "2 passive: twin identical, nothing added": {
+  "ok": true,
+  "added_max_N": 0.0,
+  "com_diff_m": 0.0,
+  "over_press": 0.0
+ },
+ "3 same seed -> same observations": {
+  "ok": true
+ },
+ "6 firmware path: yaw 0->10 deg 90 % time [s]": {
+  "ok": true,
+  "crank_30": 1.42,
+  "crank_60": 0.77
+ },
+ "6b OASIS_FALLBACK v2 path: yaw 0->9 deg time [s]": {
+  "ok": true,
+  "tune_2dps": 4.52,
+  "tune_10dps": 1.52,
+  "tune_20dps": 1.52
+ },
+ "7 interlock thresholds sim = runtime": {
+  "ok": true,
+  "sim": {
+   "fsr_force_soft_N": 60,
+   "fsr_force_hard_N": 120,
+   "arm_deg": 2.0,
+   "hold_s": 0.3
+  },
+  "runtime": {
+   "fsr_force_soft_N": 60,
+   "fsr_force_hard_N": 120,
+   "arm_deg": 2.0,
+   "hold_s": 0.3
+  }
+ },
+ "8 obs contract = deployed copies; sim predictor = runtime class": {
+  "ok": true,
+  "sim": "78c6ba05ae8bd888",
+  "deployed": {
+   "model_v7": "78c6ba05ae8bd888"
+  },
+  "same_predictor_class": true
+ },
+ "4 passive occupant stable": {
+  "ok": true,
+  "n": 96,
+  "blowups": 0,
+  "com_max_cm_p99": 7.04,
+  "com_max_low_load_cm": 1.5,
+  "F_max_N_p99": 312.8,
+  "F_beyond_inertia_N_max": 0.0,
+  "redraws": 3
+ },
+ "5 thin / low-seated occupant: upper pads unloaded (bench B: 13-348 vs A ~2000 counts)": {
+  "ok": true,
+  "B-like": {
+   "rest_hi": 181,
+   "rest_lo": 182,
+   "frac_hi": 0.25,
+   "clearance_share": 1.0
+  },
+  "A-like": {
+   "rest_hi": 1818,
+   "rest_lo": 2194,
+   "frac_hi": 0.474,
+   "clearance_share": 0.0
+  }
+ },
+ "9 wheel preview beats hold at 0.1-0.5 s (obs slots 0-9)": {
+  "ok": true,
+  "h_s": [
+   0.1,
+   0.3,
+   0.5,
+   0.7,
+   1.0
+  ],
+  "wheel_rms_g": [
+   0.022,
+   0.04,
+   0.061,
+   0.081,
+   0.104
+  ],
+  "hold_rms_g": [
+   0.037,
+   0.079,
+   0.116,
+   0.148,
+   0.187
+  ]
+ },
+ "10 reward ranks the tuned rule above passive like the score": {
+  "ok": true,
+  "rule": [
+   16.0,
+   6
+  ],
+  "ret_diff_mean": 3.373,
+  "score_diff_mean": 4.587,
+  "sign_agreement": 0.88
+ },
+ "_summary": {
+  "failed": [],
+  "overlays": [
+   "C:/Users/JUN/Documents/Active_bolster/sim/v3/overlays/pipeline_v5.yaml",
+   "C:/Users/JUN/Documents/Active_bolster/sim/v2/overlays/smooth.yaml",
+   "C:/Users/JUN/Documents/Active_bolster/sim/v3/overlays/v4_comfort.yaml",
+   "C:/Users/JUN/Documents/Active_bolster/sim/v3/overlays/no_pitch.yaml",
+   "C:/Users/JUN/Documents/Active_bolster/sim/v3/overlays/final_v7.yaml",
+   "C:/Users/JUN/Documents/Active_bolster/sim/v3/overlays/fb_a2.yaml",
+   "C:/Users/JUN/Documents/Active_bolster/sim/v3/overlays/beamng_drive_collector.yaml",
+   "C:/Users/JUN/Documents/Active_bolster/sim/v3/overlays/reward_score.yaml"
+  ]
+ }
+}

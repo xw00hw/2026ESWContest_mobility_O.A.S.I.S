@@ -1,0 +1,341 @@
+{
+  "source_repository": "https://github.com/xw00hw/ESW",
+  "source_commit": "faac8258b0e959e32b10823c4db4c8117ce8df01",
+  "hash_convention": "SHA-256 after CRLF to LF normalization",
+  "copied_files": [
+    {
+      "source_path": "01. Data_acquisition/control_station/.gitattributes",
+      "package_path": "gui/.gitattributes",
+      "source_normalized_lf_sha256": "019577603a522caf8805bb473291107a0129c4fde4042ea68acb65c73642ae55",
+      "package_normalized_lf_sha256": "019577603a522caf8805bb473291107a0129c4fde4042ea68acb65c73642ae55",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/Open_Control_Station.cmd",
+      "package_path": "gui/Open_Control_Station.cmd",
+      "source_normalized_lf_sha256": "fff050f464ee95ddcde4fe5229ff03a77f6b9b684250a2742f255f4e02fecb1a",
+      "package_normalized_lf_sha256": "fff050f464ee95ddcde4fe5229ff03a77f6b9b684250a2742f255f4e02fecb1a",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/README.md",
+      "package_path": "gui/README.md",
+      "source_normalized_lf_sha256": "0c0ec9e3eb72efebe179ef436773ef51c26787ce84fa63dc27e86a468f439ab2",
+      "package_normalized_lf_sha256": "f5aa64c13068100d20436b621343ef817757b9c8f613ec4ad51b3e4375d068e4",
+      "adapted_for_packaging": true
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/Setup_Control_Station.cmd",
+      "package_path": "gui/Setup_Control_Station.cmd",
+      "source_normalized_lf_sha256": "7199d66efacbbe149e6ff0e236eddc5b169a23a2481e0b34073584e47e0667ca",
+      "package_normalized_lf_sha256": "7199d66efacbbe149e6ff0e236eddc5b169a23a2481e0b34073584e47e0667ca",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/VALIDATION.md",
+      "package_path": "gui/VALIDATION.md",
+      "source_normalized_lf_sha256": "128cf10639519d2d563bbe8b418103cd00f9bdb27bd50dfb8f1a885bd3077ec8",
+      "package_normalized_lf_sha256": "128cf10639519d2d563bbe8b418103cd00f9bdb27bd50dfb8f1a885bd3077ec8",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/app.py",
+      "package_path": "gui/app.py",
+      "source_normalized_lf_sha256": "1af231f8146382e58ee3ed4b4ba9ee32c9e6d22d87ffb2cfb2fa14fd1100c1c0",
+      "package_normalized_lf_sha256": "1af231f8146382e58ee3ed4b4ba9ee32c9e6d22d87ffb2cfb2fa14fd1100c1c0",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/auto_scan.py",
+      "package_path": "gui/auto_scan.py",
+      "source_normalized_lf_sha256": "1595acecd493e612bd2983ceda6c1f33959c32913a9d6b3af53fb5509816c242",
+      "package_normalized_lf_sha256": "1595acecd493e612bd2983ceda6c1f33959c32913a9d6b3af53fb5509816c242",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/auto_summary.py",
+      "package_path": "gui/auto_summary.py",
+      "source_normalized_lf_sha256": "1f484f18a90db71d65354dfd03e9ee70ec260692e61873df4667bdab58af589e",
+      "package_normalized_lf_sha256": "1f484f18a90db71d65354dfd03e9ee70ec260692e61873df4667bdab58af589e",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/devices.py",
+      "package_path": "gui/devices.py",
+      "source_normalized_lf_sha256": "6678b1ee0f74ab222d0a7a02921db46090c2268261b20b16879d25fb07ac7114",
+      "package_normalized_lf_sha256": "6678b1ee0f74ab222d0a7a02921db46090c2268261b20b16879d25fb07ac7114",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/kinematics.py",
+      "package_path": "gui/kinematics.py",
+      "source_normalized_lf_sha256": "5dea8a466175341d07fe7759f0eb5e14a37a0356717f9850fbd45a57e674b83b",
+      "package_normalized_lf_sha256": "5dea8a466175341d07fe7759f0eb5e14a37a0356717f9850fbd45a57e674b83b",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/processing/README.md",
+      "package_path": "gui/processing/README.md",
+      "source_normalized_lf_sha256": "3876f6a5e9b32ccb36f92b93e8bb6b6a29433218a44c336486df2d8a96b36131",
+      "package_normalized_lf_sha256": "3876f6a5e9b32ccb36f92b93e8bb6b6a29433218a44c336486df2d8a96b36131",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/processing/organize_bench.py",
+      "package_path": "gui/processing/organize_bench.py",
+      "source_normalized_lf_sha256": "2196459ae69711a7e7d26db287f95471b04d5de33887da05cd6d340786ba62d1",
+      "package_normalized_lf_sha256": "2196459ae69711a7e7d26db287f95471b04d5de33887da05cd6d340786ba62d1",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/processing/pose_core.py",
+      "package_path": "gui/processing/pose_core.py",
+      "source_normalized_lf_sha256": "a2211d9ab335f89e8661236bbf1618fa199b017c11e8b7e6c930cb16f0879d30",
+      "package_normalized_lf_sha256": "a2211d9ab335f89e8661236bbf1618fa199b017c11e8b7e6c930cb16f0879d30",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/processing/prepare_bench.py",
+      "package_path": "gui/processing/prepare_bench.py",
+      "source_normalized_lf_sha256": "b27de49b8c6aff14491a219b68780bea650652a8b13c38154b04379dd02d7838",
+      "package_normalized_lf_sha256": "b27de49b8c6aff14491a219b68780bea650652a8b13c38154b04379dd02d7838",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/processing/report_bench.py",
+      "package_path": "gui/processing/report_bench.py",
+      "source_normalized_lf_sha256": "ccb986eacc53072071f80a357495ffe5898d0e7989ef1c99d239e2a89c49fc7c",
+      "package_normalized_lf_sha256": "ccb986eacc53072071f80a357495ffe5898d0e7989ef1c99d239e2a89c49fc7c",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/processing/requirements.txt",
+      "package_path": "gui/processing/requirements.txt",
+      "source_normalized_lf_sha256": "bb8ef0bfb7fb5793d95e6d6bbcb9729fcc031cb8b36e45557a4f34a4176f8982",
+      "package_normalized_lf_sha256": "bb8ef0bfb7fb5793d95e6d6bbcb9729fcc031cb8b36e45557a4f34a4176f8982",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/processing/test_processing.py",
+      "package_path": "gui/processing/test_processing.py",
+      "source_normalized_lf_sha256": "7b17ba27a680da3a408281bca1c01d070a273132284af7b8a5dba32e1e023800",
+      "package_normalized_lf_sha256": "7b17ba27a680da3a408281bca1c01d070a273132284af7b8a5dba32e1e023800",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/processing/validate_outputs.py",
+      "package_path": "gui/processing/validate_outputs.py",
+      "source_normalized_lf_sha256": "27241e798b6506de8f37d3a48ac5904fd4b26c85c48db7b72434e3909bb729ab",
+      "package_normalized_lf_sha256": "27241e798b6506de8f37d3a48ac5904fd4b26c85c48db7b72434e3909bb729ab",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/protocol.py",
+      "package_path": "gui/protocol.py",
+      "source_normalized_lf_sha256": "627c7db02a9046dc044be8a79da57ef0f21c0cab413648866602865622d769ce",
+      "package_normalized_lf_sha256": "b995920c04a155a26be62c20ff743bdabb53ba9be79dc488908a2838e6e295af",
+      "adapted_for_packaging": true
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/reference/c4_r8_kinematics.js",
+      "package_path": "gui/reference/c4_r8_kinematics.js",
+      "source_normalized_lf_sha256": "b0d69561adfdb4a2afcb194e61848896994b50f18defe8d91f5b6d61c952c843",
+      "package_normalized_lf_sha256": "b0d69561adfdb4a2afcb194e61848896994b50f18defe8d91f5b6d61c952c843",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/requirements.txt",
+      "package_path": "gui/requirements.txt",
+      "source_normalized_lf_sha256": "c7f168131ca678332d5518ece3a71e273b1ed8999788c07de1f70ec47bede48f",
+      "package_normalized_lf_sha256": "c7f168131ca678332d5518ece3a71e273b1ed8999788c07de1f70ec47bede48f",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/session.py",
+      "package_path": "gui/session.py",
+      "source_normalized_lf_sha256": "e9daf28ce3c0297b31ae31bc05f5b76fb8101a66d66a38d6a3c579d1dc5f8b08",
+      "package_normalized_lf_sha256": "e9daf28ce3c0297b31ae31bc05f5b76fb8101a66d66a38d6a3c579d1dc5f8b08",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/station_config.json",
+      "package_path": "gui/station_config.json",
+      "source_normalized_lf_sha256": "916948db578a9df32a4cdc3c11462ca4cd8e47506e09b3995b0d1a4d8dfada20",
+      "package_normalized_lf_sha256": "916948db578a9df32a4cdc3c11462ca4cd8e47506e09b3995b0d1a4d8dfada20",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/tests/fixtures/kinematics.json",
+      "package_path": "gui/tests/fixtures/kinematics.json",
+      "source_normalized_lf_sha256": "ada9816ae9730596f409978266617c890e1355d06f0bdf3dcc0fc90166400938",
+      "package_normalized_lf_sha256": "ada9816ae9730596f409978266617c890e1355d06f0bdf3dcc0fc90166400938",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/tests/test_auto.py",
+      "package_path": "gui/tests/test_auto.py",
+      "source_normalized_lf_sha256": "c7847ea6269d58c50610d606d8847974a37715ac9bfd606e14dbf955f84f394d",
+      "package_normalized_lf_sha256": "c7847ea6269d58c50610d606d8847974a37715ac9bfd606e14dbf955f84f394d",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/tests/test_auto_ui.py",
+      "package_path": "gui/tests/test_auto_ui.py",
+      "source_normalized_lf_sha256": "d55e29dc9cc904cc5514aab5dd2f648839fc972394c7503bccf0410f50f2ba4f",
+      "package_normalized_lf_sha256": "d55e29dc9cc904cc5514aab5dd2f648839fc972394c7503bccf0410f50f2ba4f",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/tests/test_kinematics.py",
+      "package_path": "gui/tests/test_kinematics.py",
+      "source_normalized_lf_sha256": "a0989d21252544b392b677196222e9fd988e9716d37befc5b334858e85c9b168",
+      "package_normalized_lf_sha256": "a0989d21252544b392b677196222e9fd988e9716d37befc5b334858e85c9b168",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "01. Data_acquisition/control_station/tests/test_station.py",
+      "package_path": "gui/tests/test_station.py",
+      "source_normalized_lf_sha256": "709dc77d570b1dbb0bb935ca445cdf542a23e1dfb2d4d86fb4bbe31a85d60f52",
+      "package_normalized_lf_sha256": "709dc77d570b1dbb0bb935ca445cdf542a23e1dfb2d4d86fb4bbe31a85d60f52",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "firmware/bolster_h723/CMakeLists.txt",
+      "package_path": "stm32/CMakeLists.txt",
+      "source_normalized_lf_sha256": "e914e01629ae9d32add2f4f2e586446e5ff704793575b639b14e5052e9537acb",
+      "package_normalized_lf_sha256": "4fb683bf43e31b82d15f404318783358474dad90a96d09878c06f336bfb0406c",
+      "adapted_for_packaging": true
+    },
+    {
+      "source_path": "firmware/bolster_h723/Core/Inc/fsr_board_pins.h",
+      "package_path": "stm32/Core/Inc/fsr_board_pins.h",
+      "source_normalized_lf_sha256": "260a8a28932a804ecc6bb2ec2826881989dc5835470f352da5571d2c45405918",
+      "package_normalized_lf_sha256": "260a8a28932a804ecc6bb2ec2826881989dc5835470f352da5571d2c45405918",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "firmware/bolster_h723/Core/Inc/fsr_single.h",
+      "package_path": "stm32/Core/Inc/fsr_single.h",
+      "source_normalized_lf_sha256": "cced1b68b3dd34a965f3a2d6f8db2090333b63ddc54da971fff8403a1d0ce5a0",
+      "package_normalized_lf_sha256": "cced1b68b3dd34a965f3a2d6f8db2090333b63ddc54da971fff8403a1d0ce5a0",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "firmware/bolster_h723/Core/Inc/joint_control.h",
+      "package_path": "stm32/Core/Inc/joint_control.h",
+      "source_normalized_lf_sha256": "63306957a7f6c23ab0a29b11e83b7050edf5afd8a4e7cce2d9761e853d952063",
+      "package_normalized_lf_sha256": "63306957a7f6c23ab0a29b11e83b7050edf5afd8a4e7cce2d9761e853d952063",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "firmware/bolster_h723/Core/Inc/joint_math.h",
+      "package_path": "stm32/Core/Inc/joint_math.h",
+      "source_normalized_lf_sha256": "cbaaa0ac434b4bf17617b2235af7f81d5e7d1069e3a69647697edb48f5bc32cf",
+      "package_normalized_lf_sha256": "cbaaa0ac434b4bf17617b2235af7f81d5e7d1069e3a69647697edb48f5bc32cf",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "firmware/bolster_h723/Core/Inc/main.h",
+      "package_path": "stm32/Core/Inc/main.h",
+      "source_normalized_lf_sha256": "f7521848d9ee21a729dcbf69c3f62a7767e193a3e56496c420c9a4385512eb7b",
+      "package_normalized_lf_sha256": "f7521848d9ee21a729dcbf69c3f62a7767e193a3e56496c420c9a4385512eb7b",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "firmware/bolster_h723/Core/Inc/stm32h7xx_hal_conf.h",
+      "package_path": "stm32/Core/Inc/stm32h7xx_hal_conf.h",
+      "source_normalized_lf_sha256": "a560a82445d98ff8424f38a4e3377467abceaff4300eda7d99fe78e365bff223",
+      "package_normalized_lf_sha256": "a560a82445d98ff8424f38a4e3377467abceaff4300eda7d99fe78e365bff223",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "firmware/bolster_h723/Core/Inc/stm32h7xx_it.h",
+      "package_path": "stm32/Core/Inc/stm32h7xx_it.h",
+      "source_normalized_lf_sha256": "490c294bdc8b716dc104f7001d526c9a6005eaa0780e95c9cbf22b5ad4f015cd",
+      "package_normalized_lf_sha256": "490c294bdc8b716dc104f7001d526c9a6005eaa0780e95c9cbf22b5ad4f015cd",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "firmware/bolster_h723/Core/Src/fsr_single.c",
+      "package_path": "stm32/Core/Src/fsr_single.c",
+      "source_normalized_lf_sha256": "3769407f40fd591b39922e19383ef58fe3276a3fc9f741b737709eb8229f18c0",
+      "package_normalized_lf_sha256": "3769407f40fd591b39922e19383ef58fe3276a3fc9f741b737709eb8229f18c0",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "firmware/bolster_h723/Core/Src/joint_control.c",
+      "package_path": "stm32/Core/Src/joint_control.c",
+      "source_normalized_lf_sha256": "a1d1813a03df329d77a2a4fc5d760914bb2569f1f6b866fc8ef5a07c32294b51",
+      "package_normalized_lf_sha256": "a1d1813a03df329d77a2a4fc5d760914bb2569f1f6b866fc8ef5a07c32294b51",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "firmware/bolster_h723/Core/Src/joint_math.c",
+      "package_path": "stm32/Core/Src/joint_math.c",
+      "source_normalized_lf_sha256": "69557d3cd51a05a1bc768bc84f153b2b6ab3c7594d9a8adbeb95122ef38fadbd",
+      "package_normalized_lf_sha256": "69557d3cd51a05a1bc768bc84f153b2b6ab3c7594d9a8adbeb95122ef38fadbd",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "firmware/bolster_h723/Core/Src/main.c",
+      "package_path": "stm32/Core/Src/main.c",
+      "source_normalized_lf_sha256": "47c52368a4e6584fd10c0f99d069c67906a9b6ee4cf4da48e4c4c90f0209e978",
+      "package_normalized_lf_sha256": "47c52368a4e6584fd10c0f99d069c67906a9b6ee4cf4da48e4c4c90f0209e978",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "firmware/bolster_h723/Core/Src/stm32h7xx_hal_msp.c",
+      "package_path": "stm32/Core/Src/stm32h7xx_hal_msp.c",
+      "source_normalized_lf_sha256": "91a4139206b3247e41a7945d32de3a467252ee2ffd940ca58a5b4410d499ddcb",
+      "package_normalized_lf_sha256": "91a4139206b3247e41a7945d32de3a467252ee2ffd940ca58a5b4410d499ddcb",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "firmware/bolster_h723/Core/Src/stm32h7xx_it.c",
+      "package_path": "stm32/Core/Src/stm32h7xx_it.c",
+      "source_normalized_lf_sha256": "f6667d7e96eef259baa1b6d743307ffd391aa1f956ab518da3fe82920fb1f46d",
+      "package_normalized_lf_sha256": "f6667d7e96eef259baa1b6d743307ffd391aa1f956ab518da3fe82920fb1f46d",
+      "adapted_for_packaging": false
+    },
+    {
+      "source_path": "firmware/bolster_h723/README.md",
+      "package_path": "stm32/README.md",
+      "source_normalized_lf_sha256": "0c7ad9b44ae73a5da000069da2e031f1f1b540b11ca6a143a33c73b2f3028c69",
+      "package_normalized_lf_sha256": "6905d2142d260314ca21c0d30cc5e6c4142a2a2d01c61f127b3aba43963a651b",
+      "adapted_for_packaging": true
+    },
+    {
+      "source_path": "firmware/bolster_h723/scripts/build_native_math.cmd",
+      "package_path": "stm32/scripts/build_native_math.cmd",
+      "source_normalized_lf_sha256": "55e8c25d305c318c6c08a2c6cb8f3eee80290b709c38b46757a96895c9358e70",
+      "package_normalized_lf_sha256": "66e36b0236288c3fff24c3496bdf9632235018a9acd726293679661246379e1d",
+      "adapted_for_packaging": true
+    },
+    {
+      "source_path": "firmware/bolster_h723/scripts/stm32.ps1",
+      "package_path": "stm32/scripts/stm32.ps1",
+      "source_normalized_lf_sha256": "e7e4ba9d8667bc3c498f7d8ccfcba98b6ec604f4375063ca1a910fecf0661d4c",
+      "package_normalized_lf_sha256": "34a7241abb6b0290a1306606dcd2541c99bad7e7780ba626b71275703601388d",
+      "adapted_for_packaging": true
+    }
+  ],
+  "pressure_parser": {
+    "source_path": "03. Pressure_seat/visualization/seat12_core.py",
+    "source_normalized_lf_sha256": "2c8d439f19ab1f30700cbb3322f8adc1bae282c91220af3757aca0fa4a064669",
+    "definitions": [
+      "parse_packet",
+      "SequenceTracker"
+    ],
+    "package_path": "gui/pressure_protocol.py",
+    "definitions_ast_unchanged": true
+  },
+  "adaptations": [
+    "Local pressure parser import removes sibling project dependency",
+    "GUI/firmware documentation links point within this package",
+    "ARM toolchain and Cube SDK paths can be passed to build script",
+    "Upload requires explicit ST-LINK serial; workspace prompts for it",
+    "Native C outputs use C:/Temp/seat_control_data_acquisition",
+    "Original actuator algorithms, pin mapping, limits and recording formats retained"
+  ],
+  "raw_data_included": false
+}

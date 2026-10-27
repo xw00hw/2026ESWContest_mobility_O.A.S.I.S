@@ -1,0 +1,77 @@
+{
+ "run": "v8_s1",
+ "n": 24,
+ "masked_with": "mean of the newest frame of calib_raw histories",
+ "groups": {
+  "none": {
+   "J": 4.43,
+   "d_score": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ],
+   "d_red": 0.0,
+   "d_over": 0.0
+  },
+  "a_y/a_x preview": {
+   "J": -0.8,
+   "d_score": -8.6,
+   "ci95": [
+    -21.81,
+    0.68
+   ],
+   "d_red": -15.04,
+   "d_over": -6.56
+  },
+  "vehicle now (a_y, a_x, yaw rate, speed, steer)": {
+   "J": 4.37,
+   "d_score": 0.54,
+   "ci95": [
+    -1.15,
+    2.84
+   ],
+   "d_red": -0.5,
+   "d_over": 0.42
+  },
+  "pressure (side pads, back, seat, R-L)": {
+   "J": 4.6,
+   "d_score": -0.03,
+   "ci95": [
+    -0.76,
+    0.95
+   ],
+   "d_red": 0.32,
+   "d_over": 0.32
+  },
+  "pose (torso lean, shoulder shift)": {
+   "J": 4.44,
+   "d_score": -0.15,
+   "ci95": [
+    -0.53,
+    0.08
+   ],
+   "d_red": 0.01,
+   "d_over": -0.02
+  },
+  "reported bolster angles": {
+   "J": 4.72,
+   "d_score": -0.02,
+   "ci95": [
+    -0.95,
+    0.99
+   ],
+   "d_red": 0.15,
+   "d_over": 0.18
+  },
+  "body build + rest pressure": {
+   "J": 2.75,
+   "d_score": -1.12,
+   "ci95": [
+    -3.88,
+    1.39
+   ],
+   "d_red": -1.55,
+   "d_over": 0.55
+  }
+ }
+}

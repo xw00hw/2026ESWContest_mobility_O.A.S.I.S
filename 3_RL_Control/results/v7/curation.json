@@ -1,0 +1,546 @@
+{
+ "hypotheses": "H1  tightening a bolster (yaw up) RAISES that side's pad pressure\n  H2  lateral acceleration pushes the body outward: the pad on the side the body goes to reads more\n      (real car, passenger mat: d(A1_C1 - A1_C3)/d(a_y) > 0, +y = left)\n  H3  +pitch moves the lower pad zone inward and the upper zone outward: lower pads UP, upper pads DOWN\n  H4  a narrower occupant sits with clearance (no side contact at rest); a lower seating unloads the upper pads",
+ "contact_min_counts": 200,
+ "bench": [
+  {
+   "session": "20261025_003530_9c4e477c",
+   "effect": "left_pitch_deg+right_pitch_deg",
+   "channel": "A1_C0",
+   "zone": "lower",
+   "hypothesis": "H3",
+   "slope": 22.27,
+   "ci95": [
+    17.08,
+    27.65
+   ],
+   "rest": 780,
+   "verdict": "consistent"
+  },
+  {
+   "session": "20261025_003530_9c4e477c",
+   "effect": "left_pitch_deg+right_pitch_deg",
+   "channel": "A1_C2",
+   "zone": "lower",
+   "hypothesis": "H3",
+   "slope": 6.42,
+   "ci95": [
+    3.89,
+    9.21
+   ],
+   "rest": 1554,
+   "verdict": "consistent"
+  },
+  {
+   "session": "20261025_003530_9c4e477c",
+   "effect": "left_pitch_deg+right_pitch_deg",
+   "channel": "A1_C1",
+   "zone": "upper",
+   "hypothesis": "H3",
+   "slope": -11.22,
+   "ci95": [
+    -15.19,
+    -7.39
+   ],
+   "rest": 1043,
+   "verdict": "consistent"
+  },
+  {
+   "session": "20261025_003530_9c4e477c",
+   "effect": "left_pitch_deg+right_pitch_deg",
+   "channel": "A1_C3",
+   "zone": "upper",
+   "hypothesis": "H3",
+   "slope": -10.97,
+   "ci95": [
+    -16.25,
+    -6.04
+   ],
+   "rest": 1652,
+   "verdict": "consistent"
+  },
+  {
+   "session": "20261025_005459_3512cd6e",
+   "effect": "left_pitch_deg",
+   "channel": "A1_C2",
+   "zone": "lower",
+   "hypothesis": "H3",
+   "slope": 6.89,
+   "ci95": [
+    3.6,
+    10.07
+   ],
+   "rest": 900,
+   "verdict": "consistent"
+  },
+  {
+   "session": "20261025_005459_3512cd6e",
+   "effect": "left_pitch_deg",
+   "channel": "A1_C3",
+   "zone": "upper",
+   "hypothesis": "H3",
+   "slope": -8.2,
+   "ci95": [
+    -11.01,
+    -5.21
+   ],
+   "rest": 1196,
+   "verdict": "consistent"
+  },
+  {
+   "session": "20261025_013054_fdbdd0b4",
+   "effect": "right_yaw_deg",
+   "channel": "A1_C0",
+   "zone": "lower",
+   "hypothesis": "H1",
+   "slope": -3.17,
+   "ci95": [
+    -4.68,
+    -1.35
+   ],
+   "rest": 1065,
+   "verdict": "inconsistent"
+  },
+  {
+   "session": "20261025_013054_fdbdd0b4",
+   "effect": "right_yaw_deg",
+   "channel": "A1_C1",
+   "zone": "upper",
+   "hypothesis": "H1",
+   "slope": -15.3,
+   "ci95": [
+    -16.84,
+    -13.7
+   ],
+   "rest": 510,
+   "verdict": "inconsistent"
+  },
+  {
+   "session": "20261026_183644_001e901a",
+   "effect": "left_pitch_deg+right_pitch_deg",
+   "channel": "A1_C0",
+   "zone": "lower",
+   "hypothesis": "H3",
+   "slope": 8.85,
+   "ci95": [
+    4.61,
+    12.63
+   ],
+   "rest": 1143,
+   "verdict": "consistent"
+  },
+  {
+   "session": "20261026_183644_001e901a",
+   "effect": "left_pitch_deg+right_pitch_deg",
+   "channel": "A1_C2",
+   "zone": "lower",
+   "hypothesis": "H3",
+   "slope": 2.56,
+   "ci95": [
+    -1.0,
+    6.08
+   ],
+   "rest": 722,
+   "verdict": "n.s."
+  },
+  {
+   "session": "20261026_183644_001e901a",
+   "effect": "left_pitch_deg+right_pitch_deg",
+   "channel": "A1_C1",
+   "zone": "upper",
+   "hypothesis": "H3",
+   "slope": -28.67,
+   "ci95": [
+    -35.25,
+    -22.16
+   ],
+   "rest": 2247,
+   "verdict": "consistent"
+  },
+  {
+   "session": "20261026_183644_001e901a",
+   "effect": "left_pitch_deg+right_pitch_deg",
+   "channel": "A1_C3",
+   "zone": "upper",
+   "hypothesis": "H3",
+   "slope": -2.37,
+   "ci95": [
+    -6.76,
+    1.73
+   ],
+   "rest": 1938,
+   "verdict": "n.s."
+  },
+  {
+   "session": "20261026_185658_f3d90508",
+   "effect": "right_yaw_deg",
+   "channel": "A1_C0",
+   "zone": "lower",
+   "hypothesis": "H1",
+   "slope": -5.52,
+   "ci95": [
+    -7.1,
+    -4.13
+   ],
+   "rest": 1534,
+   "verdict": "inconsistent"
+  },
+  {
+   "session": "20261026_185658_f3d90508",
+   "effect": "right_yaw_deg",
+   "channel": "A1_C1",
+   "zone": "upper",
+   "hypothesis": "H1",
+   "slope": -26.51,
+   "ci95": [
+    -28.48,
+    -24.44
+   ],
+   "rest": 2244,
+   "verdict": "inconsistent"
+  },
+  {
+   "session": "20261026_213230_4217591e",
+   "effect": "left_pitch_deg+right_pitch_deg",
+   "channel": "A1_C0",
+   "zone": "lower",
+   "hypothesis": "H3",
+   "slope": 8.29,
+   "ci95": [
+    4.37,
+    12.24
+   ],
+   "rest": 745,
+   "verdict": "consistent"
+  },
+  {
+   "session": "20261026_213230_4217591e",
+   "effect": "left_pitch_deg+right_pitch_deg",
+   "channel": "A1_C2",
+   "zone": "lower",
+   "hypothesis": "H3",
+   "slope": -0.78,
+   "ci95": [
+    -3.05,
+    0.96
+   ],
+   "rest": 240,
+   "verdict": "n.s."
+  },
+  {
+   "session": "20261026_213230_4217591e",
+   "effect": "left_pitch_deg+right_pitch_deg",
+   "channel": "A1_C1",
+   "zone": "upper",
+   "hypothesis": "H3",
+   "slope": -7.62,
+   "ci95": [
+    -14.97,
+    -2.57
+   ],
+   "rest": 348,
+   "verdict": "consistent"
+  },
+  {
+   "session": "20261026_213230_4217591e",
+   "effect": "left_pitch_deg+right_pitch_deg",
+   "channel": "A1_C3",
+   "zone": "upper",
+   "hypothesis": "H3",
+   "slope": -3.82,
+   "ci95": [
+    -6.68,
+    -1.18
+   ],
+   "rest": 238,
+   "verdict": "consistent"
+  },
+  {
+   "session": "20261026_220510_cfbdc0fe",
+   "effect": "right_yaw_deg",
+   "channel": "A1_C0",
+   "zone": "lower",
+   "hypothesis": "H1",
+   "slope": 4.6,
+   "ci95": [
+    2.01,
+    7.46
+   ],
+   "rest": 142,
+   "verdict": "no_contact"
+  },
+  {
+   "session": "20261026_220510_cfbdc0fe",
+   "effect": "right_yaw_deg",
+   "channel": "A1_C1",
+   "zone": "upper",
+   "hypothesis": "H1",
+   "slope": -3.7,
+   "ci95": [
+    -6.14,
+    -1.25
+   ],
+   "rest": 45,
+   "verdict": "no_contact"
+  },
+  {
+   "session": "20261026_223002_dee1c151",
+   "effect": "left_pitch_deg+right_pitch_deg",
+   "channel": "A1_C0",
+   "zone": "lower",
+   "hypothesis": "H3",
+   "slope": 6.46,
+   "ci95": [
+    2.61,
+    11.03
+   ],
+   "rest": 408,
+   "verdict": "consistent"
+  },
+  {
+   "session": "20261026_223002_dee1c151",
+   "effect": "left_pitch_deg+right_pitch_deg",
+   "channel": "A1_C2",
+   "zone": "lower",
+   "hypothesis": "H3",
+   "slope": -3.94,
+   "ci95": [
+    -6.28,
+    -1.55
+   ],
+   "rest": 111,
+   "verdict": "no_contact"
+  },
+  {
+   "session": "20261026_223002_dee1c151",
+   "effect": "left_pitch_deg+right_pitch_deg",
+   "channel": "A1_C1",
+   "zone": "upper",
+   "hypothesis": "H3",
+   "slope": -27.21,
+   "ci95": [
+    -38.24,
+    -16.88
+   ],
+   "rest": 87,
+   "verdict": "no_contact"
+  },
+  {
+   "session": "20261026_223002_dee1c151",
+   "effect": "left_pitch_deg+right_pitch_deg",
+   "channel": "A1_C3",
+   "zone": "upper",
+   "hypothesis": "H3",
+   "slope": -9.94,
+   "ci95": [
+    -21.53,
+    0.16
+   ],
+   "rest": 132,
+   "verdict": "no_contact"
+  }
+ ],
+ "pose_lean_vs_bolster": [
+  {
+   "session": "20261025_003530_9c4e477c",
+   "effect": "left_pitch_deg+right_pitch_deg",
+   "slope": -0.006
+  },
+  {
+   "session": "20261025_005459_3512cd6e",
+   "effect": "left_pitch_deg",
+   "slope": 0.033
+  },
+  {
+   "session": "20261025_013054_fdbdd0b4",
+   "effect": "right_yaw_deg",
+   "slope": 0.008
+  },
+  {
+   "session": "20261026_183644_001e901a",
+   "effect": "left_pitch_deg+right_pitch_deg",
+   "slope": 0.073
+  },
+  {
+   "session": "20261026_185658_f3d90508",
+   "effect": "right_yaw_deg",
+   "slope": -0.017
+  },
+  {
+   "session": "20261026_213230_4217591e",
+   "effect": "left_pitch_deg+right_pitch_deg",
+   "slope": 0.033
+  },
+  {
+   "session": "20261026_220510_cfbdc0fe",
+   "effect": "right_yaw_deg",
+   "slope": 0.01
+  },
+  {
+   "session": "20261026_223002_dee1c151",
+   "effect": "left_pitch_deg+right_pitch_deg",
+   "slope": 0.014
+  }
+ ],
+ "authority": {
+  "from_": "H3-consistent pitch responses / geometric pitch-to-yaw ratio",
+  "n": 12,
+  "pitch_slope_median": 8.24,
+  "pitch_slope_by_zone": {
+   "lower": 7.59,
+   "upper": 9.59
+  },
+  "ratio_range": [
+   0.235,
+   0.588
+  ],
+  "ratio_mid": 0.372,
+  "counts_per_deg": 22.2,
+  "range": [
+   14.0,
+   35.0
+  ],
+  "v5_value": 18.8,
+  "h1_consistent_with_contact": 0,
+  "h1_inconsistent": 4
+ },
+ "l1": {
+  "n": 16,
+  "consistent": 16,
+  "threshold_g": 0.08,
+  "min_s": 1.5,
+  "body_left_counts_per_g": 8580.0,
+  "body_right_counts_per_g": 6313.0,
+  "all_body_left": 8580.0,
+  "all_body_right": 6313.0,
+  "events": [
+   {
+    "t0": 31.6,
+    "dur_s": 2.2,
+    "d_ay_g": 0.056,
+    "d_side_counts": 184.4,
+    "counts_per_g": 3269.0,
+    "consistent": true
+   },
+   {
+    "t0": 64.0,
+    "dur_s": 2.9,
+    "d_ay_g": 0.125,
+    "d_side_counts": 410.4,
+    "counts_per_g": 3272.0,
+    "consistent": true
+   },
+   {
+    "t0": 147.7,
+    "dur_s": 3.0,
+    "d_ay_g": 0.137,
+    "d_side_counts": 862.9,
+    "counts_per_g": 6313.0,
+    "consistent": true
+   },
+   {
+    "t0": 166.6,
+    "dur_s": 4.4,
+    "d_ay_g": -0.098,
+    "d_side_counts": -796.8,
+    "counts_per_g": 8123.0,
+    "consistent": true
+   },
+   {
+    "t0": 185.2,
+    "dur_s": 2.1,
+    "d_ay_g": -0.055,
+    "d_side_counts": -282.9,
+    "counts_per_g": 5107.0,
+    "consistent": true
+   },
+   {
+    "t0": 252.4,
+    "dur_s": 5.3,
+    "d_ay_g": -0.111,
+    "d_side_counts": -863.0,
+    "counts_per_g": 7746.0,
+    "consistent": true
+   },
+   {
+    "t0": 291.0,
+    "dur_s": 3.3,
+    "d_ay_g": -0.146,
+    "d_side_counts": -2068.6,
+    "counts_per_g": 14136.0,
+    "consistent": true
+   },
+   {
+    "t0": 479.8,
+    "dur_s": 3.8,
+    "d_ay_g": -0.186,
+    "d_side_counts": -2290.0,
+    "counts_per_g": 12312.0,
+    "consistent": true
+   },
+   {
+    "t0": 523.3,
+    "dur_s": 1.6,
+    "d_ay_g": 0.091,
+    "d_side_counts": 616.7,
+    "counts_per_g": 6811.0,
+    "consistent": true
+   },
+   {
+    "t0": 537.1,
+    "dur_s": 3.9,
+    "d_ay_g": -0.237,
+    "d_side_counts": -2036.3,
+    "counts_per_g": 8580.0,
+    "consistent": true
+   },
+   {
+    "t0": 727.6,
+    "dur_s": 5.4,
+    "d_ay_g": -0.184,
+    "d_side_counts": -1905.1,
+    "counts_per_g": 10346.0,
+    "consistent": true
+   },
+   {
+    "t0": 765.8,
+    "dur_s": 3.0,
+    "d_ay_g": -0.204,
+    "d_side_counts": -1699.0,
+    "counts_per_g": 8344.0,
+    "consistent": true
+   },
+   {
+    "t0": 924.0,
+    "dur_s": 1.5,
+    "d_ay_g": 0.131,
+    "d_side_counts": 1260.6,
+    "counts_per_g": 9657.0,
+    "consistent": true
+   },
+   {
+    "t0": 954.8,
+    "dur_s": 2.1,
+    "d_ay_g": -0.054,
+    "d_side_counts": -373.9,
+    "counts_per_g": 6937.0,
+    "consistent": true
+   },
+   {
+    "t0": 967.1,
+    "dur_s": 3.5,
+    "d_ay_g": -0.137,
+    "d_side_counts": -1715.4,
+    "counts_per_g": 12537.0,
+    "consistent": true
+   },
+   {
+    "t0": 1038.6,
+    "dur_s": 3.9,
+    "d_ay_g": -0.205,
+    "d_side_counts": -1958.1,
+    "counts_per_g": 9559.0,
+    "consistent": true
+   }
+  ]
+ }
+}

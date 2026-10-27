@@ -1,0 +1,28 @@
+seat_bolster:
+  actuator_mode: fw_event_hb
+  crank_rate_dps: 15
+  fw_deadband_deg: 0.5
+v3:
+  crank_rate_choices:
+  - 30
+  - 60
+  crank_rate_p:
+  - 0.3
+  - 0.7
+  pitch_arm_ratio:
+  - 0.3055163994520476
+  - 0.8147103985387937
+  channel_map:
+    side_hi_R: A1_C1
+    side_hi_L: A1_C3
+    side_lo_R: A1_C0
+    side_lo_L: A1_C2
+  pitch_sign: 1
+  calib_zone: hi
+  clearance:
+    w_contact_m:
+    - 0.3832
+    - 0.4108
+    scale:
+    - 0.05
+    - 0.4
