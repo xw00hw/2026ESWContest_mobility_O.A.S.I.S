@@ -43,7 +43,7 @@
 
 ### 1. 설정 만들기 (장치를 열지 않음)
 ```bash
-PKG="$REPO/3_RL_Control/deploy/experiments/seated_20261028"
+PKG="$REPO/3_RL_Control/deploy/experiments/seated_trial"
 python "$PKG/prepare_candidate.py" --source "$PKG/candidate.yaml" \
   --output /absolute/new_candidate.yaml --expected-tuning-revision 2
 ```

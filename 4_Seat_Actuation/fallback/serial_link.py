@@ -18,7 +18,7 @@ MAX_READ_BYTES = 8192
 MAX_LINE_BYTES = 512
 MAX_LINES_PER_POLL = 128
 UINT32_MAX = 0xffffffff
-# Current fallback installation, corrected by the operator on 2026-10-28.
+# Current fallback installation (operator-corrected).
 # Pin order: UR/D3, UL/D4, DR/D5, DL/D6. Historical logs retain their own map.
 NEUTRAL_US = (1800, 1800, 1200, 1200)
 SENSORS = tuple(f"A{bank}_C{channel}" for bank in range(3) for channel in range(4))

@@ -1,10 +1,10 @@
 {
  "schema": "oasis.v9.reference_user.v1",
  "source": {
-  "file": "Screencast from 2026-10-28 03-31-41.webm (pose-rpi.webm)",
+  "file": "pose-rpi.webm (Pi RTMPose viewer screencast)",
   "bytes": 15218271,
   "sha256": "93f7a0b265ca0f36b03abdb1eb7815330830b71e879acf84ffb0bef7f2fe9d40",
-  "session": "2026-10-28 03:31:08 KST final seated session (short id 2odf4ms1), docs/reports/20261028",
+  "session": "final seated session",
   "note": "Pi native RTMPose viewer; overlay points = runtime shoulder/hip keypoints. Video not in git."
  },
  "method": "sim/v3/reference_body_from_video.py: green joint dots + yellow skeleton lines -> shoulder-shoulder-hip-hip quad per frame; image region x 5..1174, y 60..878 of the 1179x882 screencast; viewer scales uniformly",

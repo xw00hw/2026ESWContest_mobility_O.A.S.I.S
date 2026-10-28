@@ -14,9 +14,9 @@ import sys
 
 SENSORS = [f'A{bank}_C{channel}' for bank in range(3) for channel in range(4)]
 AXES = ['left_yaw_deg', 'left_pitch_deg', 'right_yaw_deg', 'right_pitch_deg']
-SESSION = '20261025_013054_fdbdd0b4'
-COMPARISON = '20261025_005459_3512cd6e'
-DATASET = 'bench_20261025_pose_v1'
+SESSION = 'S08'
+COMPARISON = 'S07'
+DATASET = 'bench_pose_v1'
 
 
 def pava(values, weights=None, increasing=True):
@@ -164,7 +164,7 @@ def build(dataset_dir, output):
     provenance = [dict(path=str(p.relative_to(raw)).replace('\\','/'),size_bytes=p.stat().st_size,
         sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for p in files]
     profile = dict(schema='oasis-bench-pressure-profile-v1',dataset_id=DATASET,session_id=SESSION,
-        source_drive_file_id='1HTNr1ZExkWfbuYSdfRaxxZawIA2wcV_h', source_commit=meta['source_commit'],
+        source_drive_file_id=None, source_commit=meta['source_commit'],
         input_policy='Only pressure ADC, commanded motor state, experiment config, and clock metadata. No image/video/landmark/inferred-pose or combined multimodal tables.',
         sensors=SENSORS,physical_channel_mapping=None,pressure_unit='estimated_voltage_v',vref_v=3.3,vref_measured=False,
         force_calibrated=False,actual_position_feedback=False,physical_clearance_verified=False,

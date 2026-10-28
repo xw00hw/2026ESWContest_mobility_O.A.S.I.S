@@ -1,4 +1,4 @@
-# FINAL (v7, 2026-10-27): BeamNG on the static L2 bench. Replaces beamng_v6.yaml.
+# FINAL (v7): BeamNG on the static L2 bench. Replaces beamng_v6.yaml.
 # Parameter sources: sim/v3/final/PARAMS_FINAL.md (hypothesis-consistent data only, sim/v3/final/curate.py).
 v3:
   predictor:
@@ -43,6 +43,6 @@ sensors:
   imu_latency_s: [0.01, 0.05]
   imu_misalign_deg: 0.5
   imu_bias_mps2: 0.02
-  noise_counts: [20.0, 60.0]            # bench target: 10/25 22-58, 10/26 26-44 counts within a dwell
+  noise_counts: [20.0, 60.0]            # bench target: session 1 22-58, session 2 26-44 counts within a dwell
   pose_rate_hz: [9.5, 11.0]             # bench 10.3 Hz
   pose_lean_noise_deg: [0.4, 1.0]       # bench A 0.40-0.48, B 0.75-0.97 deg

@@ -1,123 +1,105 @@
-# OASIS DAQ v0.1 — safety
+[← Raspberry Pi 센서 수집기](../README.md)
 
-## Vehicle safety
+# 안전
 
-**The DAQ is a passive recorder.** It reads sensors and writes files. It has no
-actuator, no vehicle-bus connection, and no control authority of any kind.
+> 수집기를 차량에서 운용할 때의 차량·전기·데이터 손실·개인정보·자격증명 안전 규칙과 주행 전 점검표입니다.
+> 수집기는 센서를 읽고 파일을 쓰는 **수동 기록 장치**이며, 어떤 제어 권한도 없습니다.
 
-* **Never operate the dashboard while driving.** START/STOP before moving, or
-  have a passenger do it. The dashboard is a browser page — treat it exactly
-  like a phone.
-* **The camera must not obstruct the driver's view.** It is mounted at the upper
-  driver-side A-pillar, aimed inward at the driver. Verify the field of view and
-  local regulations before driving.
-* **Secure every device and cable.** An unsecured Pi, SSD or camera is a
-  projectile in a collision. Route cables clear of pedals, the steering column,
-  and airbag deployment paths.
-* **Do not debug while driving.** SSH in, start the session, then leave it alone.
+---
 
-## Electrical safety
+## 1. 차량 안전
 
-The Pi is currently on a **5 V / 3 A (15 W) PD supply**. Raspberry Pi 5 expects
-**5 V / 5 A**; at 15 W the firmware limits **total USB current to 600 mA**, and
-four USB devices are attached (GPS, IMU, camera, SSD).
+수집기에는 구동기도, 차량 버스 연결도, 어떠한 제어 권한도 없습니다.
 
-* A Samsung T7 can draw more than 600 mA on its own during sustained writes.
-* An unexplained SSD disconnect plus a reboot occurred during the first
-  endurance run — consistent with exceeding the USB power budget.
-* **Check `vcgencmd get_throttled` before and after every session.** `0x0` is
-  healthy; bit 0 means under-voltage now, bit 16 means it happened since boot.
-* Do not hot-plug USB devices during a session.
-* For vehicle use, a supply that browns out during cranking will corrupt
-  in-flight data. Use a supply rated for the load, and prefer powering the Pi
-  from a circuit that is not shared with the starter.
-
-Under-voltage is the single most likely cause of data loss in this setup — more
-likely than any software fault.
-
-## Data safety — what this software will not do
-
-By construction, the DAQ:
-
-* **never formats, partitions or repartitions** any device;
-* **never deletes or overwrites** existing files — a session directory is always
-  new, and if a name somehow exists the next free name is used instead;
-* **never resumes into a previous session directory** after a crash;
-* **never writes recorded data into git** (`.gitignore` excludes video, raw
-  streams and per-stream CSVs);
-* **never modifies `/etc/fstab`**, and never mounts or unmounts the SSD;
-* **never changes the GPS or IMU configuration** — baud probing is read-only;
-* **never touches the Hailo driver or runtime.**
-
-`scripts/install.sh` backs up any udev rule or unit file it replaces.
-
-## Data loss: what is actually at risk
-
-`flush()` only reaches the kernel page cache. This was not theoretical — an
-abrupt SSD disconnect during the first endurance run destroyed **~10 minutes** of
-acquisition: every CSV had zero data rows and the video file was zero bytes.
-
-Mitigations now in place:
-
-| stream | worst-case loss on a power cut |
+| 규칙 | 내용 |
 |---|---|
-| CSV / JSONL | `storage.fsync_interval_s` (default **15 s**) |
-| IMU raw bytes | 15 s, or one chunk boundary |
-| GPS raw NMEA | 15 s |
-| video, completed segments | none — fsynced as ffmpeg finishes each one |
-| video, in-progress segment | up to `camera.segment_seconds` (default **60 s**) |
+| **주행 중 대시보드 조작 금지** | 출발 전에 START/STOP 하거나 동승자가 조작합니다. 대시보드는 브라우저 화면이므로 휴대폰과 똑같이 취급합니다 |
+| **카메라가 시야를 가리지 않을 것** | 운전석 쪽 A필러 상단에 운전자를 향해 장착합니다. 주행 전 시야와 관련 법규를 확인합니다 |
+| **모든 장치와 케이블 고정** | 고정하지 않은 Pi·SSD·카메라는 충돌 시 발사체가 됩니다. 케이블은 페달·조향 컬럼·에어백 전개 경로를 피해 배선합니다 |
+| **주행 중 디버깅 금지** | SSH로 접속해 세션을 시작한 뒤에는 그대로 둡니다 |
 
-Verified by `SIGKILL`: all streams held data to within 1–5 s of the kill, and
-every segment including the in-progress one stayed playable. **A true
-power-interruption test has not been run** — see `BLOCKERS.md` §6.
+## 2. 전기 안전
 
-Always check for the `INCOMPLETE` marker before treating a session as complete.
+Pi는 **5 V / 3 A (15 W) PD 전원**에 연결되어 있습니다. Raspberry Pi 5의 정격은 **5 V / 5 A**이며,
+15 W에서는 펌웨어가 **USB 총 전류를 600 mA로 제한**합니다. USB 장치는 GPS·IMU·카메라·SSD 네 개입니다.
 
-## Disk exhaustion
+- Samsung T7은 지속 쓰기 중 혼자서도 600 mA를 넘을 수 있습니다.
+- 장시간 시험 중 원인 불명의 SSD 분리와 재부팅이 관찰되었으며, USB 전력 예산 초과와 일치합니다.
+- **세션 전후로 `vcgencmd get_throttled`를 확인합니다.** `0x0`이 정상이며, bit 0 = 현재 저전압, bit 16 = 부팅 후 저전압 발생.
+- 세션 중에는 USB 장치를 꽂거나 뽑지 않습니다.
+- 차량에서 시동 시 전압이 떨어지는 전원은 기록 중인 데이터를 손상시킵니다. 부하에 맞는 정격 전원을 쓰고, 가능하면 스타터와 공유하지 않는 회로에서 Pi 전원을 받습니다.
 
-* A session **refuses to start** below `storage.min_free_gb_start` (20 GB).
-* A running session **closes cleanly and goes to ERROR** below
-  `storage.min_free_gb_stop` (5 GB) — files are finalised first, then the state
-  changes. It does not keep writing until the filesystem fails.
-* At the default 25 fps recording rate, expect **≈3.9 GB/h**. With 363 GB free
-  that is roughly 90 hours. `record_decimation: 1` raises it to ≈16 GB/h.
-* The dashboard shows free space and estimated recording time remaining.
+**이 구성에서 데이터 손실의 가장 유력한 원인은 소프트웨어 결함이 아니라 저전압입니다.**
 
-## Privacy
+## 3. 데이터 안전 — 소프트웨어가 하지 않는 것
 
-**This system records video of a person's face and body, continuously, together
-with precise location and time.** In most jurisdictions that is personal data,
-and in-vehicle camera recording of a driver may be separately regulated.
+수집기는 구조적으로 다음을 하지 않습니다.
 
-* Obtain **informed consent** from anyone recorded, before recording.
-* Recorded sessions must **not** be committed to the repository or shared
-  casually. `.gitignore` blocks the obvious paths, but it cannot stop a
-  deliberate `git add -f`.
-* `route.geojson` and `route_map.html` contain a precise travel history. Treat
-  them as sensitive.
-* Decide retention and deletion policy before collecting at scale.
-* If a session is to be shared for analysis, prefer sharing `pose/features.csv`
-  and the sensor CSVs **without** `camera/` — the posture features are derived
-  and far less identifying than the video.
+- 어떤 장치도 **포맷·파티션·재파티션하지 않습니다.**
+- 기존 파일을 **삭제하거나 덮어쓰지 않습니다.** 세션 디렉터리는 항상 새로 만들고, 이름이 겹치면 다음 빈 이름을 씁니다.
+- 비정상 종료 후 **이전 세션 디렉터리에 이어 쓰지 않습니다.**
+- 기록 데이터를 **git에 넣지 않습니다.** 세션은 저장소 밖의 SSD에만 쓰며, `.gitignore`도 영상(`*.mkv`)·원시 바이트(`*.bin`)·로그(`*.log`)를 제외합니다.
+- **`/etc/fstab`을 수정하지 않고**, SSD를 마운트·언마운트하지 않습니다.
+- **GPS·IMU 설정을 바꾸지 않습니다.** baud 탐색은 읽기 전용입니다.
+- **Hailo 드라이버나 런타임을 건드리지 않습니다.**
 
-## Credentials
+`scripts/install.sh`는 교체하는 udev 규칙이나 유닛 파일을 백업합니다.
 
-No credential — sudo password, GitHub token, or any other secret — is written to
-any file, log, commit message or session artefact. `.gitignore` additionally
-excludes `.env`, `*.token`, `*credentials*`, `*.pem` and `*.key`.
+## 4. 데이터 손실 — 실제로 위험한 범위
 
-The dashboard has **no authentication**. Bind it only to a trusted network; do
-not port-forward it.
+`flush()`는 커널 페이지 캐시까지만 보냅니다. 장시간 시험 중 SSD가 갑자기 분리되었을 때
+모든 CSV의 데이터 행이 0개, 영상 파일이 0바이트로 남아 **약 10분** 분량을 잃은 것이 확인되었습니다.
 
-## Before the first drive
+현재 적용된 대책과 전원 차단 시 최악의 손실 범위는 다음과 같습니다.
 
-- [ ] `oasis-daqctl check --probe` reports 0 problems
-- [ ] `vcgencmd get_throttled` returns `0x0`
-- [ ] GPS has achieved a real fix outdoors (`fix_valid` true)
-- [ ] MediaPipe produces landmarks with the actual driver seated
-- [ ] Neutral posture calibration succeeds (`neutral_valid` = 1)
-- [ ] IMU mounting rotation measured and written into `configs/daq.yaml`
-- [ ] SSD mounted, ≥20 GB free, and `status` shows the SSD (not the fallback)
-- [ ] All hardware physically secured; camera does not obstruct the view
-- [ ] Consent obtained from everyone who will be recorded
-- [ ] A test session recorded, stopped, and verified with `summarize`
+| 스트림 | 최악의 손실 |
+|---|---|
+| CSV / JSONL | `storage.fsync_interval_s` (기본 **15 s**) |
+| IMU 원시 바이트 | 15 s, 또는 조각 경계 하나 |
+| GPS 원시 NMEA | 15 s |
+| 영상, 완료된 조각 | 없음 — ffmpeg가 끝내는 즉시 fsync |
+| 영상, 진행 중 조각 | 최대 `camera.segment_seconds` (기본 **60 s**) |
+
+- `SIGKILL`로 검증: 모든 스트림이 종료 시점 1–5 s 이내까지 데이터를 보존했고, 진행 중이던 조각을 포함한 모든 조각이 재생 가능했습니다.
+- **실제 전원 차단 시험은 수행하지 않았습니다.** [LIMITATIONS](LIMITATIONS.md) "전원 차단 내구성" 항목 참고.
+- 세션을 완료된 것으로 취급하기 전에 항상 `INCOMPLETE` 표시가 있는지 확인합니다.
+
+## 5. 디스크 소진
+
+| 조건 | 동작 |
+|---|---|
+| 여유 공간 < `storage.min_free_gb_start` (20 GB) | 세션 **시작 거부** |
+| 여유 공간 < `storage.min_free_gb_stop` (5 GB) | 실행 중 세션을 **정상 종료하고 ERROR로 전환** — 파일을 먼저 마무리한 뒤 상태 변경. 파일시스템이 가득 찰 때까지 쓰지 않음 |
+
+- 기본 25 fps 녹화 기준 **≈3.9 GB/h**입니다. 363 GB 여유 공간이면 약 90시간입니다. `record_decimation: 1`이면 ≈16 GB/h로 늘어납니다.
+- 대시보드에 여유 공간과 남은 녹화 가능 시간이 표시됩니다.
+
+## 6. 개인정보
+
+**이 시스템은 사람의 얼굴과 몸을 연속으로 촬영하고, 정밀한 위치·시간을 함께 기록합니다.**
+대부분의 법역에서 이는 개인정보이며, 차량 내 운전자 촬영은 별도 규제를 받을 수 있습니다.
+
+- 촬영 대상자 전원에게 기록 **전에** **충분한 설명에 근거한 동의**를 받습니다.
+- 기록한 세션을 저장소에 커밋하거나 가볍게 공유하지 않습니다. `.gitignore`는 영상·원시 데이터 형식을 막지만 CSV·JSON 산출물이나 의도적인 `git add -f`까지 막지는 못합니다.
+- `route.geojson`과 `route_map.html`은 정밀한 이동 이력을 담고 있으므로 민감 정보로 취급합니다.
+- 대규모 수집 전에 보관·삭제 정책을 정합니다.
+- 분석용으로 공유할 때는 `camera/`를 **빼고** `pose/features.csv`와 센서 CSV를 공유하는 편이 낫습니다. 자세 특징은 파생값이라 영상보다 식별성이 훨씬 낮습니다.
+
+## 7. 자격증명
+
+- sudo 비밀번호, GitHub 토큰 등 어떤 비밀값도 파일·로그·커밋 메시지·세션 산출물에 기록하지 않습니다.
+- `.gitignore`는 추가로 `.env`, `.env.*`, `*.pem`, `*.key`를 제외합니다.
+- 대시보드에는 **인증이 없습니다.** 신뢰할 수 있는 네트워크에만 바인딩하고 포트 포워딩하지 않습니다.
+
+## 8. 첫 주행 전 점검표
+
+- [ ] `oasis-daqctl check --probe`가 문제 0건을 보고
+- [ ] `vcgencmd get_throttled`가 `0x0`
+- [ ] 실외에서 GPS가 실제 fix를 잡음 (`fix_valid` true)
+- [ ] 실제 운전자가 앉은 상태에서 MediaPipe가 랜드마크를 출력
+- [ ] 중립 자세 보정 성공 (`neutral_valid` = 1)
+- [ ] IMU 장착 회전을 측정해 `configs/daq.yaml`에 기록
+- [ ] SSD 마운트, 여유 공간 20 GB 이상, `status`가 대체 경로가 아닌 SSD를 표시
+- [ ] 모든 하드웨어를 물리적으로 고정, 카메라가 시야를 가리지 않음
+- [ ] 촬영 대상자 전원의 동의 확보
+- [ ] 시험 세션을 기록·정지하고 `summarize`로 확인

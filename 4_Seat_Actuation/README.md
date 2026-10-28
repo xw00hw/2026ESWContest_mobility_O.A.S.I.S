@@ -93,5 +93,6 @@ python stm32/scripts/test_fallback_elf.py                 # 빌드된 펌웨어 
 ```
 
 펌웨어 ELF 시험은 실제 빌드 결과물을 Cortex-M7 에뮬레이터에서 돌려 부팅 시 PWM OFF, 명령 재사용 거부, lease 만료, 목표 추종을 확인합니다.
+패키지 검증 결과는 [`VALIDATION.md`](VALIDATION.md), 백업 제어기 검증 결과는 [`experiment_a/VALIDATION.md`](experiment_a/VALIDATION.md)에 정리했습니다.
 
 > 원시 측정 데이터, 영상, 빌드 결과물, STM32 SDK는 포함하지 않습니다.

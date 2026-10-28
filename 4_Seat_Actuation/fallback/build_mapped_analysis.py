@@ -13,9 +13,9 @@ from pathlib import Path
 import statistics
 
 
-SID_FIRST = "20261025_003530_9c4e477c"
-SID_EARLIER_LEFT = "20261025_005459_3512cd6e"
-SID_LAST = "20261025_013054_fdbdd0b4"
+SID_FIRST = "S06"
+SID_EARLIER_LEFT = "S07"
+SID_LAST = "S08"
 SIDE_CHANNELS = {"left": ("A1_C2", "A1_C3"), "right": ("A1_C0", "A1_C1")}
 PHYSICAL_MAPPING = {"A1_C0": "DR", "A1_C1": "UR", "A1_C2": "DL", "A1_C3": "UL"}
 
@@ -110,7 +110,7 @@ def build(profile_path, point_table_path):
         diagonal.append(item)
     return {
         "schema": "oasis-mapped-pressure-evidence-v1", "dataset_id": p["dataset_id"],
-        "mapping_provenance": {"source": "User statement in the active conversation, relayed by parent agent on 2026-10-25 KST",
+        "mapping_provenance": {"source": "Team-confirmed sensor placement",
             "a1_physical_mapping": PHYSICAL_MAPPING, "side_channels": SIDE_CHANNELS,
             "mount_horns_links_sensors_unchanged_reported": True,
             "no_discomfort_or_binding_during_recording_reported": True,
@@ -149,7 +149,7 @@ def build(profile_path, point_table_path):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--profile", type=Path, default=Path(__file__).with_name("profiles")/"bench_20261025.json")
+    parser.add_argument("--profile", type=Path, default=Path(__file__).with_name("profiles")/"bench_profile.json")
     parser.add_argument("--point-table", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()

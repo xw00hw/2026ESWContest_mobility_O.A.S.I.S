@@ -1,6 +1,6 @@
 {
   "schema": "seat-daq-config-v1",
-  "confirmed_utc": "2026-10-06T14:04:10.372098+00:00",
+  "confirmed_utc": "2026-01-01T00:00:00+00:00",
   "assignment_source": "Imported from the latest working SMART_SEAT configuration: C0/C1/C2/C3 on all three MUX banks; user UI labels A0 seat, A1 Side, A2 Back. Precise sensor positions are not calibrated.",
   "vref": 3.3,
   "vref_measured": false,

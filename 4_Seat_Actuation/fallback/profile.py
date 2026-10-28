@@ -7,7 +7,7 @@ import json
 import math
 from pathlib import Path
 
-DEFAULT_PROFILE = Path(__file__).with_name("profiles") / "bench_20261025.json"
+DEFAULT_PROFILE = Path(__file__).with_name("profiles") / "bench_profile.json"
 CHANNELS = tuple(f"A{bank}_C{channel}" for bank in range(3) for channel in range(4))
 
 
@@ -24,7 +24,7 @@ class Settings:
     right_channels: tuple[str, ...] = ()
     guard_channels: tuple[str, ...] = ("A1_C0", "A1_C1", "A1_C2", "A1_C3")
     pressure_fraction: float = .20  # Live pressure guard only; does not scale yaw.
-    max_yaw_deg: float = 20.0       # User-selected structure yaw cap, 2026-10-26.
+    max_yaw_deg: float = 20.0       # Selected structure yaw cap.
     max_rate_deg_s: float = 2.0
     full_scale_ay_mps2: float = 2.941995  # 0.30 g; a cue reference, not m*a.
     on_ay_mps2: float = .2941995         # 0.03 g

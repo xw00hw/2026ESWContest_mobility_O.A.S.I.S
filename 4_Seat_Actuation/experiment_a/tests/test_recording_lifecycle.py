@@ -23,7 +23,7 @@ class RecordingLifecycleTests(unittest.TestCase):
             if item._active_lease is not None:item._active_lease.close();item._active_lease=None
 
     def record(self,finished=True):
-        identifier=f'A_20261027_120000_{len(self.records)+1:08x}'
+        identifier=f'A_20260101_120000_{len(self.records)+1:08x}'
         item=PendingRecording(self.profile,'V6',identifier,create=True);self.records.append(item)
         (item.staging_path/'control').mkdir()
         raw=item.staging_path/'control/raw.jsonl'

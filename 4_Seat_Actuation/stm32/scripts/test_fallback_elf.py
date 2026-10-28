@@ -599,7 +599,7 @@ class CadEnvelopeTests(unittest.TestCase):
                     CAD_YAW_MAX_MDEG,CAD_YAW_MAX_MDEG+1,2147483647}
         for (y0,_),(y1,_) in zip(CAD_CAP_POINTS,CAD_CAP_POINTS[1:]):
             yaw_values.update((y0-1,y0,y0+1,(y0+y1)//2,y1-1,y1,y1+1))
-        rng=random.Random(20261027)
+        rng=random.Random(2026)
         yaw_values.update(rng.randrange(0,CAD_YAW_MAX_MDEG+1) for _ in range(60))
         for yaw in sorted(yaw_values):
             cap=-1

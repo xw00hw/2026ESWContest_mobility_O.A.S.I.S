@@ -1,6 +1,6 @@
 {
- "id": "fsr_curve_20261026_uno",
- "source": "team scale press test 2026-10-26 (rough): single FSR, round contact d = 3.15 cm, Arduino Uno A0",
+ "id": "fsr_curve_uno",
+ "source": "team scale press test (rough): single FSR, round contact d = 3.15 cm, Arduino Uno A0",
  "conditions": {
   "uno_supply_and_ref_V": 5.0,
   "uno_adc_bits": 10,

@@ -24,8 +24,8 @@ from fallback import beamng_bridge as bridge
 
 LOCAL_COLLECTOR = Path(os.environ.get("BEAMNG_COLLECTOR_ROOT",
     "BeamNG_Collector_v0_3"))
-LOCAL_DRIVE = LOCAL_COLLECTOR/"data/sessions/2026-10-25/session_20261025_061416_car_A_free_cbfe254c/vehicle/vehicle.csv"
-LOCAL_STOP = LOCAL_COLLECTOR/"data/sessions/2026-10-25/session_20261025_060803_car_A_free_8623d582/vehicle/vehicle.csv"
+LOCAL_DRIVE = LOCAL_COLLECTOR/"data/sessions/drive_sample/vehicle/vehicle.csv"
+LOCAL_STOP = LOCAL_COLLECTOR/"data/sessions/stop_sample/vehicle/vehicle.csv"
 
 
 def row(seq=1, *, stream="stream-A", time_ns=None, sim=None, **changes):

@@ -1,4 +1,4 @@
-"""v9 reference user: torso geometry from a recording of the Pi RTMPose viewer (pose-rpi.webm, 10/28 final session).
+"""v9 reference user: torso geometry from a recording of the Pi RTMPose viewer (pose-rpi.webm, final seated session).
 
 The viewer draws the runtime's COCO keypoints as green dots and the skeleton as yellow lines on the mono camera
 image, scaled uniformly into its window. Per frame the shoulder-shoulder-hip-hip quad (all four sides drawn) is

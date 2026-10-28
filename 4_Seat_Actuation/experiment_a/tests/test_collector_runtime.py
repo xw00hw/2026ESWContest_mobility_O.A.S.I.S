@@ -49,7 +49,7 @@ class CollectorRuntimeTests(unittest.TestCase):
         class Session:
             def __init__(self, config, output=None):
                 self.c = config
-                self.path = Path(output)/"sessions"/"2026-10-26"/"session_unique"
+                self.path = Path(output)/"sessions"/"2026-01-01"/"session_unique"
                 self.path.mkdir(parents=True)
 
             def accept(self, payload, mono=None, wall=None):

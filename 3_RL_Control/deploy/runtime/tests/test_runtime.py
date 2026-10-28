@@ -144,7 +144,7 @@ def test_ping_alone_keeps_mcu_armed():
 
 
 def test_fsr_inverse_and_saturation_guard():
-    inv = FsrInverse(os.path.join(RT, '..', 'tools', 'fsr_curve_20261026.json'))
+    inv = FsrInverse(os.path.join(RT, '..', 'tools', 'fsr_curve.json'))
     F = [inv(c) for c in (500, 1000, 1450, 1700, 1850)]
     assert all(b > a for a, b in zip(F, F[1:])) and abs(inv(1001) - 4.3) < 0.6        # fitted table point
     assert inv(4095) == float('inf') and inv(0) == 0.0

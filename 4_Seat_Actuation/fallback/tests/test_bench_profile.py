@@ -22,7 +22,7 @@ class FitTests(unittest.TestCase):
 class ProfileTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.profile=json.loads((ROOT/'profiles'/'bench_20261025.json').read_text(encoding='utf-8'))
+        cls.profile=json.loads((ROOT/'profiles'/'bench_profile.json').read_text(encoding='utf-8'))
 
     def test_only_measured_complete_independent_branches(self):
         p=self.profile

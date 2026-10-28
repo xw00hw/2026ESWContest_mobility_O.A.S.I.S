@@ -1,5 +1,5 @@
 """O.A.S.I.S L3 environment v2 -- calibrated to the real-car data (passenger on the
-mat) and the 2026-10-25 bench data (servo bolsters, one subject).
+mat) and the bench session 1 data (servo bolsters, one subject).
 
 Differences from v0.2 (sim/bolster_env.py):
   * bolster = hobby servo per side: command latency, firmware ramp 15 deg/s, servo lag,

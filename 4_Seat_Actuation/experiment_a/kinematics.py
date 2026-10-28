@@ -9,7 +9,7 @@ measured pad contact displacement, body angles, force, or mechanical clearance.
 
 Source: Universal_Joint_Control_R8/02_Control_Python/kinematics.py and
 stm32/Core/Src/joint_math.c. Exact nonlinear neutral-branch inverse kinematics;
-the user-corrected 270-degree / 2000-us gain and 2026-10-28 fallback horn centers
+the corrected 270-degree / 2000-us gain and the fallback horn centers
 are used. The legacy acquisition image and historical data keep their own zeros.
 No serial, pressure data, camera, or runtime calibration file is accessed here.
 """

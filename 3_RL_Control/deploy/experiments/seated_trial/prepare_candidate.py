@@ -34,7 +34,7 @@ def candidate(source, expected_revision):
         policy='g_residual_rl',arm_time_budget_s=TRIAL_SECONDS,
         physical_motion_authorized=False,hardware_arm_performed=False,
         rl_after_new_neutral_authorized=False,approval_recorded_wall_time_ns=None,
-        release='reconnect_20261028_optionalpose_candidate',
+        release='reconnect_optionalpose_candidate',
         commissioning='Local software candidate only; no hardware opened or current approval inherited',
         source_config_sha256=None,
         inherited_rl_wrapper_use='Only this isolated G-hybrid wrapper and a newly reviewed runtime release; old approval tags are invalid',

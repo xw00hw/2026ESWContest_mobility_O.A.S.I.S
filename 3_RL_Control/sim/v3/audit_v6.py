@@ -145,7 +145,7 @@ def actuator():
             if t90 is None and y >= 9.0: t90 = t
         out[f'crank_{int(crank)}'] = round(t90, 2) if t90 else None
     check('6 firmware path: yaw 0->10 deg 90 % time [s]', all(out.values()) and out['crank_60'] < out['crank_30'], **out)
-    # OASIS_FALLBACK v2 (BeamNG_Bolster_FB, the bench firmware since 10/27): 2 us / 20 ms per servo, STM tune rate
+    # OASIS_FALLBACK v2 (BeamNG_Bolster_FB, the bench firmware): 2 us / 20 ms per servo, STM tune rate
     from firmware_model import fb_a2_step
     fa = {}
     for rate in (2.0, 10.0, 20.0):

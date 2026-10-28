@@ -12,7 +12,7 @@ from onnx import shape_inference,utils
 import onnxruntime as ort
 
 HERE=Path(__file__).resolve().parent
-ROOT=Path('/root/ESW_RTMPose_Compile_20261027')
+ROOT=Path('/root/ESW_RTMPose_Compile')
 ORIGINAL=ROOT/'models/rtmpose_m.onnx'
 ORIGINAL_SHA='5c0a4bf67953e6d2ac43ce15e77dc9d5d354ae18430a47d2c5963a7bc5683e3c'
 digest=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()

@@ -191,7 +191,7 @@ class ControllerGeometryTests(unittest.TestCase):
         self.assertNotEqual(tuple(loop.control.pose), original_pose)
 
     def test_seeded_random_reversals_remain_feasible_and_never_close_both_sides(self):
-        rng = random.Random(20261026)
+        rng = random.Random(2026)
         for mode in ('counter_lean', 'conform_lean'):
             loop = CommandLoop(Settings(max_pitch_deg=6, max_yaw_rate_deg_s=20,
                                         max_pitch_rate_deg_s=20, pitch_mode=mode))

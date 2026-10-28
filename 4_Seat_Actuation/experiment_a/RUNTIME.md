@@ -1,289 +1,165 @@
-# Experiment A runtime integration
+[← 보드 통신 · 차량 입력 검증 · 백업 제어기](README.md)
 
-V7 was deployed on 2026-10-27 through the same desktop shortcut/bootstrap.
-All 273 host tests (14.867s), `git diff --check`, and the installed `--check-ui`
-passed. The UI check opens no UART/UDP acquisition workers. The release hash is
-`dbed8c068b6e0cf0bdc6dfcdad82c89082556510c70359595f7e7a896bdfacd1`.
-Settings were backed up as `trial_settings.before_v7_20261027_171011.json`;
-all five hardware confirmations and firmware were retained. The application was
-left closed after verification, so the next ordinary launch selects V7. No
-physical V7 motor test or validated positive collision trial was performed.
-The V6 verification record below is historical. V7 builds on V6 commit
-`6bcf848` in `BeamNG_Bolster_FB`, preserving the V6 history and installed release.
-Git integration does not automatically update another PC installation or board firmware.
+# 런타임 통합 규칙
 
-## Input boundary
+> 백업 제어기 런타임(`runner.py`, `vehicle.py`, `impact.py`, `steering_preview.py`, `transport.py`)의 입력 경계, 충격 의심 래치, 조향 선제 반응, 시작 권한, 이상 데이터 처리, 기록 보존 규칙을 정리합니다.
+> 기준은 현재 배포 버전 V7입니다.
 
-Only BeamNG collector v0.3 vehicle rows enter the vehicle-response/control calculation.
-`vehicle.py` shares the existing pressure-independent adapter and adds optional
-`specific_force_x/y/z_mps2`, `roll_rad`, `pitch_rad`, and `gear_index` fields. Vehicle coordinates
-are +x forward, +y left, +z up; orientation fields describe the vehicle and are not
-occupant measurements. Optional fields are preserved as `None` when missing and
-are rejected if present but nonfinite. Selecting specific force requires its x/y
-fields before ARM; there is no silent substitution between acceleration sources.
-V6 also uses validated steering, forward gear, brake and vehicle orientation for
-the bounded steering advance described below. Throttle is recorded but unused.
+---
 
-The existing collector bridge archives the original row first, then forwards a
-copy on loopback UDP 64257. The collector retains ownership of UDP 64256. Source
-receive timestamps, session/stream identifiers, configuration hash, derivative
-validity, sequence continuity and simulation time are preserved. Runtime reads
-the existing bridge envelope `oasis.beamng.fallback.v1`; the legacy name describes
-the compatible transport envelope and does not enable the pressure fallback.
+## 1. 입력 경계
 
-`runner.py` never passes pressure to the policy or computes a pressure baseline,
-contact gate or pressure-based target. Optional `record_pressure=True` starts
-acquisition only for evaluation logs; the desktop launcher enables this option.
-Default CLI behavior still discards residual scanner bytes. There is no camera,
-pose-estimator or RL input. Offline angle choices remain static configuration.
+제어 계산에 들어가는 입력은 **BeamNG 수집기 v0.3의 차량 행뿐**입니다.
 
-## V7: saturation and a separate impact-suspect latch
+| 항목 | 규칙 |
+|---|---|
+| 좌표계 | 차량 기준 `+x` 전방, `+y` 좌측, `+z` 위. 자세 필드는 차량의 자세이며 착석자 측정이 아님 |
+| 선택 필드 | `specific_force_x/y/z_mps2`, `roll_rad`, `pitch_rad`, `gear_index`. 없으면 `None`으로 보존, 있는데 유한하지 않으면 거부 |
+| 가속도 소스 | `acceleration_source`로 선택. specific force를 고르면 ARM 전에 x/y 필드가 있어야 하며, 소스 간 자동 대체는 없음 |
+| 조향 선제 반응 | 검증된 조향·전진 기어·브레이크·차량 자세를 사용. 스로틀은 기록만 하고 쓰지 않음 |
+| 압력 | 정책 입력 아님. 압력 기준선·접촉 게이트·압력 기반 목표를 계산하지 않음 |
+| 카메라·자세 추정·RL | 입력 없음. 각도 관련 선택은 정적 설정 |
 
-Experiment A no longer treats a single `abs(ay)>12` or `abs(ax)>15` sample as
-a collision or automatic session end. Its adapter uses a broad integrity bound
-of 200 m/s² per linear x/y component; nonfinite values, invalid derivatives,
-clocks, sequence changes and ordinary freshness checks remain faults. The
-shared pressure-fallback validator's defaults are unchanged. Qualified large
-ay enters the normal response filter and saturates the requested Yaw at the
-effective STM limit (initially 15°), with Pitch/CAD coupling, 2°/s initial
-rates, PWM slew and neutral passage unchanged. Saturation is a target bound,
-not a guarantee of instantaneous physical motion or unlimited applied load.
+- 기존 수집기 브리지는 원본 행을 먼저 보관한 뒤 루프백 UDP **64257**로 사본을 전달합니다. UDP **64256**은 수집기가 계속 소유합니다.
+- 원래 수신 시각, 세션/스트림 ID, 설정 해시, 미분 유효성, 순번 연속성, simulation time을 보존합니다.
+- 런타임은 기존 브리지 봉투 `oasis.beamng.fallback.v1`을 읽습니다. 이름은 호환 전송 형식을 뜻할 뿐 압력 기반 폴백을 켜지 않습니다.
+- `record_pressure=True`는 평가용 기록을 위한 압력 수집만 시작하며, 데스크톱 앱은 이 옵션을 켭니다. CLI 기본값은 잔여 스캐너 바이트를 버립니다.
 
-`impact.py` observes every original qualified row before policy downsampling.
-It uses gravity-free linear ax/ay, independently of the selected response
-acceleration source. Let `a=hypot(ax,ay)` and `j=hypot(delta_ax,delta_ay)/dt`.
-Default settings are:
+## 2. 포화와 충격 의심 래치
 
-| Setting | Value |
+단일 표본의 `abs(ay) > 12` 또는 `abs(ax) > 15`를 충돌이나 세션 종료로 취급하지 않습니다. 입력 어댑터는 x/y 각 성분에 200 m/s²의 넓은 무결성 한계만 두며, 유한하지 않은 값·미분 무효·시계·순번 변경·신선도 검사는 계속 오류로 처리합니다. 공유 압력 폴백 검증기의 기본값은 바꾸지 않았습니다.
+
+**포화:** 유효한 큰 횡가속도는 일반 응답 필터를 거쳐 STM 유효 Yaw 상한(초기 15°)에 포화합니다. Pitch·CAD 결합, 초기 2 °/s 변화율, PWM 변화율 제한, 중립 경유는 그대로입니다. 포화는 목표의 상한일 뿐 즉각적인 물리 동작이나 무제한 하중을 보장하지 않습니다.
+
+**충격 의심 판정 (`impact.py`):** 정책 다운샘플링 전의 모든 유효 원본 행을 관찰합니다. 응답용 가속도 소스와 무관하게 중력을 제외한 선형 `ax`, `ay`를 사용합니다. `a = hypot(ax, ay)`, `j = hypot(Δax, Δay) / dt`입니다.
+
+| 설정 | 기본값 |
 |---|---:|
-| `impact_planar_threshold_mps2` | 25m/s² |
-| `impact_jerk_threshold_mps3` | 150m/s³ |
-| `impact_min_duration_s` | 0.06s |
-| `impact_min_delta_v_mps` | 1.5m/s |
-| `impact_extreme_planar_mps2` | 60m/s² |
+| `impact_planar_threshold_mps2` | 25 m/s² |
+| `impact_jerk_threshold_mps3` | 150 m/s³ |
+| `impact_min_duration_s` | 0.06 s |
+| `impact_min_delta_v_mps` | 1.5 m/s |
+| `impact_extreme_planar_mps2` | 60 m/s² |
 
-A sustained suspicion requires **all**: a continuous segment with `a>=25`,
-`j>=150` observed within that segment, duration >=0.06s, and the magnitude of
-the local-axis vector acceleration integral >=1.5m/s. Duration/integration use
-original simulation time. Integration is trapezoidal only between two high
-endpoints; it never backdates a new peak over a preceding low sample. A low,
-unqualified or discontinuous sample clears the segment. Repeated held samples
-earn no duration. Local vehicle axes rotate, so this short vector integral is
-an acceleration-derived proxy, not independent measured world-frame delta-v.
-Separately, `a>=60` immediately requests motor OFF. The detector latches until
-the session ends and does not use pressure, body measurements or motor position.
+- 지속 충격 의심은 다음을 **모두** 만족해야 합니다: `a ≥ 25`인 연속 구간, 그 구간 안에서 `j ≥ 150` 관측, 지속 시간 ≥ 0.06 s, 국부 축 벡터 가속도 적분의 크기 ≥ 1.5 m/s.
+- 지속 시간과 적분은 원래 simulation time을 사용합니다. 적분은 두 고가속도 끝점 사이에서만 사다리꼴로 계산하며, 새 최댓값을 앞선 낮은 표본으로 소급하지 않습니다.
+- 낮은 표본·무효 표본·불연속 표본은 구간을 초기화합니다. 반복된 같은 표본은 지속 시간을 늘리지 않습니다.
+- 차량 국부 축은 회전하므로 이 짧은 벡터 적분은 가속도에서 유도한 대리값이며, 독립 측정한 전역 좌표 delta-v가 아닙니다.
+- 별도로 `a ≥ 60`이면 즉시 모터 OFF를 요청합니다.
+- 판정은 세션이 끝날 때까지 래치되며 압력·신체 측정·모터 위치를 사용하지 않습니다.
 
-These are provisional shock heuristics, not collision ground truth. The user's
-confirmed non-collision V6 session `A_20261027_165300_984bb9af` peaked at ay
-12.87136, ax +7.25147, a 14.77348m/s², then fell to a 6.93867m/s² after 13.5ms.
-The earlier 14:41 a=32.93081m/s² peak is unlabelled and also isolated. Neither
-record is a validated positive collision case; no detection-rate claim follows.
+> 이 판정은 잠정적인 충격 휴리스틱이며 충돌의 정답 기준이 아닙니다. 비충돌로 확인된 기록 `S14`(최대 a_y 12.87136, a_x +7.25147, 합성 14.77348 m/s², 13.5 ms 뒤 6.93867 m/s²)와 합성 32.93081 m/s²의 고립 최댓값이 있는 라벨 없는 기록 모두 검증된 양성 충돌 사례가 아니므로, 검출률은 주장하지 않습니다.
 
-On suspicion the runner logs the raw trigger and `ImpactState` diagnostics,
-latches out motor command/ARM authority, and enters `IMPACT_OFF_PENDING`.
-After a matching OFF acknowledgement and a fresh OFF STATE within 300ms it
-enters `RECORD_ONLY`. The same vehicle and pressure recording continues until
-manual Stop or another acquisition/device/logging fault. There is no motor
-re-ARM in this session. Failure to confirm OFF ends the full run; a stale prior
-OFF STATE cannot satisfy confirmation. Manual Stop ends the workers and then
-the user explicitly saves or discards the pending record.
+**판정 후 동작**
 
-After the impact latch, missing/invalid vehicle samples remain diagnostic data
-and do not restore motor authority or automatically end the record-only phase.
-Board transport, OFF verification and recording failures still end the run.
-The ordinary vehicle freshness gate remains mandatory whenever control is active.
+1. 원시 트리거와 `ImpactState` 진단을 기록하고, 모터 명령·ARM 권한을 래치로 차단한 뒤 `IMPACT_OFF_PENDING`으로 들어갑니다.
+2. 일치하는 OFF ACK와 300 ms 안의 새 OFF STATE를 받으면 `RECORD_ONLY`로 들어갑니다. 이전의 오래된 OFF STATE로는 확인되지 않으며, OFF 확인에 실패하면 전체 실행을 종료합니다.
+3. 같은 차량·압력 기록은 수동 중지나 다른 수집·장치·기록 오류가 있을 때까지 계속됩니다. 이 세션에서 모터를 다시 ARM하지 않습니다.
+4. 래치 이후의 누락·무효 차량 표본은 진단 자료로만 남고, 모터 권한을 복구하거나 기록 단계를 자동 종료하지 않습니다. 보드 통신·OFF 확인·기록 실패는 여전히 실행을 종료합니다.
 
-Offline verification currently includes 17 focused tests covering saturation,
-isolated peaks, sustained front/side shocks, extreme input, stopped input,
-duplicate/gap handling, coherent-vector accumulation and replay latching. The
-939-row user-confirmed non-collision record and 1,527-row unlabelled earlier
-record both replayed without an impact event. These tests opened no hardware;
-synthetic positive cases do not establish real collision detection performance.
+제어가 활성인 동안에는 일반 차량 신선도 게이트가 항상 적용됩니다.
 
-## V6 bounded steering advance
+## 3. 조향 선제 반응 (`steering_preview.py`)
 
-`steering_preview.py` adds a small cue before primary lateral-acceleration
-support. Its maximum requested Yaw is 2° and requested Pitch is always 0°.
-It never sums with the acceleration target. The existing initial primary limits
-of Yaw 15°, Pitch ±6°, 2°/s, CAD coupling, PWM slew, and neutral passage remain in
-force. A 2° target is not a guarantee of immediate 2° shaft motion.
+실제 횡가속도 반응보다 먼저 작은 신호를 줍니다. 요청 Yaw는 최대 2°, 요청 Pitch는 항상 0°이며 **가속도 목표와 더하지 않습니다.** 기존 1차 한계(Yaw 15°, Pitch ±6°, 2 °/s, CAD 결합, PWM 변화율, 중립 경유)는 그대로 적용되므로 2° 목표가 즉시 2° 축 동작을 보장하지 않습니다.
 
-The declared profile is stock `vehicles/vivace/vivace_160_DCT.pc` (Cherrier
-Vivace 160 DCT, 1.6L turbo gasoline/FWD/7DCT), SHA256
-`4eb3d9c52cb02b1a8885779090215f6b631671a3fee03296a0d32303d367ce85`.
-`metadata.declared_vehicle_profile.identity_source` explicitly reads
-`operator_selected_profile_not_live_vehicle_verification`, and
-`steering_gain_calibrated=false`. No V5 steering gain or inferred road-wheel
-angle is transferred; this profile is a comparison candidate, not a validated
-dynamic equivalent of a real vehicle or a live vehicle-identity interlock.
-
-Default configuration:
-
-| Setting | Value |
+| 설정 | 기본값 |
 |---|---:|
 | `steering_preview_enabled` | true |
 | `steering_to_ay_sign` | +1 |
 | `steering_preview_max_yaw_deg` | 2° |
 | `steering_preview_deadband_deg` / `steering_preview_reference_deg` | 5° / 45° |
 | `steering_preview_max_abs_deg` | 560° |
-| `steering_preview_min_speed_mps` / `steering_preview_full_speed_mps` | 5 / 15m/s |
-| `steering_preview_dwell_s` / `steering_preview_timeout_s` | 0.1 / 1.5s |
-| `steering_preview_speed_lookahead_s` | 0.25s |
+| `steering_preview_min_speed_mps` / `steering_preview_full_speed_mps` | 5 / 15 m/s |
+| `steering_preview_dwell_s` / `steering_preview_timeout_s` | 0.1 / 1.5 s |
+| `steering_preview_speed_lookahead_s` | 0.25 s |
 
-Eligibility requires finite steering within the bound, forward integer gear >0,
-brake in [0,1], absolute vehicle roll/pitch <20°, valid gravity-free longitudinal
-acceleration, and actual speed >=5m/s. Missing qualifiers disable this small cue;
-they do not manufacture data or bypass the ordinary input validator. A stopped
-vehicle or steering inside the 5° deadband resets the episode. Otherwise only
-the dwell may restart: dropped qualifiers or direction flips never renew the
-1.5s episode. Both clocks use intervals between same-PC source receipt monotonic
-timestamps, exactly once per new source sample, rather than simulation-time
-slow motion or repeated policy ticks.
+**적용 조건:** 범위 안의 유한한 조향, 0보다 큰 전진 정수 기어, [0, 1] 범위의 브레이크, 차량 roll/pitch 절댓값 20° 미만, 유효한 중력 제외 종가속도, 실제 속도 5 m/s 이상. 조건 값이 없으면 이 신호만 꺼지며 데이터를 만들어 내거나 일반 입력 검증을 우회하지 않습니다.
 
-Let `clip01(x)=max(0,min(1,x))`. The cue uses:
+**에피소드:** 정지 차량이거나 조향이 5° 불감대 안이면 에피소드를 초기화합니다. 그 밖의 경우에는 유지 시간(dwell)만 다시 시작할 수 있고, 조건 이탈이나 방향 전환으로 1.5 s 에피소드가 갱신되지 않습니다. 두 시계 모두 같은 PC의 원본 수신 단조 시각 간격을 새 원본 표본마다 한 번씩 사용하며, simulation time 슬로 모션이나 반복된 정책 tick을 쓰지 않습니다.
 
 ```text
-v_preview = clip(max(0, v + linear_ax * 0.25), 0.8*v, 1.1*v)
-speed_fraction = clip01((v_preview**2 - 5**2) / (15**2 - 5**2))
-steering_fraction = clip01((abs(steering_deg) - 5) / (45 - 5))
-brake_factor = 1 - 0.5*brake
-yaw = min(2, effective_max_yaw) * speed_fraction * steering_fraction * brake_factor
-pitch = 0
+clip01(x)         = max(0, min(1, x))
+v_preview         = clip(max(0, v + linear_ax · 0.25), 0.8·v, 1.1·v)
+speed_fraction    = clip01((v_preview² − 5²) / (15² − 5²))
+steering_fraction = clip01((|steering_deg| − 5) / (45 − 5))
+brake_factor      = 1 − 0.5 · brake
+yaw               = min(2, effective_max_yaw) · speed_fraction · steering_fraction · brake_factor
+pitch             = 0
 ```
 
-Positive steering times `steering_to_ay_sign` requests right support. Existing
-primary support, raw or filtered absolute ay >= the 0.03g entry threshold, or
-opposite-direction ay reaching the 0.02g release threshold blocks the cue. Brake
-dampens only this cue and never attenuates the primary actual-acceleration
-response. Vehicle orientation is an eligibility bound, not occupant posture.
+- 양의 조향 × `steering_to_ay_sign`은 오른쪽 지지를 요청합니다.
+- 1차 지지가 이미 활성이거나, 원시·필터 횡가속도 절댓값이 켜짐 임계 0.03 g 이상이거나, 반대 방향 횡가속도가 꺼짐 임계 0.02 g에 도달하면 이 신호를 막습니다.
+- 브레이크는 이 신호만 줄이며 실제 가속도 기반 1차 반응은 줄이지 않습니다. 차량 자세는 적용 조건일 뿐 착석자 자세가 아닙니다.
 
-`diag.target_source` is `actual_acceleration` or `steering_advance`.
-`diag.steering_preview` logs `active`, `reason`, `side`, `yaw_deg`, `pitch_deg`,
-`steering_fraction`, `speed_fraction`, `projected_speed_mps`, `brake_factor`,
-`dwell_elapsed_s`, `episode_age_s`, and `throttle_used=false`. These explain
-decisions; they are not proof of road-wheel angle, future ay, actual contact
-pressure, or human motion prediction. The declared profile and settings are
-preserved in each selected recording.
+**진단 기록:** `diag.target_source`는 `actual_acceleration` 또는 `steering_advance`입니다. `diag.steering_preview`에 `active`, `reason`, `side`, `yaw_deg`, `pitch_deg`, `steering_fraction`, `speed_fraction`, `projected_speed_mps`, `brake_factor`, `dwell_elapsed_s`, `episode_age_s`, `throttle_used=false`를 남깁니다. 이는 판단 설명용이며 바퀴 조향각·미래 횡가속도·접촉 압력·사람 동작 예측의 증거가 아닙니다.
 
-## Startup and authority
+**선언 차량 프로파일:** BeamNG 기본 차량 설정 `vehicles/vivace/vivace_160_DCT.pc`(1.6L 터보 가솔린, FWD, 7단 DCT), SHA256 `4eb3d9c52cb02b1a8885779090215f6b631671a3fee03296a0d32303d367ce85`. `metadata.declared_vehicle_profile.identity_source`는 `operator_selected_profile_not_live_vehicle_verification`, `steering_gain_calibrated=false`입니다. 조향 게인이나 추정 바퀴 조향각을 이전 설정에서 가져오지 않았으며, 이 프로파일은 비교 후보일 뿐 실제 차량의 동역학 등가물이나 실시간 차량 식별 인터락이 아닙니다. 선언 프로파일과 설정은 각 기록에 보존합니다.
 
-1. Settings validation and explicit hardware confirmations run **before** any
-   UART or UDP resource opens. The desktop app enumerates ST-LINK ports without
-   opening unrelated devices; it never flashes firmware or invents confirmations.
-2. `CONTROL_HELLO` must match the existing fallback motor firmware contract,
-   including geometry/calibration, 270° servo mapping and 2 µs/20 ms slew.
-   The A v2 identity, CAD profile hash and STM committed tuning revision must
-   match; the effective STM values are frozen for this session and rechecked at ARM.
-3. `FB_OFF → DISABLE → STATE` verifies PWM OFF and disables the separate scanner.
-   With observation enabled, this becomes `FB_OFF → DISABLE → HELLO(FSR) →
-   START_12,15 → STATE`. Pressure PING is scheduled every second through the same
-   single pending-request slot, after higher-priority motor/state work.
-4. The launcher requires at least two continuous seconds of valid fresh vehicle
-   data and verified OFF board telemetry. A bad sample resets the full interval.
-5. One explicit session-ID ARM is sent. A fresh armed STATE must report neutral
-   commanded pose/target and no ongoing move before model outputs or leases begin.
+## 4. 시작 절차와 구동 권한
 
-Launching the commissioned desktop app authorizes this one automatic start;
-no repeated ARM button is required. Its pre-ARM BeamNG wait is unlimited. The
-supervisor waits for the original collector socket/archive to open, then waits
-for USB and starts the controller. Either worker ending stops the other;
-the V7 impact latch keeps both workers alive with motor output OFF. No
-automatic restart or re-ARM follows an error. Stop is checked both at loop entry
-and again after receiving rows, before any ARM/control action. The validation
-clock is refreshed after each receive so concurrent fresh rows are not mistaken
-for future timestamps.
+1. 설정 검증과 명시적 하드웨어 확인값 검사를 UART·UDP를 열기 **전에** 수행합니다. 데스크톱 앱은 관계없는 장치를 열지 않고 ST-LINK 포트만 나열하며, 펌웨어를 쓰거나 확인값을 만들어 내지 않습니다.
+2. `CONTROL_HELLO`가 기존 폴백 모터 펌웨어 계약(기하·보정, 270° 서보 매핑, 2 µs/20 ms 변화율)과 일치해야 합니다. A v2 식별자, CAD 프로파일 해시, STM 커밋 튜닝 revision도 일치해야 하며, 유효 STM 값은 세션 동안 고정되고 ARM 때 다시 확인합니다.
+3. `FB_OFF → DISABLE → STATE`로 PWM OFF를 확인하고 별도 스캐너를 끕니다. 압력 관측을 켜면 `FB_OFF → DISABLE → HELLO(FSR) → START_12,15 → STATE`가 됩니다. 압력 PING은 같은 단일 대기 슬롯으로 1초마다, 우선순위 높은 모터·상태 작업 다음에 보냅니다.
+4. 유효하고 신선한 차량 데이터가 연속 2초 이상, 보드 OFF 상태가 확인되어야 합니다. 나쁜 표본 하나가 전체 구간을 초기화합니다.
+5. 세션 ID를 담은 명시적 ARM을 한 번 보냅니다. 모델 출력과 lease를 시작하기 전에, 새 armed STATE가 중립 명령 자세·목표와 진행 중인 이동 없음을 보고해야 합니다.
 
-`BoardState` is firmware command/transport evidence, **not measured shaft position
-or human posture**. Its use for device health, independent angle limits and
-neutral-transition checks does not add an occupant-feedback input to Experiment A.
+- 최초 설정을 마친 데스크톱 앱 실행이 이 한 번의 자동 시작을 허가하며, ARM 버튼을 반복해 누를 필요가 없습니다. ARM 전 BeamNG 대기에는 시간 제한이 없습니다.
+- 감독자는 원본 수집기 소켓·보관 파일이 열릴 때까지 기다린 뒤 USB를 기다리고 제어기를 시작합니다. 한 작업자가 끝나면 다른 작업자도 멈춥니다. 충격 래치 상태에서는 두 작업자가 모터 OFF로 계속 동작합니다.
+- 오류 후 자동 재시작·재ARM은 없습니다. 중지 요청은 반복 시작 시점과 행 수신 직후(ARM·제어 동작 전) 두 번 확인합니다. 수신 후 검증 시계를 다시 읽어, 동시에 도착한 신선한 행을 미래 시각으로 오인하지 않습니다.
 
-At most one UART request is outstanding, with exact response matching and a
-200 ms ACK timeout. Requests are not queued for delayed motion. The same loop
-that validates vehicle input computes targets and renews motor authority: motor
-PING every 100 ms, STATE approximately every 100 ms, changing targets no faster
-than every 40 ms, policy ticks no faster than every 20 ms. Firmware independently
-retains its 500 ms motor lease and fixed PWM slew limit. Faster configured body
-response does not increase that firmware actuator bandwidth.
+`BoardState`는 펌웨어 명령·통신 상태의 증거이며 **측정한 축 위치나 사람 자세가 아닙니다.** 장치 상태 확인, 독립 각도 한계, 중립 전환 확인에만 쓰며 착석자 피드백 입력을 더하지 않습니다.
 
-## Invalid data and shutdown
+**통신 주기**
 
-During control, every received vehicle row is checked, including multiple rows in the same poll.
-A subsequent good row cannot hide an earlier bad derivative, stream/session
-change, timestamp regression, stale row or sequence error after ARM. Input or
-board faults cause immediate OFF initiation and terminate the run; the V7
-impact-suspect path above is a distinct record-only transition. There is no
-automatic reconnect or re-ARM. Before ARM, invalid input restarts qualification.
+| 항목 | 주기·제한 |
+|---|---|
+| 대기 중인 UART 요청 | 최대 1개, 정확한 응답 대조, ACK 제한 200 ms. 지연 동작용 큐 없음 |
+| 모터 PING | 100 ms마다 |
+| STATE | 약 100 ms마다 |
+| 목표 변경 | 40 ms보다 자주 바꾸지 않음 |
+| 정책 tick | 20 ms보다 자주 실행하지 않음 |
+| 펌웨어 (독립) | 모터 lease 500 ms, 고정 PWM 변화율 제한 |
 
-Control freshness uses host monotonic time. Simulation time is separately
-validated and the model owns its simulation integration. Repeated policy ticks
-must not integrate a retained vehicle sample twice. Replay must preserve these
-clocks and never disguise recorded data as a fresh live source.
+차량 입력 검증, 목표 계산, 모터 권한 갱신은 같은 루프에서 수행합니다. 설정한 응답이 빨라도 펌웨어 구동기 대역폭은 늘어나지 않습니다.
 
-Shutdown sends `FB_OFF`, disables acquisition, requests STATE and waits up to
-300 ms for fresh OFF evidence. The manifest reports whether OFF telemetry was
-actually observed; an old OFF STATE cannot prove shutdown. PWM OFF is not a
-claim that an unpowered/loaded mechanism releases contact or holds its position.
+## 5. 이상 데이터와 종료
 
-## Records and verification scope
+- 제어 중에는 한 번의 폴링에서 받은 여러 행을 포함해 **모든** 차량 행을 검사합니다. ARM 후에는 뒤의 좋은 행이 앞선 미분 무효·스트림/세션 변경·시각 역행·지연 행·순번 오류를 숨길 수 없습니다.
+- 입력·보드 오류는 즉시 OFF를 시작하고 실행을 종료합니다. 충격 의심 경로는 이와 별개인 기록 전용 전환입니다. 자동 재연결·재ARM은 없습니다. ARM 전의 무효 입력은 시작 자격 확인을 다시 시작합니다.
+- 제어 신선도는 호스트 단조 시각을 사용합니다. simulation time은 별도로 검증하며, 반복된 정책 tick이 같은 차량 표본을 두 번 적분하지 않습니다. 재생은 이 시계들을 보존하며 기록 데이터를 실시간 소스로 위장하지 않습니다.
+- 유효하지 않은 입력은 유효한 큰 가속도와 구분하며, 사용 가능한 동작 요청으로 잘라 넣지 않습니다. 큰 값이나 휴리스틱 의심은 충돌의 증거가 아닙니다.
+- 종료 시 `FB_OFF`를 보내고 수집을 끈 뒤 STATE를 요청해 최대 300 ms 동안 새 OFF 증거를 기다립니다. manifest에는 OFF 텔레메트리를 실제로 관측했는지 기록하며, 오래된 OFF STATE로는 종료를 증명할 수 없습니다.
 
-For V6 and later desktop runs, acquisition writes to a pending directory outside the
-permanent output root: `install_root/pending_sessions/<version>/<session_id>`.
-`STOPPED` or `ERROR` does not mean saved. Only an explicit Save after **all**
-workers finish promotes a pending directory to `output_root/<version>/<session_id>`.
-Explicit Discard removes only that selected owned pending tree. Close and errors
-do neither; the next application start discovers recoverable pending sessions and
-requires the operator to resolve them before starting or reconnecting. A crash
-releases the OS lease so its unfinished record can be recovered without opening
-hardware. Active records cannot be recovered, moved, or discarded.
+> PWM OFF는 전원이 없거나 하중이 걸린 기구가 접촉을 풀거나 위치를 유지한다는 뜻이 아닙니다.
 
-`DesktopSession.snapshot()` exposes `retention`, `recording_id`, `staging_path`,
-`persisted_path`, `intended_output`, and the active `output` path. The retention
-states are `pending`, `saved`, and `discarded` (`none` before acquisition).
-`save_recording()` and `discard_recording()` serialize against each other and
-reject live workers. Same-volume save uses directory rename; cross-volume save
-copies to a private destination staging directory, verifies file hashes, then
-renames it into place. Copy or promotion failure leaves the original pending
-record available. Existing destinations are never overwritten. Every recursive
-move/delete validates the owned root, identifier, ownership marker, resolved
-path, and absence of symlinks/junctions/reparse children.
+## 6. 기록과 보존
 
-Raw CSV/JSONL and existing capture manifests remain byte-identical after save.
-`recording.json` is the retention authority; `recording_retention_at_capture`
-in `experiment.json` describes its original capture state. Absolute paths in
-historical records are resolved with `recording_relocation.json` and
-`resolve_recording_path(saved_root, historical_reference)` rather than rewriting
-their content. The relocated reference must stay inside the current recording.
+**임시 기록과 확정**
 
-Each new run directory receives `manifest.json` and `control.jsonl` with config,
-local module hashes, source context, decisions and board command state. Existing
-session files are never overwritten. The collector independently retains its
-original vehicle archive. With observation enabled, `pressure.jsonl`,
-`pressure_raw.csv` and `pressure_sweeps.csv` preserve all raw ADC/status samples,
-complete sweeps, independent MCU/host clocks and quality events. Pressure is
-not calibrated to force. Bounded asynchronous logging performs writes/fsync in
-its own worker; queue overflow or disk failure ends motor authority and retains
-`INCOMPLETE`. Video is not captured. The enclosing desktop session adds
-`experiment.json` with collector path and comparison labels; see [DESKTOP.md](DESKTOP.md).
-The offending vehicle frame is logged before an armed-session input exception
-is raised; impact-trigger samples and diagnostics are also retained if the
-operator chooses Save. Invalid input remains distinct from valid large
-acceleration and is not clamped into a usable motion request. A high value or
-heuristic suspicion is not proof of a collision.
+| 상태 | 경로 |
+|---|---|
+| 수집 중 (`pending`) | `install_root/pending_sessions/<version>/<session_id>` |
+| 저장 (`saved`) | `output_root/<version>/<session_id>` |
 
-Historical V6 was deployed through the same desktop bootstrap/shortcut on 2026-10-27.
-All 238 host tests and the installed `--check-ui` check passed; the latter opens
-no UART. Release identity is recorded in [README.md](README.md). Physical
-steering-advance/contact-pressure verification remains outstanding. No firmware
-change was made for this host release. Earlier V1~V5 records are never
-automatically migrated or removed.
+- `STOPPED`나 `ERROR`는 저장을 뜻하지 않습니다. **모든** 작업자가 끝난 뒤 명시적 `저장`만 임시 폴더를 확정합니다. 명시적 `버리기`는 선택한 소유 임시 트리만 삭제합니다.
+- 창 닫기와 오류는 둘 다 하지 않습니다. 다음 실행 때 복구 가능한 임시 세션을 찾아, 시작·재연결 전에 처리하도록 요구합니다. 비정상 종료 시 OS 잠금이 풀리므로 하드웨어를 열지 않고 미완료 기록을 복구할 수 있습니다. 진행 중인 기록은 복구·이동·삭제할 수 없습니다.
+- `DesktopSession.snapshot()`은 `retention`, `recording_id`, `staging_path`, `persisted_path`, `intended_output`, 현재 `output` 경로를 제공합니다. 보존 상태는 `pending`, `saved`, `discarded`(수집 전 `none`)입니다.
+- `save_recording()`과 `discard_recording()`은 서로 직렬화되며 작업자가 살아 있으면 거부합니다. 같은 볼륨 저장은 디렉터리 이름 변경, 다른 볼륨 저장은 비공개 대상 임시 폴더로 복사 → 파일 해시 검증 → 이름 변경 순입니다. 복사·확정 실패 시 원래 임시 기록은 그대로 남고, 기존 대상은 덮어쓰지 않습니다.
+- 모든 재귀 이동·삭제는 소유 루트, 식별자, 소유 표시, 해석된 경로, 심볼릭 링크·정션·재분석 지점 하위 항목이 없는지를 검증합니다.
 
-Transport/launcher tests inject a fake UART, loopback receiver and monotonic clock.
-The fixture policy tests orchestration independently of the biomechanical model;
-additional end-to-end tests use the actual response calculation and command limiter. They cover
-no-pressure startup and identical output with absent/corrupt residual pressure
-bytes, strict ACKs, session/clock errors, startup qualification, neutral ARM
-verification and fresh shutdown evidence. Current target tests respect the CAD
-envelope and pass commanded neutral before changing support side. Historical
-25° reversal tests describe the superseded V1 limits, not the current envelope.
-The fake board acknowledges position immediately;
-these tests are not measurements of real servos, actual pressure or torso motion.
+**기록 내용**
+
+- 원시 CSV/JSONL과 기존 수집 manifest는 저장 후에도 바이트 단위로 같습니다. 보존 상태의 기준은 `recording.json`이며, `experiment.json`의 `recording_retention_at_capture`는 수집 시점 상태입니다. 기록 안의 과거 절대 경로는 내용을 고치지 않고 `recording_relocation.json`과 `resolve_recording_path(saved_root, historical_reference)`로 해석하며, 해석 결과는 현재 기록 안에 있어야 합니다.
+- 새 실행 폴더마다 `manifest.json`과 `control.jsonl`에 설정, 로컬 모듈 해시, 소스 정보, 판단 내용, 보드 명령 상태를 남기고 기존 세션 파일은 덮어쓰지 않습니다. 수집기는 원본 차량 보관 파일을 독립적으로 유지합니다.
+- 압력 관측을 켜면 `pressure.jsonl`, `pressure_raw.csv`, `pressure_sweeps.csv`에 모든 raw ADC·상태 표본, 완성 스캔, 독립된 MCU·호스트 시계, 품질 이벤트를 보존합니다. 압력은 힘으로 교정하지 않았습니다. 영상은 기록하지 않습니다.
+- 비동기 기록은 유한 큐와 별도 작업자에서 쓰기·fsync를 수행합니다. 큐 초과나 디스크 오류는 모터 권한을 끝내고 `INCOMPLETE`를 남깁니다.
+- ARM 상태에서 입력 예외를 내기 전에 문제 차량 프레임을 먼저 기록합니다. 충격 트리거 표본과 진단도 `저장` 시 함께 보존됩니다.
+- 데스크톱 세션은 수집기 경로와 비교 라벨을 담은 `experiment.json`을 추가합니다([DESKTOP.md](DESKTOP.md)).
+- 버전 관리 이전 기록은 자동으로 옮기거나 삭제하지 않습니다.
+
+## 7. 시험 범위
+
+전송·실행기 시험은 가짜 UART, 루프백 수신기, 단조 시계를 주입합니다. 일부는 생체역학 모델과 무관하게 오케스트레이션을 시험하고, 종단 간 시험은 실제 응답 계산과 명령 제한기를 사용합니다. 압력 없는 시작, 압력 바이트가 없거나 손상되어도 같은 출력, 엄격한 ACK, 세션·시계 오류, 시작 자격 확인, 중립 ARM 확인, 새 종료 증거를 다룹니다. 현재 목표 시험은 CAD 엔벨로프를 지키고, 지지 방향을 바꾸기 전에 중립 명령을 거치는지 확인합니다.
+
+가짜 보드는 위치를 즉시 확인 응답하므로, 이 시험들은 실제 서보·압력·몸통 움직임의 측정이 아닙니다. 조향 선제 반응과 접촉 압력의 실물 검증은 남아 있습니다. 결과 수치는 [VALIDATION.md](VALIDATION.md)를 참고합니다.

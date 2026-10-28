@@ -1,6 +1,6 @@
 """Calibrate the v2 occupant/seat/sensor model from the data we have.
 
-Assumption (team decision, 2026-10-25): tightening a bolster INCREASES the pressure on
+Assumption (team decision): tightening a bolster INCREASES the pressure on
 that side's side-channel. The bench right-side data showed the opposite sign, which is
 read as the right yaw axis having been recorded reversed; its magnitude is kept.
 
@@ -8,7 +8,7 @@ One physical model (HumanLateral + bolster contact + linear count readout) must
 reproduce BOTH
   car (refined run2, passenger): side-diff (R-L) = 7234 counts/g toward the console,
                                  3468 counts/g toward the door, 1st-order 0.085 s + 0.1 s
-  bench (2026-10-25):            side-diff = +15.7 counts/deg of bolster tightening
+  bench:                         side-diff = +15.7 counts/deg of bolster tightening
 Unknowns: effective lever arm of the pad (normal travel per degree at the contact point),
 counts-per-newton G, door support k_door. With a linear contact the ratio of the two gains
 does not depend on the contact stiffness k, so k is NOT identifiable from these data; it is
@@ -99,7 +99,7 @@ LD = brentq(fd, np.log(1), np.log(1e5), xtol=1e-3); KD = float(np.exp(LD))
 K_TAB = [[float(k), float(gains(k, arm=ARM)[0])] for k in np.geomspace(800, 12000, 7)]
 # door/contact stiffness ratio used in the env: the static 0.2 g fit gives KD/K (~6.6), but the drive
 # replay's door/console ratio (0.44 vs car 0.48) needs ~0.8-2 because most of the replay asymmetry comes
-# from the drive itself; 2.0 is the team's choice (2026-10-25)
+# from the drive itself; 2.0 is the team's choice
 DOOR_RATIO_DRIVE = 2.0
 print(f'effective arm = {100 * ARM:.2f} cm (geometric 17 cm), contact k = {K:.0f} N/m ({"identified from pad calibration" if K_IDENT else "nominal, not identifiable"}), G = {G_SIDE:.2f} counts/N, door k = {KD:.0f} N/m')
 print(f'  sim: console {console:.0f} N/g, tightening {tight:.2f} N/deg -> {tight * G_SIDE:.1f} counts/deg (bench {BENCH_TIGHT:.1f})')

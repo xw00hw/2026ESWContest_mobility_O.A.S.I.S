@@ -1,8 +1,8 @@
 {
   "schema": "oasis-bench-pressure-profile-v1",
-  "dataset_id": "bench_20261025_pose_v1",
-  "session_id": "20261025_013054_fdbdd0b4",
-  "source_drive_file_id": "1HTNr1ZExkWfbuYSdfRaxxZawIA2wcV_h",
+  "dataset_id": "bench_pose_v1",
+  "session_id": "S08",
+  "source_drive_file_id": null,
   "source_commit": "d6fff54445b5833586e004b783e53645ca17a663",
   "input_policy": "Only pressure ADC, commanded motor state, experiment config, and clock metadata. No image/video/landmark/inferred-pose or combined multimodal tables.",
   "sensors": [
@@ -14142,7 +14142,7 @@
     }
   },
   "qualitative_earlier_left_only": {
-    "session_id": "20261025_005459_3512cd6e",
+    "session_id": "S07",
     "points": [
       {
         "left_yaw_deg": 0,
@@ -14817,47 +14817,47 @@
   "quality_all_points_ok": true,
   "provenance": [
     {
-      "path": "20261025_013054_fdbdd0b4/source_metadata.json",
+      "path": "S08/source_metadata.json",
       "size_bytes": 5638,
       "sha256": "9e4fa955be8dc954e422ed021fc99c70a25d9160cde8b66269ae2ce24306d860"
     },
     {
-      "path": "20261025_013054_fdbdd0b4/source_auto_plan.csv",
+      "path": "S08/source_auto_plan.csv",
       "size_bytes": 117169,
       "sha256": "9fca342dd996c12e060dc8c8297db8b8ec64d6348f52ba4239661234d70abf2f"
     },
     {
-      "path": "20261025_013054_fdbdd0b4/point_pressure.csv",
+      "path": "S08/point_pressure.csv",
       "size_bytes": 1113512,
       "sha256": "19346ef91fe1a994748b3d0b23a58f734338079c2598d4dd51fbaeff8b69816f"
     },
     {
-      "path": "20261025_013054_fdbdd0b4/pressure_long.parquet",
+      "path": "S08/pressure_long.parquet",
       "size_bytes": 66674231,
       "sha256": "79f12a65f4d7becf0d2f9e162b340711d71140b1dc1aecb6e66b6f45d9edbcf4"
     },
     {
-      "path": "20261025_013054_fdbdd0b4/motion.parquet",
+      "path": "S08/motion.parquet",
       "size_bytes": 481931,
       "sha256": "a4bab799c54140e528a1207ae7cc09b4389071e15912413dac1433e4f589f1e3"
     },
     {
-      "path": "20261025_013054_fdbdd0b4/points_source.parquet",
+      "path": "S08/points_source.parquet",
       "size_bytes": 111541,
       "sha256": "dcae44c2115a6051a4e170c839367d4f68d20d69ac186464dcdf8884d7db57cd"
     },
     {
-      "path": "20261025_005459_3512cd6e/source_metadata.json",
+      "path": "S07/source_metadata.json",
       "size_bytes": 5554,
       "sha256": "be008dcef408654830ed94fe5e95e3d71f445041aef59cac41f0db1da855580b"
     },
     {
-      "path": "20261025_005459_3512cd6e/source_auto_plan.csv",
+      "path": "S07/source_auto_plan.csv",
       "size_bytes": 28642,
       "sha256": "db4ae2aa68571ec41b1ac56625de815dcb6ffa02dbb56f1a5b4fdcc8ca41ea60"
     },
     {
-      "path": "20261025_005459_3512cd6e/point_pressure.csv",
+      "path": "S07/point_pressure.csv",
       "size_bytes": 506673,
       "sha256": "1e35112c6727bfad2bb42592ea49bd4f34a9559fe548d571d39aede02f92dfab"
     }

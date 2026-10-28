@@ -13,9 +13,9 @@ import pandas as pd
 from pose_core import NAMES, ROI, THRESHOLD, draw, estimate, features, load_model
 
 SESSIONS = {
-    '20261025_003530_9c4e477c': ('both_yaw_pitch_357', 357),
-    '20261025_005459_3512cd6e': ('left_yaw_pitch_357', 357),
-    '20261025_013054_fdbdd0b4': ('both_yaw_28x28_784', 784),
+    'S06': ('both_yaw_pitch_357', 357),
+    'S07': ('left_yaw_pitch_357', 357),
+    'S08': ('both_yaw_28x28_784', 784),
 }
 FEATURES = ['shoulder_tilt_deg', 'torso_lean_deg', 'head_offset_shoulder_ratio',
             'shoulder_span_px', 'torso_height_px']

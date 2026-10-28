@@ -28,10 +28,10 @@ def main():
     (root / 'candidate.yaml').write_text(yaml.safe_dump(cfg,sort_keys=False,allow_unicode=True),encoding='utf-8')
     path = root / 'prepare_candidate.py'
     text = path.read_text(encoding='utf-8')
-    text = text.replace("    cfg['log_dir']='/home/esw/ESW_RL_FB/reconnect_20261028/logs'", "    # Keep the explicitly reviewed destination from the input template.\n    cfg['log_dir']=source.get('log_dir','/REPLACE_WITH_NEW_TRIAL_LOG_DIRECTORY')")
+    text = text.replace("    cfg['log_dir']='/home/esw/ESW_RL_FB/reconnect/logs'", "    # Keep the explicitly reviewed destination from the input template.\n    cfg['log_dir']=source.get('log_dir','/REPLACE_WITH_NEW_TRIAL_LOG_DIRECTORY')")
     path.write_text(text,encoding='utf-8')
     paths = sorted(p for p in root.rglob('*.py') if p.name != Path(__file__).name)
-    provenance = {'date':'2026-10-28','scope':'seated commissioning source, no run authorization',
+    provenance = {'scope':'seated commissioning source, no run authorization',
         'unchanged_from_physically_used_core':['occupied_trial.py','raw_count_guard.py','startup_alignment.py','native/rtmpose_viewer.py','camera/collect_pose_reference.py','pc/start_pc_displays.py'],
         'template_changes':['candidate.yaml: local identifiers/paths removed; all readiness remains false; wheel calibration confirmation false',
             'prepare_candidate.py: preserve explicitly supplied log_dir instead of historical machine path'],

@@ -136,7 +136,7 @@ realtime:
   gc_freeze: true
 log_dir: /REPLACE_WITH_NEW_TRIAL_LOG_DIRECTORY
 deployment:
-  release: reconnect_20261028_optionalpose_candidate
+  release: reconnect_optionalpose_candidate
   commissioning: Template only; paths and local calibration require review; readiness
     is not inherited
   physical_pressure_calibrated: false
@@ -168,7 +168,7 @@ deployment:
   approval_recorded_wall_time_ns: null
   neutral_calibration_validated: false
   rl_after_new_neutral_authorized: false
-  neutral_calibration_id: D3_1800_D4_1800_D5_1200_D6_1200_20261028
+  neutral_calibration_id: D3_1800_D4_1800_D5_1200_D6_1200
   neutral_pulses_us:
   - 1800
   - 1800

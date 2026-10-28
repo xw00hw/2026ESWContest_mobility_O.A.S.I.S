@@ -4,7 +4,7 @@
 #define JOINT_YAW_LIMIT_MDEG 27000
 #define JOINT_PITCH_LIMIT_MDEG 8000
 #ifdef OASIS_FALLBACK_CONTROL
-/* 2026-10-28 user-corrected mechanical zero, UR/UL/DR/DL (D3/D4/D5/D6).
+/* Corrected mechanical zero, UR/UL/DR/DL (D3/D4/D5/D6).
  * This correction belongs to the current fallback/RL installation only. */
 #define JOINT_BOOT_PULSES {1800,1800,1200,1200}
 #else
@@ -14,8 +14,8 @@
 #define MOTOR_RATE_MDEG_S 15000
 #define CONTROL_TIMEOUT_MS 1500U
 #ifdef OASIS_FALLBACK_CONTROL
-/* Experiment A: user corrected the four DS5180 motors to 270 degrees on
- * 2026-10-27. The mechanical-zero calibration is selected separately above. */
+/* Experiment A: the four DS5180 motors are configured for 270 degrees.
+ * The mechanical-zero calibration is selected separately above. */
 #define JOINT_SERVO_RANGE_DEG 270U
 #else
 #define JOINT_SERVO_RANGE_DEG 270U

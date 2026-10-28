@@ -1,7 +1,7 @@
 """v9 body scale: camera neutral of the seated occupant vs the reference user -> one frozen G-curve factor.
 
 The G base curve + bounded RL residual (g_residual_control) was tuned on the seated bench with one person, the
-reference user (10/28 final session, screencast sha256 93f7a0b2...). Another occupant gets the same controller,
+reference user (final seated session, screencast sha256 93f7a0b2...). Another occupant gets the same controller,
 only its base / preview angles multiplied by a small factor from the body ratio the camera sees:
 
   r_w = (shoulder_width_px / frame_width)  / REFERENCE shoulder_width_frac      shoulder joint span
@@ -10,7 +10,7 @@ only its base / preview angles multiplied by a small factor from the body ratio 
                                                                   (K_W -1.2, K_T 0, clip 0.9 .. 1.1)
 
 Pixel fractions of the full frame are used so the ratio does not depend on the capture resolution. They assume
-the reviewed camera mode, lens, mount and seat position (the 10/28 fixed composition): a moved camera or seat
+the reviewed camera mode, lens, mount and seat position (the final-session fixed composition): a moved camera or seat
 changes r without a body change. The ratio is taken from the operator-confirmed neutral JSON of the seated
 person (oasis.rtmpose.neutral.v1, the same file pose_camera --neutral uses), once per session, never from live
 frames. K_W, K_T and the clip come from sim/v3/tune_body_scale.py (results/v9/body_scale.json).
@@ -20,9 +20,9 @@ import math
 
 NEUTRAL_SCHEMA = 'oasis.rtmpose.neutral.v1'
 SCALE_MIN, SCALE_MAX = 0.8, 1.2            # hard bound of any factor the governor accepts
-# reference user, measured from the RTMPose overlay of the 10/28 final-session screencast (results/v9)
+# reference user, measured from the RTMPose overlay of the final-session screencast (results/v9)
 REFERENCE = dict(shoulder_width_frac=0.2665, torso_height_frac=0.424,      # 294 frames, cv 2.8 % / 3.6 %
-                 source='OASIS 2026-10-28 03:31 final seated session, screencast sha256 93f7a0b265ca0f36...')
+                 source='OASIS final seated session, screencast sha256 93f7a0b265ca0f36...')
 # ratio -> scale law (sim/v3/tune_body_scale.py, results/v9/body_scale*.json): the support-optimal angle scale of the
 # simulated occupant falls with shoulder width (narrow: clearance to close, wide: preload); the reference body's
 # optimum is s = 1.0 (0.997). Sitting height: the tuning and the held-out episodes disagree on the sign -> K_T = 0

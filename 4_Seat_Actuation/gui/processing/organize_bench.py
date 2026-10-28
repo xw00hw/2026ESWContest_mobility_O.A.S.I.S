@@ -17,7 +17,7 @@ from pose_core import NAMES, ROI, THRESHOLD
 BIN_NS = 100_000_000
 SENSORS = [f'A{bank}_C{channel}' for bank in range(3) for channel in range(4)]
 # Conservative visual-review interval, not an inferred motor response.
-CAMERA_REVIEW = {'20261025_005459_3512cd6e': (239.0, 280.0)}
+CAMERA_REVIEW = {'S07': (239.0, 280.0)}
 
 
 def annotate(times, points):
@@ -146,7 +146,7 @@ def merge(source, dest):
     actual = set(map(tuple, points[angle_columns].to_numpy()))
     if SESSIONS[source.name][1] == 784:
         wanted = {(left,0,right,0) for left in range(28) for right in range(28)}
-    elif source.name == '20261025_003530_9c4e477c':
+    elif source.name == 'S06':
         wanted = {(yaw,pitch,yaw,pitch) for yaw in range(21) for pitch in range(-8,9)}
     else:
         wanted = {(yaw,pitch,0,0) for yaw in range(21) for pitch in range(-8,9)}

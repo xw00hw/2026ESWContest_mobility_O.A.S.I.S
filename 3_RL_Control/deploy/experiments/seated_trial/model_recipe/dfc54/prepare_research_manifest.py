@@ -7,8 +7,8 @@ from pathlib import Path
 
 STAGE=Path(__file__).resolve().parent
 GUI=Path(os.environ.get('OASIS_GUI_ROOT', STAGE.parents[5]/'4_Seat_Actuation'/'gui'))  # gui/processed/ holds the bench recordings
-BENCH=GUI/'processed/bench_20261026_rtmpose_v1'
-SESSIONS=('20261026_183644_001e901a','20261026_185658_f3d90508')
+BENCH=GUI/'processed/bench_rtmpose_v1'
+SESSIONS=('S09','S10')
 def sha(p):
     h=hashlib.sha256()
     with p.open('rb') as f:
@@ -45,7 +45,7 @@ for session in SESSIONS:
         if capture in seen:continue
         seen.add(capture)
         if index<300 or index>last-300:continue
-        if session=='20261026_185658_f3d90508' and 1250*30<=index<=1260*30:continue
+        if session=='S10' and 1250*30<=index<=1260*30:continue
         unique.append(row)
     chosen=[unique[round(i*(len(unique)-1)/79)] for i in range(80)]
     for i,row in enumerate(chosen):

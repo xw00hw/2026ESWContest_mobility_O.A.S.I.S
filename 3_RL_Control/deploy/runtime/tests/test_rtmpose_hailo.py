@@ -463,13 +463,13 @@ class TestHybridBackend(unittest.TestCase):
     @unittest.skipUnless(os.environ.get('OASIS_RTMPOSE_PARITY_ROOT') and os.environ.get('OASIS_RTMPOSE_FULL'),
                          'optional pinned ONNX artifacts unavailable; no hardware inference in this test')
     def test_real_cpu_head_parity_through_stub_hailo_layout(self):
-        self.check_real_cpu_head_parity('Conv_205:625', 'derived_20261027T133306_261860Z',
+        self.check_real_cpu_head_parity('Conv_205:625', 'derived_conv205',
                                         'rtmpose_m_conv205_prefix.onnx', 'rtmpose_m_simcc_head.onnx')
 
     @unittest.skipUnless(os.environ.get('OASIS_RTMPOSE_PARITY_ROOT') and os.environ.get('OASIS_RTMPOSE_FULL'),
                          'optional pinned ONNX artifacts unavailable; no hardware inference in this test')
     def test_real_mul204_cpu_head_parity_through_stub_hailo_layout(self):
-        self.check_real_cpu_head_parity('Mul_204:624', 'derived_mul204_20261027T151036_163064Z',
+        self.check_real_cpu_head_parity('Mul_204:624', 'derived_mul204',
                                         'rtmpose_m_mul204_prefix.onnx', 'rtmpose_m_conv205_simcc_head.onnx')
 
     def check_real_cpu_head_parity(self, boundary, artifact_dir, prefix_name, head_name):

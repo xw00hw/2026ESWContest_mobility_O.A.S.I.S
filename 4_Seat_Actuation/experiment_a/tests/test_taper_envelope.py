@@ -54,7 +54,7 @@ class TaperEnvelopeTests(unittest.TestCase):
             self.assertAlmostEqual(center, allowable_pitch_for_yaw(yaw+h,8), delta=2*h)
 
     def test_random_straight_paths_and_neutral_return_remain_inside_envelope(self):
-        rng = random.Random(20261026)
+        rng = random.Random(2026)
         pairs = [((15., 6.), (22., 0.)), ((22., 0.), (0., 0.)),
                  ((21., -allowable_pitch_for_yaw(21)), (19., 2.8))]
         for _ in range(300):

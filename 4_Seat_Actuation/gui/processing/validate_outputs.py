@@ -70,7 +70,7 @@ def main():
         compact=pd.read_csv(args.output/'analysis_points.csv')
         assert len(all_points)==len(compact)==1498
         assert not all_points.duplicated(['session_id','point_index']).any()
-        write_json(args.output/'COMPLETE.json',dict(dataset='bench_20261025_pose_v1',
+        write_json(args.output/'COMPLETE.json',dict(dataset='bench_pose_v1',
             status='complete',sessions=3,measurement_windows=1498,
             output_videos_full_decode='passed',raw_data_modified=False))
 

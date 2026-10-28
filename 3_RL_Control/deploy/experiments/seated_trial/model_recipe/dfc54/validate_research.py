@@ -4,7 +4,7 @@ from pathlib import Path
 import numpy as np
 import onnxruntime as ort
 
-ROOT=Path('/root/ESW_RTMPose_Compile_20261027')
+ROOT=Path('/root/ESW_RTMPose_Compile')
 OUT=Path(os.environ['OASIS_DFC_RUN_DIR']);source_receipt=Path(os.environ['OASIS_DFC_QUANTIZATION_RESULT'])
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 start=time.monotonic();report={'stage':'fresh_process_heldout_validation','heldout_complete':False}

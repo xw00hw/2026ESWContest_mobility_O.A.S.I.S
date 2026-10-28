@@ -1,5 +1,5 @@
-# O.A.S.I.S L3 v2 domain-randomisation spec (2026-10-25)
-# Built on: refined car run2 (passenger on the mat), bench 2026-10-25 (one subject, static),
+# O.A.S.I.S L3 v2 domain-randomisation spec
+# Built on: refined car run2 (passenger on the mat), bench session 1 (one subject, static),
 # calib_v2.json (one physical model fitted to both). Tags as in v0.1:
 #   L1 car data | BENCH bench data | CAL derived by calib_v2 | LIT literature | ASM assumption
 # Team assumption: tightening increases same-side pressure (bench right-yaw sign flipped).
@@ -69,7 +69,7 @@ seat_bolster:        # 2 DOF/side on the bench; v2 controls YAW only (pitch effe
   side_preload_N:    {dist: uniform, range: [5, 40], nominal: 20, level: 0, src: "BENCH/L1: side channels loaded at rest"}
   h_bolster_m:       {dist: uniform, range: [0.15, 0.25], nominal: 0.20, level: 0, src: ASM}
   c_contact:         {dist: uniform, range: [100, 400], nominal: 250, level: 0, src: ASM}
-  servo_rate_dps: 15                   # 'ramp' mode only (v2 training of 2026-10-25): structure yaw ramp
+  servo_rate_dps: 15                   # 'ramp' mode only (v2 training): structure yaw ramp
   actuator_mode: ramp                  # ramp | fw_event | fw_stream | fw_track (see FirmwareServo)
   crank_rate_dps: 15                   # firmware MOTOR_RATE_MDEG_S/1000 (crank, not structure; yaw ~ crank/2.3)
   fw_deadband_deg: 0.5

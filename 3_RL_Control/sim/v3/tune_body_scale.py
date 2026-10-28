@@ -1,6 +1,6 @@
 """v9: tune ONE thing -- the body scale of the seated G controller (G base curve + bounded v8 RL residual).
 
-The controller is the 10/28 seated-bench controller, unchanged: oasis_rt.g_residual_control (imported from the Pi
+The controller is the final seated-bench controller, unchanged: oasis_rt.g_residual_control (imported from the Pi
 runtime, so sim and Pi run the same code) on measured a_y and the 0.7 s BeamNG prediction, the v8 actor's
 effective angle minus its training prior as a +-1.5 deg residual, one signed 0.3 s filter, speed gate. The
 actor sees the deployed profile (75 kg / 0.42 m / 0.58 m: profile.from_camera stays false), like on the Pi.
@@ -9,7 +9,7 @@ The bench actuator is the reviewed trial setting (STM yaw rate 10 deg/s, yaw cap
 The reference user is the sim nominal body (shoulder 0.42 m, sitting torso 0.58 m = the trial's profile). For each
 body variant the scale s of the base / preview angle is swept on paired episodes (rule-tuning seeds 3000+). The
 criterion is support, the mean CoM RMS reduction vs the open-bolster twin: with it the reference body's optimum is
-s = 1, as the reference user reported for the 10/28 setting. (The evaluation score with its comfort penalty picks
+s = 1, as the reference user reported for the final seated setting. (The evaluation score with its comfort penalty picks
 the smallest scale even for the reference body, i.e. it disagrees with that report; it is kept as a diagnostic.)
 The optima are fitted as s = 1 + K_W (r_w - 1) + K_T (r_t - 1), r = body / reference; --validate checks a law on
 held-out eval-bank episodes (seeds 1000+) including the body_type_eval bodies.

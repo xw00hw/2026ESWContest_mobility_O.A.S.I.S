@@ -14,7 +14,7 @@ A bench effect counts as consistent when its sign matches, its 95 % CI excludes 
 Authority (pad counts per degree of yaw) from H3-consistent data: a pitch degree moves a zone by zone_dh / lever
 of what a yaw degree does (geometry: zone_dh 0.04-0.10 m about the plate's pitch axis, pad 0.17 m from the yaw
 hinge) -> yaw-equivalent = |pitch slope| / (zone_dh / lever). The H1 data (right-yaw sessions) are reported, and
-excluded where inconsistent (10/25 and 10/26-A: the right pads read LESS when it closes).
+excluded where inconsistent (bench sessions 1 and 2-A: the right pads read LESS when it closes).
 
     python -P sim/v3/final/curate.py --bench models/v5/bench_fit.json --corr models/v5/corr.json \
         --l1 refined_drive/01_refined/run2/synced_10hz.csv --out models/v7

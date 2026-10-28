@@ -10,8 +10,8 @@ v3:
   # two pad zones per wing at h_bolster -/+ zone_dh (the plate's cranks sit +-48 mm; the pad is taller)
   zone_dh_m: [0.04, 0.10]
   # +pitch moves the LOWER zone inward and the upper outward (R = Rz(-yaw) Rx(pitch), crank 1 = upper).
-  # Channel map CONFIRMED by the team 2026-10-26 (A1 side bank): C0 right lower, C1 right upper, C2 left lower,
-  # C3 left upper. With it, bench 10/25 B2 (+pitch -> C0 +26 / C1 -10 right, C2 +6 / C3 -9 left counts/deg)
+  # Channel map CONFIRMED by the team (A1 side bank): C0 right lower, C1 right upper, C2 left lower,
+  # C3 left upper. With it, bench session 1 B2 (+pitch -> C0 +26 / C1 -10 right, C2 +6 / C3 -9 left counts/deg)
   # says +pitch raises the LOWER pads -> pitch_sign +1 follows from the data (photos still welcome).
   pitch_sign: 1
   calib_zone: hi                      # zone of the calibrated side channels (car 7234 counts/g, bench 15.7 counts/deg)
@@ -23,7 +23,7 @@ v3:
   arm_range_m: [0.003, 0.05]
   # body shape -> contact: upper-zone share of the wing stiffness grows with shoulder width
   zone_frac_hi: {base: 0.5, per_m_shoulder: 3.0, sd: 0.08, clip: [0.25, 0.75]}
-  # body shape -> preload: preload x exp(beta * (shoulder_w - 0.42) / 0.06); 2 subjects on 10/26 calibrate beta
+  # body shape -> preload: preload x exp(beta * (shoulder_w - 0.42) / 0.06); 2 subjects of bench session 2 calibrate beta
   width_preload_beta: [0.0, 0.7]
   # what the policy sees of the body build: mass from scale / rest pressure (8 %), shoulder width and sitting
   # torso from the calibrated frontal camera (3 %) -- the camera is the body-shape cue

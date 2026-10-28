@@ -9,7 +9,7 @@ import xml.etree.ElementTree as ET
 
 STM = Path(__file__).resolve().parents[1]
 PROJECT = STM/'cubeide'
-WORKSPACE = Path.home()/'STM32CubeIDE/workspace_ExperimentA_20261027'
+WORKSPACE = Path.home()/'STM32CubeIDE/workspace_ExperimentA'
 NAME = 'ExperimentA_CAD_180'
 TEMPLATE = Path.home()/'Documents/GitHub/SMART_SEAT/MOTER/firmware/r8_debug'
 

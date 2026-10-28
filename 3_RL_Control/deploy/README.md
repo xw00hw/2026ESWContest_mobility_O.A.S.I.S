@@ -46,7 +46,7 @@ UDP 64257 ─► beamng_rx      릴레이 수신, Pi 시계로 재타임스탬�
 | `runtime/config.yaml` | 실행 설정 |
 | `export/`, `tools/pack_model.py` | 학습 결과 → 모델 패키지(정책, 예측기, 관측 계약, manifest + sha256) → Pi 설치 |
 | `tools/pad_calib.py` | 압력 패드 저울 보정 ([절차](tools/PAD_CALIB_PROTOCOL.md)) |
-| [`experiments/seated_20261028/`](experiments/seated_20261028/README.md) | 실물 착석 시험 실행 래퍼와 카메라·모니터 도구 |
+| [`experiments/seated_trial/`](experiments/seated_trial/README.md) | 실물 착석 시험 실행 래퍼와 카메라·모니터 도구 |
 | [`CONTROL_SPEC.md`](CONTROL_SPEC.md) | **제어 사양 전체** (관측, 예측기, 규칙, RL, 체형, 안전, fallback, 결과) |
 
 ---
@@ -118,7 +118,7 @@ cd ~/rl/deploy/runtime
 기준 사용자와 체형이 다른 사람이 앉을 때만 켭니다.
 
 1. 카메라와 좌석 위치를 기준 측정 때와 같게 둡니다(비율이 화면 대비 값이기 때문).
-2. 새 착석자의 카메라 중립 자세를 수집합니다 (`experiments/seated_20261028/camera/collect_pose_reference.py`).
+2. 새 착석자의 카메라 중립 자세를 수집합니다 (`experiments/seated_trial/camera/collect_pose_reference.py`).
 3. 실행 설정에 추가합니다.
    ```yaml
    g_residual_control: {enabled: true}

@@ -5,12 +5,12 @@
     python deploy/tools/fsr_curve.py --rm_uno 10000 --rm_stm 4700     # different divider on the STM bank
     python deploy/tools/fsr_curve.py --write                          # store the fit in the json (Pi runtime reads it)
 
-Transfer rule (fsr_curve_20261026.json): the Uno ran at 5 V supply = 5 V reference, the STM32 bank's
+Transfer rule (fsr_curve.json): the Uno ran at 5 V supply = 5 V reference, the STM32 bank's
 divider and VREF+ share the 3V3 rail -> both ADCs measure the divider RATIO, so
     stm_counts = 4095 * uno_V / 5.0        (same divider resistor and topology)
 The exact VREF+ (3.3 V nominal, VDDA rail on the Nucleo) only matters for showing volts. If the divider
 differs, the FSR resistance R_fsr = R_m (1/ratio - 1) of a pull-down divider is carried over instead.
-CHECK (2026-10-26): the car drive read up to 2316 (A1_C1) / 2063 (A1_C3) counts, above this curve's
+CHECK: the car drive read up to 2316 (A1_C1) / 2063 (A1_C3) counts, above this curve's
 saturation (~1880-1920) -> the A1 bank's divider is NOT the Uno test's; remap with the real R_m values
 (or --rm_ratio, >= ~1.5 from the car maxima) before using forces from this curve.
 
@@ -22,7 +22,7 @@ import argparse, json, os
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DEFAULT = os.path.join(HERE, 'fsr_curve_20261026.json')
+DEFAULT = os.path.join(HERE, 'fsr_curve.json')
 FULL = 4095
 
 

@@ -96,7 +96,7 @@ class NonfiniteForceTests(unittest.TestCase):
     def test_saturated_baseline_through_real_pressure_force_path_releases(self):
         cfg = C.load_config(str(RT / 'config.yaml'))
         cfg['_K'] = 0
-        cfg['_fsr_curve'] = str(RT.parent / 'tools' / 'fsr_curve_20261026.json')
+        cfg['_fsr_curve'] = str(RT.parent / 'tools' / 'fsr_curve.json')
         cfg['rig'] = 'static_bench'
         cfg['pressure']['counts_per_N'] = {
             channel: 86.94837255456748

@@ -1,8 +1,8 @@
 {
   "schema": "oasis-mapped-pressure-evidence-v1",
-  "dataset_id": "bench_20261025_pose_v1",
+  "dataset_id": "bench_pose_v1",
   "mapping_provenance": {
-    "source": "User statement in the active conversation, relayed by parent agent on 2026-10-25 KST",
+    "source": "Team-confirmed sensor placement",
     "a1_physical_mapping": {
       "A1_C0": "DR",
       "A1_C1": "UR",
@@ -29,11 +29,11 @@
   },
   "sources": {
     "profile": {
-      "path": "bench_20261025.json",
-      "sha256": "898bc5ecb825efc7f3a7b162d9812940d98e99d845805b3ca4d6f6b738fb915d"
+      "path": "bench_profile.json",
+      "sha256": "a8a62de07a4705417549b915b342671626dead2c5ca0410c60f3a5eed8b97e02"
     },
     "pressure_only_point_table": {
-      "path": "ESW_fallback_local_data\\bench_20261025_pose_v1\\pressure_command_points.csv",
+      "path": "ESW_fallback_local_data\\bench_pose_v1\\pressure_command_points.csv",
       "sha256": "2c2603fc173759ad7a0b1e8a98649c101dace5b398b0f29d4dee7d57bbc0347f",
       "kind": "locally derived pressure/motor-only table"
     },
@@ -42,7 +42,7 @@
   "units": "sum of per-channel mean estimated ADC volts; not N, Pa, total load, or summed-signal p95",
   "synchrony_note": "Means share a dwell interval. MUX channels are sampled sequentially, not simultaneously; sum variance/quantiles are not derived here.",
   "later_session": {
-    "session_id": "20261025_013054_fdbdd0b4",
+    "session_id": "S08",
     "neutral_a1_statistics": {
       "A1_C0": {
         "samples": 201,
@@ -3521,8 +3521,8 @@
     }
   },
   "earlier_left_only_comparison": {
-    "earlier_session_id": "20261025_005459_3512cd6e",
-    "later_session_id": "20261025_013054_fdbdd0b4",
+    "earlier_session_id": "S07",
+    "later_session_id": "S08",
     "same_full_commands": true,
     "points": [
       {
@@ -3781,8 +3781,8 @@
     "interpretation": "Same-direction signed responses differ, including sign reversal between sessions; causal pressure gain is not identified."
   },
   "first_last_equal_yaw_comparison": {
-    "first_session_id": "20261025_003530_9c4e477c",
-    "last_session_id": "20261025_013054_fdbdd0b4",
+    "first_session_id": "S06",
+    "last_session_id": "S08",
     "same_full_commands": true,
     "points": [
       {

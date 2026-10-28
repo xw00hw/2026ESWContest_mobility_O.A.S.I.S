@@ -1,4 +1,4 @@
-# O.A.S.I.S L3 domain-randomisation spec  (v0.1, 2026-10-12)
+# O.A.S.I.S L3 domain-randomisation spec  (v0.1)
 #
 # Every parameter is drawn once per episode (per_step: true = resampled each step).
 # src tags  : L1   = fitted from the real-vehicle log (analysis/*.json)
@@ -133,7 +133,7 @@ reward:                      # review doc 6.3 -- pressure is NEVER in the reward
 safety:                      # firmware path, applied outside the policy
   side_fsr_trip_frac: 0.7    # side-FSR rise over the session baseline, fraction of ADC headroom (~ +120 N nominal)
   motor_torque_trip_Nm: 20   # backup interlock from motor current (still works when a side FSR is dead)
-  mode: v1                   # v1: FSR-headroom / torque trip (RL runs of 2026-10-21); v2: force-based graded interlock
+  mode: v1                   # v1: FSR-headroom / torque trip (early RL runs); v2: force-based graded interlock
   v2_force_hard_N: 120       # v2: motor-side force rise over rest -> release that side
   v2_force_soft_N: 80        # v2: -> hold (no further closing)
   v2_fsr_rise_cps: 6000      # v2: FSR rise > 300 counts / 50 ms while closing -> hold

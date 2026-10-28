@@ -36,7 +36,7 @@ HYBRID_CONFIG = dict(enabled=True,deadband_g=.01,measured_on_g=.02,measured_off_
     preview_confirm_s=.1,residual_max_deg=1.5,speed_min_mps=1.)
 OPTIONAL_POSE_CONFIG = dict(source='udp',source_id='front_seat_pose',udp_port=47802,
     min_confidence=.5,lean_sign=1.,stale_s=1.)
-MONITOR_LINK = '/home/esw/ESW_RL_FB/reconnect_20261028/live_control.jsonl'
+MONITOR_LINK = '/home/esw/ESW_RL_FB/reconnect/live_control.jsonl'
 CONFIRM = ('hardware_mapping_checked','neutral_start_clear','stm_tuning_reviewed',
            'steer_sign_checked','trial_settings_reviewed')
 SAFE = frozenset((v+'\n').encode('ascii') for v in

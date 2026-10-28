@@ -32,7 +32,7 @@ from sync import write_text  # noqa: E402
 
 # --------------------------------------------------------------------------- geometry (calibration knobs)
 # Vehicle frame of imu_mounting.json: +x forward, +y left, +z up; origin = IMU.
-# User-measured mount (2026-10-24): IMU on the passenger dashboard, centred on the passenger seat, 0.40 m ahead of the
+# Measured mount: IMU on the passenger dashboard, centred on the passenger seat, 0.40 m ahead of the
 # passenger seat-cushion centre at the same height.
 IMU_TO_PSEAT = np.array([-0.40, 0.0, 0.0])
 # Driver/passenger seat-centre spacing from the test vehicle's front shoulder room 1473 mm and hip room
@@ -295,7 +295,7 @@ def main():
         frame="imu_mounting.json vehicle frame: +x forward, +y left, +z up; origin at the IMU",
         geometry=dict(imu_to_passenger_seat_m=IMU_TO_PSEAT, imu_to_driver_seat_m=IMU_TO_DSEAT,
                       seat_spacing_m=SEAT_SPACING_M, seat_spacing_range_m=SEAT_SPACING_RANGE_M,
-                      sources=["user measurement 2026-10-24: IMU centred on the passenger seat, 0.40 m ahead of the "
+                      sources=["measured mount: IMU centred on the passenger seat, 0.40 m ahead of the "
                                "cushion centre, same height",
                                "test vehicle front shoulder room 1473 mm, hip room 1438 mm; "
                                "front track 1618-1623 mm (cararac); overall 4905 x 1860 x 1445 mm, wheelbase 2850 mm",

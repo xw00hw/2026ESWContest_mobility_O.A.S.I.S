@@ -141,7 +141,7 @@ class BolsterEnvV3(BolsterEnvV2):
         return float(np.clip(arm, lo, hi)), console
 
     def _preload(self, sb, pr):
-        """rest contact force of the side pads. With v3.clearance (v5, 2 subjects 10/26): an occupant narrower than
+        """rest contact force of the side pads. With v3.clearance (v5, 2 subjects, bench session 2): an occupant narrower than
         the contact width w_c does not touch the pads at rest (subject B: side pads ~0-250 counts vs A ~2000) ->
         preload 0 and an effective clearance (w_c - w)/2 x scale the bolster must close before it supports."""
         self.clearance_m = 0.0
@@ -248,7 +248,7 @@ class BolsterEnvV3(BolsterEnvV2):
     def _sense(self, i):
         o, t = self.out, self.t
         if self.fsr and int(t / self.dt) % 2 == 0:                # 100 Hz mat
-            # sensed share of the zone force falls as that wing closes (bench 10/26: the right bolster closes onto
+            # sensed share of the zone force falls as that wing closes (bench session 2: the right bolster closes onto
             # the body, yet its pads read LESS: -26.5 upper / -5.5 lower counts/deg) -> coverage 1 - beta yaw/th_max
             cov = {k: max(0.1, 1.0 - self.v3p['coverage_beta'][f'{k[0]}_{k[1]}'] * self.th[0 if k[0] == 'L' else 1] / self.th_max) for k in self.fsr}
             self.counts = {k: f(o[f'F_{k[0]}_{k[1]}'] * cov[k], 0.01) for k, f in self.fsr.items()}

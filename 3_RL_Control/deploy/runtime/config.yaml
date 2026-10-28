@@ -28,7 +28,7 @@ beamng:                             # PC: Collector v0.3 -> fallback.beamng_brid
 
 confirmations:                      # hardware session refuses to open any device until all are true (operator, not software)
   hardware_mapping_checked: false   # servo wiring UR D3 / UL D4 / DR D5 / DL D6, +yaw closes toward the occupant on both sides
-  neutral_start_clear: false        # FB_ARM applies confirmed D3/D4/D5/D6 neutral 1800/1800/1200/1200 us (2026-10-28): mechanism may move
+  neutral_start_clear: false        # FB_ARM applies confirmed D3/D4/D5/D6 neutral 1800/1800/1200/1200 us: mechanism may move
   stm_tuning_reviewed: false        # g_experiment_a_tune (yaw_max, rates) reviewed for this session (stm32/EXPERIMENT_A_LIVE_TUNING.md)
   steer_sign_checked: false         # --check-vehicle: steer_verdict ok with beamng.steer_sign
   trial_settings_reviewed: false
@@ -53,10 +53,10 @@ link:
   mock_crank_rate_dps: 15.0         # --mock only (FW v6 MOTOR_RATE); proposal: 60
 
 pressure:
-  channels:                         # physical pad -> mat channel (A1 = side bank; map confirmed by the team 2026-10-26)
+  channels:                         # physical pad -> mat channel (A1 = side bank; confirmed map)
     side_R: A1_C1                   # v2 models: one side pad per wing (calibration channels, loaded in the car)
     side_L: A1_C3
-    side_hi_R: A1_C1                # v3 models: upper / lower pad per wing -- confirmed 2026-10-26:
+    side_hi_R: A1_C1                # v3 models: upper / lower pad per wing -- confirmed:
     side_hi_L: A1_C3                #   C0 right lower, C1 right upper, C2 left lower, C3 left upper
     side_lo_R: A1_C0
     side_lo_L: A1_C2
@@ -66,7 +66,7 @@ pressure:
     cush_L: [A0_C1, A0_C2]          #   L = [A0_C0, A0_C2] from the A0 map C0 FL, C1 BR, C2 BL, C3 FR)
   pad_calib: ../model/pad_calib.json  # tools/pad_calib.py output (counts/N per channel); without it the model's
                                       # sim value from manifest.json (v2 32.6, v3 87 counts/N per pad) is used
-  fsr_curve: null                   # e.g. ../tools/fsr_curve_20261026.json: nonlinear FSR curve for the INTERLOCK
+  fsr_curve: null                   # e.g. ../tools/fsr_curve.json: nonlinear FSR curve for the INTERLOCK
                                       # force. OFF until the curve is remapped to the A1 bank's divider (the car read
                                       # up to 2316 counts, above the Uno curve's ~1900 saturation; fsr_curve.py --rm_*)
   zero_window_s: 2.0
@@ -105,7 +105,7 @@ g_residual_control:
   speed_min_mps: 1.0
 
 body_scale:                         # v9: G base/preview angle x s for a sitter other than the reference user
-  enabled: false                    # s = 1 when false (the reference user's reviewed 10/28 behaviour)
+  enabled: false                    # s = 1 when false (the reference user's reviewed behaviour)
   neutral: null                     # this sitter's operator-confirmed neutral JSON (same file as pose_camera --neutral)
   reference: {}                     # override of oasis_rt/body_scale.py REFERENCE only for a re-measured reference user
 

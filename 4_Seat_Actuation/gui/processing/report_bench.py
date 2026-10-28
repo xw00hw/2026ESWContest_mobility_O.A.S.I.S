@@ -152,7 +152,7 @@ def main():
             source_manifest.append(dict(filename=file.name,sha256=sha256(file)))
     shutil.copyfile(here/'README.md',args.output/'METHODS.md')
     commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=here,text=True).strip()
-    write_json(args.output/'processing_manifest.json',dict(dataset_id='bench_20261025_pose_v1',
+    write_json(args.output/'processing_manifest.json',dict(dataset_id='bench_pose_v1',
         processing_parent_commit=commit,source_files=source_manifest,
         model=dict(name='RTMPose-m body7 COCO17 256x192',sha256=sha256(args.model),
         source='https://download.openmmlab.com/mmpose/v1/projects/rtmposev1/onnx_sdk/rtmpose-m_simcc-body7_pt-body7_420e-256x192-e48f03d0_20230504.zip'),
@@ -161,7 +161,7 @@ def main():
     pd.DataFrame([dict(session_id=s,start_video_s=a,end_video_s=b,
         reason='Camera reposition observed visually; conservative review interval, raw values retained',
         review_frames='7344,7359,7386,7518,7800,8100') for s,(a,b) in CAMERA_REVIEW.items()]).to_csv(args.output/'manual_quality_flags.csv',index=False)
-    lines=['# 벤치 실측 정리 — 2026-10-25','',
+    lines=['# 벤치 실측 정리','',
         '정상 종료된 3개 세션, **총 1,498개 측정 구간**의 압력·명령각·영상 포즈를 정리했다.',
         '원본 세션 파일은 수정하지 않았다. 사용법과 단위·시계·결측 규칙은 [METHODS.md](METHODS.md)를 따른다.','',
         '- [분석용 간단 표: 각도·압력 12채널·2D 포즈·품질](analysis_points.csv)',

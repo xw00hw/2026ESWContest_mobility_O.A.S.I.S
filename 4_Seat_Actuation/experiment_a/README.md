@@ -73,6 +73,6 @@ python -m experiment_a --config experiment_a/config.candidate.json replay --vehi
 python -m unittest discover -s experiment_a/tests -q
 ```
 
-PC 데스크톱 앱 설치·사용은 [`DESKTOP.md`](DESKTOP.md), 입력 경계·시작 권한·종료 규칙 상세는 [`RUNTIME.md`](RUNTIME.md)를 참고합니다.
+PC 데스크톱 앱 설치·사용은 [`DESKTOP.md`](DESKTOP.md), 입력 경계·시작 권한·종료 규칙 상세는 [`RUNTIME.md`](RUNTIME.md), 몸통 응답 모델과 패드 면 정렬은 [`HUMAN_MODEL.md`](HUMAN_MODEL.md), 시험·재생·에뮬레이션 결과는 [`VALIDATION.md`](VALIDATION.md)를 참고합니다.
 
 > 데스크톱 앱에서 `중지`는 모터 OFF와 기록 종료만 하고, 기록은 사용자가 `저장`이나 `버리기`를 고를 때만 확정합니다. 오류 후 자동으로 다시 ARM하지 않습니다.

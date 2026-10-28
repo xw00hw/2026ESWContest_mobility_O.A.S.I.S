@@ -3,7 +3,7 @@
  "contact_min_counts": 200,
  "bench": [
   {
-   "session": "20261025_003530_9c4e477c",
+   "session": "S06",
    "effect": "left_pitch_deg+right_pitch_deg",
    "channel": "A1_C0",
    "zone": "lower",
@@ -17,7 +17,7 @@
    "verdict": "consistent"
   },
   {
-   "session": "20261025_003530_9c4e477c",
+   "session": "S06",
    "effect": "left_pitch_deg+right_pitch_deg",
    "channel": "A1_C2",
    "zone": "lower",
@@ -31,7 +31,7 @@
    "verdict": "consistent"
   },
   {
-   "session": "20261025_003530_9c4e477c",
+   "session": "S06",
    "effect": "left_pitch_deg+right_pitch_deg",
    "channel": "A1_C1",
    "zone": "upper",
@@ -45,7 +45,7 @@
    "verdict": "consistent"
   },
   {
-   "session": "20261025_003530_9c4e477c",
+   "session": "S06",
    "effect": "left_pitch_deg+right_pitch_deg",
    "channel": "A1_C3",
    "zone": "upper",
@@ -59,7 +59,7 @@
    "verdict": "consistent"
   },
   {
-   "session": "20261025_005459_3512cd6e",
+   "session": "S07",
    "effect": "left_pitch_deg",
    "channel": "A1_C2",
    "zone": "lower",
@@ -73,7 +73,7 @@
    "verdict": "consistent"
   },
   {
-   "session": "20261025_005459_3512cd6e",
+   "session": "S07",
    "effect": "left_pitch_deg",
    "channel": "A1_C3",
    "zone": "upper",
@@ -87,7 +87,7 @@
    "verdict": "consistent"
   },
   {
-   "session": "20261025_013054_fdbdd0b4",
+   "session": "S08",
    "effect": "right_yaw_deg",
    "channel": "A1_C0",
    "zone": "lower",
@@ -101,7 +101,7 @@
    "verdict": "inconsistent"
   },
   {
-   "session": "20261025_013054_fdbdd0b4",
+   "session": "S08",
    "effect": "right_yaw_deg",
    "channel": "A1_C1",
    "zone": "upper",
@@ -115,7 +115,7 @@
    "verdict": "inconsistent"
   },
   {
-   "session": "20261026_183644_001e901a",
+   "session": "S09",
    "effect": "left_pitch_deg+right_pitch_deg",
    "channel": "A1_C0",
    "zone": "lower",
@@ -129,7 +129,7 @@
    "verdict": "consistent"
   },
   {
-   "session": "20261026_183644_001e901a",
+   "session": "S09",
    "effect": "left_pitch_deg+right_pitch_deg",
    "channel": "A1_C2",
    "zone": "lower",
@@ -143,7 +143,7 @@
    "verdict": "n.s."
   },
   {
-   "session": "20261026_183644_001e901a",
+   "session": "S09",
    "effect": "left_pitch_deg+right_pitch_deg",
    "channel": "A1_C1",
    "zone": "upper",
@@ -157,7 +157,7 @@
    "verdict": "consistent"
   },
   {
-   "session": "20261026_183644_001e901a",
+   "session": "S09",
    "effect": "left_pitch_deg+right_pitch_deg",
    "channel": "A1_C3",
    "zone": "upper",
@@ -171,7 +171,7 @@
    "verdict": "n.s."
   },
   {
-   "session": "20261026_185658_f3d90508",
+   "session": "S10",
    "effect": "right_yaw_deg",
    "channel": "A1_C0",
    "zone": "lower",
@@ -185,7 +185,7 @@
    "verdict": "inconsistent"
   },
   {
-   "session": "20261026_185658_f3d90508",
+   "session": "S10",
    "effect": "right_yaw_deg",
    "channel": "A1_C1",
    "zone": "upper",
@@ -199,7 +199,7 @@
    "verdict": "inconsistent"
   },
   {
-   "session": "20261026_213230_4217591e",
+   "session": "S11",
    "effect": "left_pitch_deg+right_pitch_deg",
    "channel": "A1_C0",
    "zone": "lower",
@@ -213,7 +213,7 @@
    "verdict": "consistent"
   },
   {
-   "session": "20261026_213230_4217591e",
+   "session": "S11",
    "effect": "left_pitch_deg+right_pitch_deg",
    "channel": "A1_C2",
    "zone": "lower",
@@ -227,7 +227,7 @@
    "verdict": "n.s."
   },
   {
-   "session": "20261026_213230_4217591e",
+   "session": "S11",
    "effect": "left_pitch_deg+right_pitch_deg",
    "channel": "A1_C1",
    "zone": "upper",
@@ -241,7 +241,7 @@
    "verdict": "consistent"
   },
   {
-   "session": "20261026_213230_4217591e",
+   "session": "S11",
    "effect": "left_pitch_deg+right_pitch_deg",
    "channel": "A1_C3",
    "zone": "upper",
@@ -255,7 +255,7 @@
    "verdict": "consistent"
   },
   {
-   "session": "20261026_220510_cfbdc0fe",
+   "session": "S12",
    "effect": "right_yaw_deg",
    "channel": "A1_C0",
    "zone": "lower",
@@ -269,7 +269,7 @@
    "verdict": "no_contact"
   },
   {
-   "session": "20261026_220510_cfbdc0fe",
+   "session": "S12",
    "effect": "right_yaw_deg",
    "channel": "A1_C1",
    "zone": "upper",
@@ -283,7 +283,7 @@
    "verdict": "no_contact"
   },
   {
-   "session": "20261026_223002_dee1c151",
+   "session": "S13",
    "effect": "left_pitch_deg+right_pitch_deg",
    "channel": "A1_C0",
    "zone": "lower",
@@ -297,7 +297,7 @@
    "verdict": "consistent"
   },
   {
-   "session": "20261026_223002_dee1c151",
+   "session": "S13",
    "effect": "left_pitch_deg+right_pitch_deg",
    "channel": "A1_C2",
    "zone": "lower",
@@ -311,7 +311,7 @@
    "verdict": "no_contact"
   },
   {
-   "session": "20261026_223002_dee1c151",
+   "session": "S13",
    "effect": "left_pitch_deg+right_pitch_deg",
    "channel": "A1_C1",
    "zone": "upper",
@@ -325,7 +325,7 @@
    "verdict": "no_contact"
   },
   {
-   "session": "20261026_223002_dee1c151",
+   "session": "S13",
    "effect": "left_pitch_deg+right_pitch_deg",
    "channel": "A1_C3",
    "zone": "upper",
@@ -341,42 +341,42 @@
  ],
  "pose_lean_vs_bolster": [
   {
-   "session": "20261025_003530_9c4e477c",
+   "session": "S06",
    "effect": "left_pitch_deg+right_pitch_deg",
    "slope": -0.006
   },
   {
-   "session": "20261025_005459_3512cd6e",
+   "session": "S07",
    "effect": "left_pitch_deg",
    "slope": 0.033
   },
   {
-   "session": "20261025_013054_fdbdd0b4",
+   "session": "S08",
    "effect": "right_yaw_deg",
    "slope": 0.008
   },
   {
-   "session": "20261026_183644_001e901a",
+   "session": "S09",
    "effect": "left_pitch_deg+right_pitch_deg",
    "slope": 0.073
   },
   {
-   "session": "20261026_185658_f3d90508",
+   "session": "S10",
    "effect": "right_yaw_deg",
    "slope": -0.017
   },
   {
-   "session": "20261026_213230_4217591e",
+   "session": "S11",
    "effect": "left_pitch_deg+right_pitch_deg",
    "slope": 0.033
   },
   {
-   "session": "20261026_220510_cfbdc0fe",
+   "session": "S12",
    "effect": "right_yaw_deg",
    "slope": 0.01
   },
   {
-   "session": "20261026_223002_dee1c151",
+   "session": "S13",
    "effect": "left_pitch_deg+right_pitch_deg",
    "slope": 0.014
   }

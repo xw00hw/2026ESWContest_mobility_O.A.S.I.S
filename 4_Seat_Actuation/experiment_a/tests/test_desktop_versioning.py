@@ -78,7 +78,7 @@ class DesktopVersioningTests(unittest.TestCase):
 
     def test_same_version_and_same_second_create_distinct_session_directories(self):
         with patch("experiment_a.desktop_session.datetime") as clock:
-            clock.now.return_value = datetime(2026, 10, 26, 12, 34, 56)
+            clock.now.return_value = datetime(2026, 1, 1, 12, 34, 56)
             first, _, _ = self.run_session()
             second, _, _ = self.run_session()
         self.assertNotEqual(first, second)
@@ -86,7 +86,7 @@ class DesktopVersioningTests(unittest.TestCase):
         self.assertFalse(self.output_root.exists())
         self.assertEqual(second.parent, first.parent)
         for output in (first, second):
-            self.assertRegex(output.name, r"^A_20261026_123456_[0-9a-f]{8}$")
+            self.assertRegex(output.name, r"^A_20260101_123456_[0-9a-f]{8}$")
             self.assertTrue((output/"experiment.json").is_file())
 
     def test_new_version_uses_separate_parent_and_preserves_previous_manifest(self):
@@ -113,8 +113,8 @@ class DesktopVersioningTests(unittest.TestCase):
         self.assertIs(observed["pressure_enabled"], True)
 
     def test_existing_unversioned_and_versioned_raw_files_remain_byte_identical(self):
-        legacy = self.output_root/"A_20261025_010203_legacy"/"raw"/"telemetry.jsonl"
-        previous = self.output_root/"V1"/"A_20261026_000001_previous"/"control"/"pressure_raw.csv"
+        legacy = self.output_root/"A_20260101_010203_legacy"/"raw"/"telemetry.jsonl"
+        previous = self.output_root/"V1"/"A_20260101_000001_previous"/"control"/"pressure_raw.csv"
         before = {}
         for path, payload in ((legacy, b'{"fixture":"legacy raw"}\r\n'),
                               (previous, b"fixture,raw\r\nold,4095\r\n")):
@@ -127,7 +127,7 @@ class DesktopVersioningTests(unittest.TestCase):
             self.assertEqual(path.read_bytes(), payload)
             self.assertEqual(path.stat().st_mtime_ns, timestamp)
         self.assertEqual(sorted(p.name for p in self.output_root.iterdir()),
-                         ["A_20261025_010203_legacy", "V1", "V2"])
+                         ["A_20260101_010203_legacy", "V1", "V2"])
 
     def test_invalid_version_is_rejected_before_threads_paths_or_workers(self):
         worker = Mock(side_effect=AssertionError("An invalid release opened a worker"))

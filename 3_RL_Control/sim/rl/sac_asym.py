@@ -39,10 +39,10 @@ p.add_argument('--level_ramp', type=float, default=0.6)  # fraction of training 
 p.add_argument('--no_priv', action='store_true')         # ablation: symmetric critic
 p.add_argument('--seed', type=int, default=0)
 p.add_argument('--threads', type=int, default=2)
-# stability fixes after the 2026-10-21 runs diverged in their last 50k steps (critic loss 7 -> 4600,
+# stability fixes after the early runs diverged in their last 50k steps (critic loss 7 -> 4600,
 # alpha 0.017 -> 0.40): the optimal common clamp c = -1 sits on the tanh boundary, the naive
 # log(1 - tanh^2 + eps) term then explodes, entropy looks collapsed, alpha jumps, targets break.
-p.add_argument('--legacy', action='store_true')          # reproduce the unstable 2026-10-21 setup
+p.add_argument('--legacy', action='store_true')          # reproduce the earlier unstable setup
 p.add_argument('--reward_scale', type=float, default=20.0)  # passive seat ~ -0.008/step is far below the entropy term
 p.add_argument('--mu_reg', type=float, default=1e-3)      # keep pre-tanh means off the saturated tails
 p.add_argument('--grad_clip', type=float, default=10.0)

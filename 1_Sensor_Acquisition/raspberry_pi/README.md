@@ -116,6 +116,6 @@ python -m pytest tests/ -q
 | [OPERATIONS](docs/OPERATIONS.md) | 사용법, 설정, 문제 해결, 복구 |
 | [SAFETY](docs/SAFETY.md) | 차량·전기·데이터 손실·개인정보 안전 |
 | [TEST_RESULTS](docs/TEST_RESULTS.md) | 실제로 수행한 시험과 수행하지 못한 시험 |
-| [BLOCKERS](docs/BLOCKERS.md) | 해결하지 못한 문제와 해결 방법 |
+| [LIMITATIONS](docs/LIMITATIONS.md) | 알려진 제약과 해결 상태 |
 
 > 기록한 세션 데이터는 저장소에 포함하지 않습니다.
